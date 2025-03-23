@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="permission_titles">
+        <item>SMS</item>
+        <item>Contacts</item>
+        <item>Storage(Optional)</item>
+    </string-array>
+    <string-array name="permission_description">
+        <item><![CDATA[<b>Receive SMS & MMS</b><br>Needed to detect incoming messages and categorize them for better organization, filtering, and notifications.<br><br><b>Read SMS</b><br>Required to access and classify existing messages for expense tracking, banking alerts, and spam detection.<br><br><b>Receive MMS</b><br>Needed to detect incoming MMS messages, allowing the app to process and categorize media-based messages.]]></item>
+        <item><![CDATA[<b>Read Contacts)</b><br>Used to display sender names instead of just numbers, improving the user experience by associating SMS senders with known contacts.]]></item>
+        <item><![CDATA[<b>Read External Storage</b><br>Needed to access message attachments such as receipts, invoices, or media shared via MMS.<br><br><b>Write External Storage</b><br>Required for saving message-related attachments if users choose to export or store them.]]></item>
+    </string-array>
+</resources>

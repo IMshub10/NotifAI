@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="label" format="color" />
+    <attr name="boxBackground" format="color" />
+    <attr name="tagBackground" format="color" />
+    <attr name="labelSecondary" format="color" />
+    <attr name="labelTertiary" format="color" />
+    <attr name="colorLink" format="color" />
+    <attr name="iconColorPrimary" format="color" />
+    <attr name="iconColorSecondary" format="color" />
+    <attr name="colorSeparator" format="color" />
+    <attr name="colorGreen" format="color" />
+    <attr name="toolbarBackground" format="color" />
+    <attr name="colorPrimaryLight" format="color" />
+</resources>

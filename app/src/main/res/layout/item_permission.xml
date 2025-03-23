@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.summer.notifai.ui.datamodel.PermissionItemModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_color_surface_radius_medium"
+        android:padding="@dimen/spacing_small"
+        app:layout_marginBottom="@{model.isLast ? @dimen/spacing_nothing : @dimen/spacing_small}"
+        app:layout_marginTop="@{model.isFirst ? @dimen/spacing_nothing : @dimen/spacing_small}">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_itemPermission_icon"
+            android:layout_width="@dimen/spacing_xx_large"
+            android:layout_height="@dimen/spacing_xx_large"
+            android:background="@drawable/shape_color_surface_radius_x_medium"
+            android:backgroundTint="?colorPrimaryLight"
+            android:padding="@dimen/spacing_small"
+            android:src="@drawable/ic_sms_24x24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setDrawableRes="@{model.icon}"
+            app:tint="?colorPrimaryDark" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemPermission_title"
+            style="@style/text_body_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:textSize="16sp"
+            app:htmlText="@{model.title}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemPermission_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="SMS" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemPermission_description"
+            style="@style/text_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:textSize="14sp"
+            app:htmlText="@{model.description}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemPermission_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemPermission_title"
+            tools:text="Receive SMS &amp; MMS" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,3 +1,51 @@
 <resources>
     <string name="app_name">NotifAI</string>
+    <string name="permissions">Permissions</string>
+    <string name="title_user_agreement">User Agreement</string>
+    <string name="user_agreement">
+    <![CDATA[
+        <h3>1. Data Collection and Privacy</h3>
+        <br>
+        <p><b>NotifAI</b> operates entirely offline and does not collect or store any personal data unless explicitly permitted by the user.</p>
+        <p>The app does not share or transmit any SMS messages, contacts, or other sensitive information to external servers without user consent.</p>
+        <p>We may collect anonymous analytics data, such as app crashes and feature usage trends, to enhance performance and stability. This data does not track individual user behavior or contain personally identifiable information.</p>
+        <br>
+        <br>
+        <h3>2. User Control and Consent</h3>
+        <br>
+        <p>The user has full control over their data and can disable data sharing at any time in the app settings.</p>
+        <p>If data sharing is disabled, all stored data on our servers (if any) related to the user will be deleted upon request. Users can request data deletion by contacting us at <br><b>mehershubham.work@gmail.com</b>, and we will process the request within 5 days.</p>
+        <br>
+        <br>
+        <h3>3. Security Measures</h3>
+        <br>
+        <p>All data transmissions (if enabled) are encrypted to protect user privacy.</p>
+        <p>We implement industry-standard security measures, including encryption and access controls, to ensure that user data remains protected from unauthorized access.</p>
+        <br>
+        <br>
+        <h3>4. Changes to This Agreement</h3>
+        <br>
+        <p>We may update this User Agreement from time to time. Users will be notified of any significant changes via in-app notifications.</p>
+        <p>Continued use of the app after changes take effect constitutes agreement to the revised terms.</p>
+        <br>
+        <br>
+        <h3>5. Contact Information</h3>
+        <br>
+        <p>If you have any questions about this agreement or how your data is handled, please contact us at <br><b>mehershubham.work@gmail.com</b>.</p>
+        <br>
+        <br>
+        <p>By using <b>NotifAI</b>, you confirm that you have read and understood this User Agreement, and you agree to its terms and conditions.</p>
+        <br>
+        <br>
+        <br>
+        <br>
+    ]]>
+</string>
+    <string name="proceed">Proceed</string>
+    <string name="agree_to_use">Agree to Use</string>
+    <string name="optional_agreement_title">Help Improve NotifAI😀</string>
+    <string name="optional_agreement_description">We collect anonymous SMS metadata to improve performance. This data is never sold or shared.</string>
+    <string name="enable_sharing">Enable Sharing</string>
+    <string name="not_now">Not Now</string>
+    <string name="grant_permissions">Grant Permissions</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_onboarding"
+    app:startDestination="@id/userAgreementFrag">
+
+    <fragment
+        android:id="@+id/permissionsFrag"
+        android:name="com.summer.notifai.ui.onboarding.permissions.PermissionsFrag"
+        android:label="PermissionsFrag"
+        tools:layout="@layout/frag_permissions" />
+
+    <fragment
+        android:id="@+id/userAgreementFrag"
+        android:name="com.summer.notifai.ui.onboarding.useragreement.UserAgreementFrag"
+        android:label="User Agreement"
+        tools:layout="@layout/frag_user_agreement">
+        <action
+            android:id="@+id/action_userAgreementFrag_to_permissionsFrag"
+            app:destination="@id/permissionsFrag" />
+    </fragment>
+</navigation>

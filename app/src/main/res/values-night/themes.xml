@@ -1,7 +1,77 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.NotifAI" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Theme.NotifAI" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryLight">@color/primaryLight</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorPrimaryVariant">@color/grey_dark</item>
+        <item name="colorOnPrimary">@color/grey</item>
+
+        <item name="colorSurface">@color/black</item>
+        <item name="colorOnSurface">@color/black</item>
+
+        <item name="colorError">@color/red_dark</item>
+        <item name="colorAccent">@color/blue_link</item>
+
+        <item name="android:colorBackground">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/blue_grey_dark</item>
+        <item name="colorSecondaryVariant">@color/blue_grey_light</item>
+        <item name="colorOnSecondary">@color/grey_darkest</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:colorEdgeEffect">@color/transparent</item>
+
+        <item name="android:textColorLink">@color/blue_link</item>
+        <item name="colorLink">@color/blue_link</item>
+        <item name="android:textColorHint">?attr/labelTertiary</item>
+
+        <item name="label">@color/white</item>
+        <item name="labelSecondary">@color/opaque_0.6</item>
+        <item name="labelTertiary">@color/opaque_0.3</item>
+        <item name="colorGreen">@color/green_dark</item>
+        <item name="boxBackground">@color/background_dark</item>
+        <item name="tagBackground">@color/grey_dark</item>
+
+        <item name="colorSeparator">@color/separator_dark</item>
+        <item name="iconColorPrimary">?attr/colorLink</item>
+        <item name="iconColorSecondary">?attr/labelTertiary</item>
+
+        <item name="bottomNavigationStyle">@style/BottomDark</item>
+        <item name="actionMenuTextColor">@color/primaryDark</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowTransition</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="appBarLayoutStyle">@style/AppTheme.AppBarOverlay</item>
+        <item name="toolbarBackground">@color/black</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+
+        <item name="android:navigationIcon">@drawable/ic_navigation_back_light</item>
+    </style>
+    <!--Bottom Navigation View===================================================================-->
+    <style name="BottomDark" parent="Widget.Design.BottomNavigationView">
+        <item name="android:itemBackground">@color/light_black</item>
+        <item name="backgroundTint">@color/light_black</item>
+        <item name="itemIconTint">@drawable/ripple_dark</item>
+        <item name="itemTextColor">@drawable/ripple_dark</item>
+        <item name="itemRippleColor">@color/primary</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <!--BottomSheetStyles========================================================================-->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_color_surface_radius_medium</item>
     </style>
 </resources>

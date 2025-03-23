@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_color_surface_radius_medium">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dialogOptionalAgreement_title"
+            style="@style/text_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_medium"
+            android:layout_marginTop="@dimen/spacing_x_medium"
+            android:text="@string/optional_agreement_title"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dialogOptionalAgreement_description"
+            style="@style/text_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_medium"
+            android:layout_marginTop="@dimen/spacing_x_medium"
+            android:text="@string/optional_agreement_description"
+            app:layout_constraintTop_toBottomOf="@+id/dialogOptionalAgreement_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialogOptionalAgreement_positiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_x_medium"
+            android:text="@string/enable_sharing"
+            android:backgroundTint="@color/green_dark"
+            android:textColor="?colorOnSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialogOptionalAgreement_description" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialogOptionalAgreement_negativeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_x_medium"
+            android:text="@string/not_now"
+            android:textColor="?colorOnSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/dialogOptionalAgreement_positiveButton"
+            app:layout_constraintTop_toBottomOf="@+id/dialogOptionalAgreement_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

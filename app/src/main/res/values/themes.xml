@@ -1,9 +1,256 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.NotifAI" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.NotifAI" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryLight">@color/primaryLight</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorPrimaryVariant">@color/grey_darkest</item>
+        <item name="colorOnPrimary">@color/grey_darkest</item>
+
+        <item name="colorSurface">@color/white_hole</item>
+        <item name="colorOnSurface">@color/grey_lightest</item>
+
+        <item name="colorAccent">@color/orange_dark</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/blue_grey_dark</item>
+        <item name="colorSecondaryVariant">@color/blue_grey_light</item>
+        <item name="colorOnSecondary">@color/background_light</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColorLink">@color/blue_link</item>
+        <item name="colorLink">@color/blue_link</item>
+        <item name="android:textColorHint">?attr/labelTertiary</item>
+
+        <item name="android:colorBackground">@color/white_hole</item>
+        <item name="android:windowBackground">@color/white_hole</item>
+
+        <item name="label">@color/charcoal</item>
+        <item name="labelSecondary">@color/translucent_0.6</item>
+        <item name="labelTertiary">@color/translucent_0.3</item>
+        <item name="colorGreen">@color/green_light</item>
+        <item name="boxBackground">@color/background_light</item>
+        <item name="tagBackground">@color/grey_lightest</item>
+
+        <item name="colorSeparator">@color/separator_light</item>
+        <item name="iconColorPrimary">?attr/colorLink</item>
+        <item name="iconColorSecondary">?attr/labelSecondary</item>
+
+        <item name="appBarLayoutStyle">@style/AppTheme.AppBarOverlay</item>
+        <item name="toolbarBackground">@color/white_hole</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="bottomNavigationStyle">@style/Bottom_Light</item>
+        <item name="actionMenuTextColor">@color/black</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="android:windowAnimationStyle">@style/WindowTransition</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:navigationIcon">@drawable/ic_navigation_back_dark</item>
+    </style>
+    <!--Animation================================================================================-->
+    <style name="WindowTransition" parent="android:Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+        <item name="itemRippleColor">?attr/colorPrimary</item>
     </style>
 
-    <style name="Theme.NotifAI" parent="Base.Theme.NotifAI" />
+    <!--AppBar/Toolbar ==========================================================================-->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Application.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:background">?attr/toolbarBackground</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:letterSpacing">0.015</item>
+    </style>
+
+    <!--Bottom Navigation View===================================================================-->
+    <style name="Bottom_Light" parent="Widget.Design.BottomNavigationView">
+        <item name="android:itemBackground">?attr/colorSurface</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="itemIconTint">@drawable/ripple_light</item>
+        <item name="itemTextColor">@drawable/ripple_light</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <!--BottomSheetStyles========================================================================-->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_color_surface_radius_medium</item>
+    </style>
+    <!--Text Styles==============================================================================-->
+    <style name="text_title" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">24sp</item>
+        <item name="android:lineHeight">36sp</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:letterSpacing">0.015</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_title_2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:lineHeight">30sp</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:letterSpacing">0.015</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_header" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">17sp</item>
+        <item name="android:lineHeight">25.5sp</item>
+        <item name="android:letterSpacing">0.012</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_header_bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">17sp</item>
+        <item name="android:lineHeight">25.5sp</item>
+        <item name="android:letterSpacing">0.012</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:fontFamily">@font/roboto_mono_bold</item>
+    </style>
+
+    <style name="text_body" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">22.5sp</item>
+        <item name="lineHeight">22.5sp</item>
+        <item name="android:letterSpacing">0.016</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_body_bold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">22.5sp</item>
+        <item name="lineHeight">22.5sp</item>
+        <item name="android:letterSpacing">0.016</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:fontFamily">@font/roboto_mono_medium</item>
+    </style>
+
+    <style name="text_body_secondary" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">22.5sp</item>
+        <item name="android:letterSpacing">0.016</item>
+        <item name="android:textColor">?attr/labelSecondary</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_caption" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_caption_secondary" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:textColor">?attr/labelSecondary</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_link" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">22.5sp</item>
+        <item name="android:letterSpacing">0.016</item>
+        <item name="android:textColor">?attr/colorLink</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="text_body_error" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineHeight">22.5sp</item>
+        <item name="android:letterSpacing">0.016</item>
+        <item name="android:textColor">?attr/colorError</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <!-- CardView -->
+
+    <style name="TopRadiusCardView" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut
+        </item>
+    </style>
+
+    <style name="BottomRadiusCardView" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">
+            @style/Bottom.ShapeAppearanceOverlay.MaterialCardView.Cut
+        </item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="Bottom.ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">8dp</item>
+        <item name="cornerSizeBottomLeft">8dp</item>
+    </style>
+
+    <style name="InputTextOutLine" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxStrokeErrorColor">@color/red_light</item>
+        <item name="boxBackgroundColor">?boxBackground</item>
+        <item name="boxStrokeColor">?attr/colorOnPrimary</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="hintTextColor">?label</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/spacing_x_small</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/spacing_x_small</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/spacing_x_small</item>
+        <item name="boxCornerRadiusTopStart">@dimen/spacing_x_small</item>
+        <item name="hintTextAppearance">@style/HelperTextAppearance</item>
+        <item name="errorTextAppearance">@style/HelperTextAppearance</item>
+        <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
+    </style>
+
+    <style name="HelperTextAppearance" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">?attr/label</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:fontFamily">@font/roboto_mono_regular</item>
+        <item name="android:textCursorDrawable">@drawable/shape_color_cursor</item>
+    </style>
+
+    <style name="SpannableDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/spannable_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/spannable_fade_out</item>
+    </style>
+
+    <!--    =====================================================================================-->
+
 </resources>
