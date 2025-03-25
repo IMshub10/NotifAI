@@ -3,14 +3,11 @@ package com.summer.notifai.ui.onboarding
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityOnboardingBinding
 import com.summer.passwordmanager.base.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnBoardingActivity : BaseActivity<ActivityOnboardingBinding>() {

@@ -3,7 +3,6 @@ package com.summer.notifai.ui.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.summer.core.repository.IOnboardingRepository
-import com.summer.core.repository.OnboardingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,9 +11,9 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(private val onboardingRepository: IOnboardingRepository) :
     ViewModel() {
 
-    private fun setUserAgreement(agreed: Boolean) {
+    private fun setUserAgreement() {
         viewModelScope.launch {
-            onboardingRepository.setUserAgreement(agreed)
+            onboardingRepository.setUserAgreement(true)
         }
     }
 
@@ -25,12 +24,12 @@ class OnboardingViewModel @Inject constructor(private val onboardingRepository: 
     }
 
     fun onOptionalDataSharingEnabled() {
-        setUserAgreement(true)
+        setUserAgreement()
         setDataSharing(true)
     }
 
     fun onOptionalDataSharingDisabled() {
-        setUserAgreement(true)
+        setUserAgreement()
         setDataSharing(false)
     }
 

@@ -1,6 +1,5 @@
 package com.summer.notifai.ui.start
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.summer.core.util.startActivityWithClearTop
