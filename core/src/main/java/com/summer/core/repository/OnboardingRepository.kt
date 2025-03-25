@@ -16,5 +16,7 @@ class OnboardingRepository @Inject constructor(
         sharedPreferencesManager.saveData(PreferenceKeys.USER_AGREEMENT, agreed)
     }
 
-    // Add other methods to handle onboarding data
+    override fun setDataSharing(enabled: Boolean) {
+        sharedPreferencesManager.saveData(PreferenceKeys.DATA_SHARING, enabled)
+    }
 }

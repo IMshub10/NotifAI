@@ -18,12 +18,13 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
     private val optionsFrag by lazy {
         OptionalAgreementDialogFrag(object : OptionalAgreementDialogFrag.ClickListener {
             override fun onAgree() {
-                onboardingViewModel.setUserAgreement(true)
+                onboardingViewModel.onOptionalDataSharingEnabled()
                 findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
             }
 
             override fun onDisagree() {
-
+                onboardingViewModel.onOptionalDataSharingDisabled()
+                findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
             }
         })
     }

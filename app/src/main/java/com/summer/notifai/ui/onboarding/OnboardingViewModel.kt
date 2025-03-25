@@ -12,10 +12,26 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(private val onboardingRepository: IOnboardingRepository) :
     ViewModel() {
 
-    fun setUserAgreement(agreed: Boolean) {
+    private fun setUserAgreement(agreed: Boolean) {
         viewModelScope.launch {
             onboardingRepository.setUserAgreement(agreed)
         }
+    }
+
+    private fun setDataSharing(enabled: Boolean) {
+        viewModelScope.launch {
+            onboardingRepository.setDataSharing(enabled)
+        }
+    }
+
+    fun onOptionalDataSharingEnabled() {
+        setUserAgreement(true)
+        setDataSharing(true)
+    }
+
+    fun onOptionalDataSharingDisabled() {
+        setUserAgreement(true)
+        setDataSharing(false)
     }
 
 }

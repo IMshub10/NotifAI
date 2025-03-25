@@ -9,3 +9,9 @@ fun startActivityWithClearTop(activity: Activity, clas: Class<*>?) {
     })
     activity.finish()
 }
+fun startActivityWithClearTop(activity: Activity, intent: Intent) {
+    activity.startActivity(intent.apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    })
+    activity.finish()
+}

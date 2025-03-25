@@ -29,26 +29,33 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
     }
 
     private fun observers() {
-        startViewModel.hasAgreedToUserAgreement.observe(this) { useAgreement ->
-            if (useAgreement != null) {
-                if (useAgreement) {
-                    if (permissionManager.hasRequiredPermissions()) {
+        startViewModel.hasAgreedToUserAgreement.observe(this) { userAgreement ->
+            if (userAgreement != null) {
+                val hasRequiredPermissions = permissionManager.hasRequiredPermissions()
+                when {
+                    userAgreement && hasRequiredPermissions -> {
                         startActivityWithClearTop(this, MainActivity::class.java)
-                    } else {
-                        startActivity(
+                    }
+
+                    !userAgreement -> {
+                        startActivityWithClearTop(
+                            this,
+                            OnBoardingActivity.onNewInstance(
+                                context = this,
+                                onboardingFlowType = OnboardingFlowType.USER_AGREEMENT
+                            )
+                        )
+                    }
+
+                    else -> {
+                        startActivityWithClearTop(
+                            this,
                             OnBoardingActivity.onNewInstance(
                                 context = this,
                                 onboardingFlowType = OnboardingFlowType.PERMISSIONS
                             )
                         )
                     }
-                } else {
-                    startActivity(
-                        OnBoardingActivity.onNewInstance(
-                            context = this,
-                            onboardingFlowType = OnboardingFlowType.USER_AGREEMENT
-                        )
-                    )
                 }
             }
         }
