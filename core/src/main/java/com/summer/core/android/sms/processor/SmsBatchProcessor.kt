@@ -1,6 +1,8 @@
 package com.summer.core.android.sms.processor
 
 import android.util.Log
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.summer.core.android.sms.data.ISMSContentProvider
 import com.summer.core.android.sms.mapper.SMSMapper
 import com.summer.core.data.domain.model.FetchResult
@@ -85,6 +87,7 @@ class SmsBatchProcessor @Inject constructor(
                                 confidenceScore = classification.second
                             )
                         } catch (e: Exception) {
+                            FirebaseCrashlytics.getInstance().recordException(e)
                             e.printStackTrace()
                             sms
                         }

@@ -48,6 +48,7 @@ dependencies {
     api(libs.androidx.lifecycle.livedata)
     api(libs.kotlinx.coroutines.core)
     api(libs.kotlinx.coroutines.android)
+    implementation(libs.firebase.crashlytics)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
