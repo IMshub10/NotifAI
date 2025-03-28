@@ -9,7 +9,11 @@
         android:id="@+id/permissionsFrag"
         android:name="com.summer.notifai.ui.onboarding.permissions.PermissionsFrag"
         android:label="PermissionsFrag"
-        tools:layout="@layout/frag_permissions" />
+        tools:layout="@layout/frag_permissions" >
+        <action
+            android:id="@+id/action_permissionsFrag_to_smsProcessingFrag"
+            app:destination="@id/smsProcessingFrag" />
+    </fragment>
 
     <fragment
         android:id="@+id/userAgreementFrag"
@@ -20,4 +24,10 @@
             android:id="@+id/action_userAgreementFrag_to_permissionsFrag"
             app:destination="@id/permissionsFrag" />
     </fragment>
+
+    <fragment
+        android:id="@+id/smsProcessingFrag"
+        android:name="com.summer.notifai.ui.onboarding.processor.SMSProcessingFrag"
+        android:label="SMSProcessingFrag"
+        tools:layout="@layout/frag_sms_processing" />
 </navigation>

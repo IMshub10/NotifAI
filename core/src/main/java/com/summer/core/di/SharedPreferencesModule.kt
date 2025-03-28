@@ -2,8 +2,8 @@ package com.summer.core.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.summer.core.data.preference.PreferenceKeys.Companion.DEFAULT_PREF
-import com.summer.core.data.preference.SharedPreferencesManager
+import com.summer.core.data.local.preference.PreferenceKeys.Companion.DEFAULT_PREF
+import com.summer.core.data.local.preference.SharedPreferencesManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

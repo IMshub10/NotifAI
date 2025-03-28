@@ -1,11 +1,11 @@
-package com.summer.core.data.db
+package com.summer.core.data.local.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.summer.core.data.dao.SMSDao
-import com.summer.core.data.entities.SMSEntity
+import com.summer.core.data.local.dao.SMSDao
+import com.summer.core.data.local.entities.SMSEntity
 
 @Database(entities = [SMSEntity::class], version = 1)
 abstract class SMSDatabase : RoomDatabase() {

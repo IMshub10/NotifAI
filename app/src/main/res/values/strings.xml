@@ -48,4 +48,12 @@
     <string name="enable_sharing">Enable Sharing</string>
     <string name="not_now">Not Now</string>
     <string name="grant_permissions">Grant Permissions</string>
+    <string name="processing_messages">Processing Messages</string>
+    <string name="processing_messages_">Processing messages…</string>
+    <string name="processing_complete">Processing complete!</string>
+    <string name="processing_error">Error: %1$s</string>
+    <string name="progress_percentage">%1$d%% done…</string>
+    <string name="start_processing">Start Processing</string>
+    <string name="stop_processing">Stop Processing</string>
+
 </resources>

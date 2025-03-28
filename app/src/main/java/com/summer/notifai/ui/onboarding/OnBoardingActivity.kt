@@ -26,16 +26,18 @@ class OnBoardingActivity : BaseActivity<ActivityOnboardingBinding>() {
                 R.id.permissionsFrag
             }
 
-            OnboardingFlowType.SMS_CLASSIFICATION -> {
-                R.id.userAgreementFrag //TODO(To be replaced with smsClassificationFlag)
+            OnboardingFlowType.SMS_PROCESSING -> {
+                R.id.smsProcessingFrag
             }
         }
         setupNavController(startDestination)
     }
 
     private fun setupNavController(startDestination: Int) {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
-        val navController = navHostFragment?.navController ?: throw IllegalStateException("NavController is null")
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+        val navController =
+            navHostFragment?.navController ?: throw IllegalStateException("NavController is null")
 
         val navGraph = navController.navInflater.inflate(R.navigation.nav_onboarding)
         navGraph.setStartDestination(startDestination)

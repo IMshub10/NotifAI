@@ -3,7 +3,7 @@ package com.summer.notifai.ui.onboarding
 enum class OnboardingFlowType {
     USER_AGREEMENT,
     PERMISSIONS,
-    SMS_CLASSIFICATION;
+    SMS_PROCESSING;
 
     companion object {
         fun fromString(value: String): OnboardingFlowType? {

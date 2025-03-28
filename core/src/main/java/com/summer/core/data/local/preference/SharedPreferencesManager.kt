@@ -1,14 +1,15 @@
-package com.summer.core.data.preference
+package com.summer.core.data.local.preference
 
 import android.content.SharedPreferences
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class SharedPreferencesManager @Inject constructor(private val sharedPreferences: SharedPreferences) {
 
     fun saveData(key: PreferenceKeys, data: String) {
-        sharedPreferences.edit().putString(key.key, data).apply()
+        sharedPreferences.edit { putString(key.key, data) }
     }
 
     fun getData(key: PreferenceKeys, defaultValue: String? = null): String? {
@@ -16,7 +17,7 @@ class SharedPreferencesManager @Inject constructor(private val sharedPreferences
     }
 
     fun saveData(key: PreferenceKeys, data: Int) {
-        sharedPreferences.edit().putInt(key.key, data).apply()
+        sharedPreferences.edit { putInt(key.key, data) }
     }
 
     fun getDataInt(key: PreferenceKeys, defaultValue: Int = 0): Int {
@@ -24,7 +25,7 @@ class SharedPreferencesManager @Inject constructor(private val sharedPreferences
     }
 
     fun saveData(key: PreferenceKeys, data: Boolean) {
-        sharedPreferences.edit().putBoolean(key.key, data).apply()
+        sharedPreferences.edit { putBoolean(key.key, data) }
     }
 
     fun getDataBoolean(key: PreferenceKeys, defaultValue: Boolean = false): Boolean {
@@ -32,7 +33,7 @@ class SharedPreferencesManager @Inject constructor(private val sharedPreferences
     }
 
     fun saveData(key: PreferenceKeys, data: Float) {
-        sharedPreferences.edit().putFloat(key.key, data).apply()
+        sharedPreferences.edit { putFloat(key.key, data) }
     }
 
     fun getDataFloat(key: PreferenceKeys, defaultValue: Float = 0f): Float {
@@ -40,7 +41,7 @@ class SharedPreferencesManager @Inject constructor(private val sharedPreferences
     }
 
     fun saveData(key: PreferenceKeys, data: Long) {
-        sharedPreferences.edit().putLong(key.key, data).apply()
+        sharedPreferences.edit { putLong(key.key, data) }
     }
 
     fun getDataLong(key: PreferenceKeys, defaultValue: Long = 0L): Long {
@@ -48,7 +49,7 @@ class SharedPreferencesManager @Inject constructor(private val sharedPreferences
     }
 
     fun saveData(key: PreferenceKeys, data: Set<String>) {
-        sharedPreferences.edit().putStringSet(key.key, data).apply()
+        sharedPreferences.edit { putStringSet(key.key, data) }
     }
 
     fun getDataStringSet(key: PreferenceKeys, defaultValue: Set<String>? = null): Set<String>? {

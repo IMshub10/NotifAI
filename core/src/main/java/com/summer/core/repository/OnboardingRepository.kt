@@ -1,7 +1,7 @@
 package com.summer.core.repository
 
-import com.summer.core.data.preference.SharedPreferencesManager
-import com.summer.core.data.preference.PreferenceKeys
+import com.summer.core.data.local.preference.SharedPreferencesManager
+import com.summer.core.data.local.preference.PreferenceKeys
 import javax.inject.Inject
 
 
@@ -18,5 +18,9 @@ class OnboardingRepository @Inject constructor(
 
     override fun setDataSharing(enabled: Boolean) {
         sharedPreferencesManager.saveData(PreferenceKeys.DATA_SHARING, enabled)
+    }
+
+    override fun isSMSProcessingCompleted(): Boolean {
+        return sharedPreferencesManager.getDataBoolean(PreferenceKeys.SMS_PROCESSING_STATUS)
     }
 }

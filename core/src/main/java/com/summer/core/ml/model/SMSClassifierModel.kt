@@ -23,8 +23,10 @@ import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.LongBuffer
+import javax.inject.Singleton
 import kotlin.math.exp
 
+@Singleton
 class SMSClassifierModel(context: Context) {
     private var ortEnv: OrtEnvironment = OrtEnvironment.getEnvironment()
     private var ortSession: OrtSession
@@ -50,7 +52,7 @@ class SMSClassifierModel(context: Context) {
     }
 
     private fun loadModelFile(context: Context): ByteBuffer {
-        val inputStream: InputStream = context.assets.open(MODEL_FILE_NAME)
+        val inputStream: InputStream = context.assets.open("ml/$MODEL_FILE_NAME")
         val byteArray = inputStream.readBytes()
         inputStream.close()
 
@@ -64,7 +66,7 @@ class SMSClassifierModel(context: Context) {
 
     private fun loadFullJson(context: Context): JSONObject {
         val jsonStr =
-            context.assets.open(TOKENIZER_FILE_NAME).bufferedReader().use { it.readText() }
+            context.assets.open("ml/$TOKENIZER_FILE_NAME").bufferedReader().use { it.readText() }
         return JSONObject(jsonStr)
     }
 
@@ -82,7 +84,7 @@ class SMSClassifierModel(context: Context) {
 
     private fun loadLabelMap(context: Context): Map<Int, String> {
         val jsonStr =
-            context.assets.open(LABEL_ENCODER_FILE_NAME).bufferedReader().use { it.readText() }
+            context.assets.open("ml/$LABEL_ENCODER_FILE_NAME").bufferedReader().use { it.readText() }
         val jsonObject = JSONObject(jsonStr)
         val map = mutableMapOf<Int, String>()
         jsonObject.keys().forEach { key -> map[key.toInt()] = jsonObject.getString(key) }

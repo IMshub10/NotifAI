@@ -5,6 +5,7 @@ import com.summer.core.ml.model.SMSClassifierModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -14,7 +15,7 @@ object ModelModule {
 
     @Provides
     @Singleton
-    fun provideSMSClassifierModel(context: Context): SMSClassifierModel {
+    fun provideSMSClassifierModel(@ApplicationContext context: Context): SMSClassifierModel {
         return SMSClassifierModel(context)
     }
 }

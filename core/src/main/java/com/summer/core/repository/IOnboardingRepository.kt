@@ -4,4 +4,5 @@ interface IOnboardingRepository {
     fun hasAgreedToUserAgreement(): Boolean
     fun setUserAgreement(agreed: Boolean)
     fun setDataSharing(enabled: Boolean)
+    fun isSMSProcessingCompleted(): Boolean
 }

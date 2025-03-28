@@ -2,6 +2,7 @@ package com.summer.notifai.ui.start
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.summer.core.ml.model.SMSClassifierModel
 import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.MainActivity
 import com.summer.notifai.R
@@ -11,11 +12,15 @@ import com.summer.notifai.ui.onboarding.OnBoardingActivity
 import com.summer.notifai.ui.onboarding.OnboardingFlowType
 import com.summer.passwordmanager.base.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartActivity : BaseActivity<ActivityStartBinding>() {
     override val layoutResId: Int
         get() = R.layout.activity_start
+
+    @Inject
+    lateinit var smsClassifierModel: SMSClassifierModel
 
     private val startViewModel: StartViewModel by viewModels()
 
@@ -28,15 +33,15 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
     }
 
     private fun observers() {
-        startViewModel.hasAgreedToUserAgreement.observe(this) { userAgreement ->
-            if (userAgreement != null) {
+        startViewModel.uiState.observe(this) { uiState ->
+            if (uiState.hasAgreedToUserAgreement != null && uiState.isSMSProcessingCompleted != null) {
                 val hasRequiredPermissions = permissionManager.hasRequiredPermissions()
                 when {
-                    userAgreement && hasRequiredPermissions -> {
+                    uiState.hasAgreedToUserAgreement && uiState.isSMSProcessingCompleted -> {
                         startActivityWithClearTop(this, MainActivity::class.java)
                     }
 
-                    !userAgreement -> {
+                    !uiState.hasAgreedToUserAgreement -> {
                         startActivityWithClearTop(
                             this,
                             OnBoardingActivity.onNewInstance(
@@ -46,12 +51,22 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
                         )
                     }
 
-                    else -> {
+                    !hasRequiredPermissions -> {
                         startActivityWithClearTop(
                             this,
                             OnBoardingActivity.onNewInstance(
                                 context = this,
                                 onboardingFlowType = OnboardingFlowType.PERMISSIONS
+                            )
+                        )
+                    }
+
+                    else -> {
+                        startActivityWithClearTop(
+                            this,
+                            OnBoardingActivity.onNewInstance(
+                                context = this,
+                                onboardingFlowType = OnboardingFlowType.SMS_PROCESSING
                             )
                         )
                     }

@@ -12,9 +12,9 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.navigation.fragment.findNavController
 import com.summer.core.util.showShortToast
-import com.summer.core.util.startActivityWithClearTop
-import com.summer.notifai.MainActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragPermissionsBinding
 import com.summer.notifai.manager.permission.PermissionManagerImpl
@@ -46,7 +46,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
             val deniedPermissions = permissions.filterValues { !it }.keys
             if (deniedPermissions.isEmpty()) {
                 showShortToast("All necessary permissions granted!")
-                startActivityWithClearTop(requireActivity(), MainActivity::class.java)
+                findNavController().navigate(R.id.action_permissionsFrag_to_smsProcessingFrag)
             } else {
                 showRationaleOrSettings(deniedPermissions)
             }
@@ -108,7 +108,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
      */
     private fun openAppSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = android.net.Uri.parse("package:${requireContext().packageName}")
+            data = "package:${requireContext().packageName}".toUri()
         }
         startActivity(intent)
     }
@@ -135,6 +135,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
         val iconsArray = intArrayOf(
             R.drawable.ic_sms_24x24,
             R.drawable.ic_contacts_24x24,
+            R.drawable.ic_storage_24x24,
             R.drawable.ic_storage_24x24
         )
 

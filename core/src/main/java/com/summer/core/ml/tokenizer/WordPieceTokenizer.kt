@@ -77,8 +77,11 @@ class WordPieceTokenizer(private val vocab: Map<String, Long>) {
         tokens.add(vocab[SEPARATOR_TOKEN] ?: error("Missing $SEPARATOR_TOKEN token"))
 
         // Add padding at the end if word tokens less that maxLength
-        val paddedTokens =
-            tokens.take(maxLength) + List(maxLength - tokens.size) { vocab[PADDING_TOKEN]!! }
+        val paddedTokens = if (tokens.size < maxLength) {
+            tokens + List(maxLength - tokens.size) { vocab[PADDING_TOKEN]!! }
+        } else {
+            tokens.take(maxLength) // Trim tokens to max length
+        }
 
         return paddedTokens.toLongArray()
     }

@@ -10,12 +10,36 @@ import androidx.core.content.ContextCompat
 
 class PermissionManagerImpl(private val context: Context) : PermissionManager {
 
-    val requiredPermissions = arrayOf(
-        Manifest.permission.RECEIVE_SMS,
-        Manifest.permission.READ_SMS,
-        Manifest.permission.RECEIVE_MMS,
-        Manifest.permission.READ_CONTACTS
-    )
+    val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            arrayOf(
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.RECEIVE_MMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.POST_NOTIFICATIONS,
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.RECEIVE_MMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.POST_NOTIFICATIONS,
+                Manifest.permission.FOREGROUND_SERVICE
+            )
+        }
+    } else {
+        arrayOf(
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.RECEIVE_MMS,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.FOREGROUND_SERVICE
+        )
+    }
 
     val optionalPermissions = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -28,7 +52,7 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
 
     override fun isDefaultSMS(): Boolean {
         return true
-        //for testing
+        //TODO()for testing
         /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             context.getSystemService(RoleManager::class.java)
                 ?.isRoleHeld(RoleManager.ROLE_SMS) == true

@@ -60,4 +60,7 @@ dependencies {
     implementation(libs.androidx.navigation.dynamic.features.fragment)
 
     androidTestImplementation(libs.androidx.navigation.testing)
+
+    //lottie
+    implementation(libs.lottie)
 }
