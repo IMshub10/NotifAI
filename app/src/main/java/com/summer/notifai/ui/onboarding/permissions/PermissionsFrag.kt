@@ -82,6 +82,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
         if (missingPermissions.isNotEmpty()) {
             permissionLauncher.launch(missingPermissions.toTypedArray())
         } else {
+            findNavController().navigate(R.id.action_permissionsFrag_to_smsProcessingFrag)
             showShortToast("All permissions are already granted!")
         }
     }
@@ -121,7 +122,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
     private fun listeners() {
         with(mBinding) {
             fragUserAgreementActionButton.setOnClickListener {
-                if (!permissionManager.isDefaultSMS())
+                if (!permissionManager.isDefaultSms())
                     promptToSetDefaultSmsApp()
                 else
                     requestRequiredPermissions()

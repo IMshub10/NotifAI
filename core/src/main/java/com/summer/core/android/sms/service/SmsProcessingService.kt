@@ -49,7 +49,7 @@ class SmsProcessingService : Service() {
 
     private fun startProcessing() {
         serviceScope.launch {
-            repository.fetchSMSFromDevice().collect { result ->
+            repository.fetchSmsMessagesFromDevice().collect { result ->
                 when (result) {
                     is FetchResult.Loading -> {
                         updateNotification("Processing batch ${result.batchNumber} of ${result.totalBatches}...")
@@ -59,7 +59,7 @@ class SmsProcessingService : Service() {
                     is FetchResult.Success -> {
                         updateNotification("Processing completed successfully!")
                         sendBroadcast(FetchResult.Success)
-                        repository.setSMSProcessingStatusCompleted(true)
+                        repository.setSmsProcessingStatusCompleted(true)
                         stopSelf()
                     }
 

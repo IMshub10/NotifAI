@@ -1,7 +1,7 @@
 package com.summer.core.di
 
 import android.content.Context
-import com.summer.core.ml.model.SmsClassifierModel
+import com.summer.core.util.CountryCodeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,11 +11,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ModelModule {
-
+object CountryProviderModule {
     @Provides
     @Singleton
-    fun provideSmsClassifierModel(@ApplicationContext context: Context): SmsClassifierModel {
-        return SmsClassifierModel(context)
+    fun provideCountryCodeProvider(@ApplicationContext context: Context): CountryCodeProvider {
+        return CountryCodeProvider(context)
     }
 }

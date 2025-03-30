@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.summer.core.repository.IOnboardingRepository
-import com.summer.core.android.sms.service.SmsProcessingService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +19,7 @@ class StartViewModel @Inject constructor(
 
     init {
         checkUserAgreement()
-        checkSMSProcessingStatus()
+        checkSmsProcessingStatus()
     }
 
     /**
@@ -36,9 +35,9 @@ class StartViewModel @Inject constructor(
     /**
      * Checks if SMS processing has been completed.
      */
-    private fun checkSMSProcessingStatus() {
+    private fun checkSmsProcessingStatus() {
         viewModelScope.launch {
-            val isProcessingComplete = onboardingRepository.isSMSProcessingCompleted()
+            val isProcessingComplete = onboardingRepository.isSmsProcessingCompleted()
             updateState(isSMSProcessingCompleted = isProcessingComplete)
         }
     }
@@ -53,7 +52,7 @@ class StartViewModel @Inject constructor(
         val currentState = _uiState.value ?: StartUiState()
         _uiState.value = currentState.copy(
             hasAgreedToUserAgreement = hasAgreedToUserAgreement ?: currentState.hasAgreedToUserAgreement,
-            isSMSProcessingCompleted = isSMSProcessingCompleted ?: currentState.isSMSProcessingCompleted
+            isSmsProcessingCompleted = isSMSProcessingCompleted ?: currentState.isSmsProcessingCompleted
         )
     }
 }
@@ -63,5 +62,5 @@ class StartViewModel @Inject constructor(
  */
 data class StartUiState(
     val hasAgreedToUserAgreement: Boolean? = null,
-    val isSMSProcessingCompleted: Boolean? = null
+    val isSmsProcessingCompleted: Boolean? = null
 )

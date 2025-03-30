@@ -1,8 +1,8 @@
 package com.summer.core.di
 
 import android.content.Context
-import com.summer.core.data.local.dao.SMSDao
-import com.summer.core.data.local.db.SMSDatabase
+import com.summer.core.data.local.dao.SmsDao
+import com.summer.core.data.local.db.SmsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,12 +16,12 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): SMSDatabase {
-        return SMSDatabase.getDatabase(context)
+    fun provideDatabase(@ApplicationContext context: Context): SmsDatabase {
+        return SmsDatabase.getDatabase(context)
     }
 
     @Provides
-    fun provideSmsDao(database: SMSDatabase): SMSDao {
+    fun provideSmsDao(database: SmsDatabase): SmsDao {
         return database.smsDao()
     }
 }

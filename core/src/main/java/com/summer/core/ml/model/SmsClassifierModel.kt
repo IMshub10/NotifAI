@@ -18,6 +18,7 @@ import com.summer.core.ml.utils.Constants.SEPARATOR
 import com.summer.core.ml.utils.Constants.TOKENIZER_FILE_NAME
 import com.summer.core.ml.utils.Constants.VOCAB
 import com.summer.core.ml.tokenizer.WordPieceTokenizer
+import com.summer.core.util.roundToTwoDecimalPlaces
 import org.json.JSONObject
 import java.io.InputStream
 import java.nio.ByteBuffer
@@ -27,7 +28,7 @@ import javax.inject.Singleton
 import kotlin.math.exp
 
 @Singleton
-class SMSClassifierModel(context: Context) {
+class SmsClassifierModel(context: Context) {
     private var ortEnv: OrtEnvironment = OrtEnvironment.getEnvironment()
     private var ortSession: OrtSession
     private var vocab: Map<String, Long>
@@ -84,7 +85,8 @@ class SMSClassifierModel(context: Context) {
 
     private fun loadLabelMap(context: Context): Map<Int, String> {
         val jsonStr =
-            context.assets.open("ml/$LABEL_ENCODER_FILE_NAME").bufferedReader().use { it.readText() }
+            context.assets.open("ml/$LABEL_ENCODER_FILE_NAME").bufferedReader()
+                .use { it.readText() }
         val jsonObject = JSONObject(jsonStr)
         val map = mutableMapOf<Int, String>()
         jsonObject.keys().forEach { key -> map[key.toInt()] = jsonObject.getString(key) }
@@ -101,7 +103,7 @@ class SMSClassifierModel(context: Context) {
     /**
      * Runs ONNX inference and returns label + confidence score
      */
-    fun classifySms(sender: String, message: String): Pair<String, Float> {
+    fun classifySms(sender: String, message: String): SmsClassifierOutputModel {
         val inputText = getInputTextFromSenderNMessage(sender, message)
         val inputTokens = wordPieceTokenizer.tokenize(inputText, maxLength = 128)
         val attentionMask =
@@ -122,9 +124,15 @@ class SMSClassifierModel(context: Context) {
 
         val maxIndex = probabilities.indices.maxByOrNull { probabilities[it] }!!
         val predictedLabel = labelMap[maxIndex] ?: "Unknown"
-        val confidenceScore = probabilities[maxIndex]
+        val confidenceScore = probabilities[maxIndex].roundToTwoDecimalPlaces()
 
-        return Pair(predictedLabel, confidenceScore)
+        return SmsClassifierOutputModel(
+            importanceScore = predictedLabel.first().digitToIntOrNull() ?: 0,
+            smsClassificationTypeId = predictedLabel.takeLast(2).toInt(),
+            confidenceScore = confidenceScore,
+            smsClassTypeId = predictedLabel[1].digitToIntOrNull() ?: 0,
+            smsSubClassTypeId = predictedLabel[2].digitToIntOrNull() ?: 0
+        )
     }
 
     /**

@@ -23,7 +23,7 @@ import com.summer.passwordmanager.base.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SMSProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
+class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_sms_processing
 

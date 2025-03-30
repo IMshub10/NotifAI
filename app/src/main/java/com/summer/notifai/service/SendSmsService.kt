@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
-class SendSMSService : Service() {
+class SendSmsService : Service() {
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }

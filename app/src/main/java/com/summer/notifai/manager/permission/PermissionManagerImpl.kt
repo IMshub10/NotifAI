@@ -50,7 +50,7 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
         return requiredPermissions.all { hasPermission(it) }
     }
 
-    override fun isDefaultSMS(): Boolean {
+    override fun isDefaultSms(): Boolean {
         return true
         //TODO()for testing
         /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -61,9 +61,9 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
         }*/
     }
 
-    override fun hasReadSMS(): Boolean = hasPermission(Manifest.permission.READ_SMS)
+    override fun hasReadSms(): Boolean = hasPermission(Manifest.permission.READ_SMS)
 
-    override fun hasReceiveSMS(): Boolean = hasPermission(Manifest.permission.RECEIVE_SMS)
+    override fun hasReceiveSms(): Boolean = hasPermission(Manifest.permission.RECEIVE_SMS)
 
     override fun hasReadContacts(): Boolean = hasPermission(Manifest.permission.READ_CONTACTS)
 

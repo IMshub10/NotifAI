@@ -2,19 +2,36 @@ package com.summer.core.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.summer.core.data.local.entities.SmsEntity.Companion.TABLE_NAME
 
-@Entity(tableName = "sms_messages")
-data class SMSEntity(
+@Entity(
+    tableName = TABLE_NAME,
+    foreignKeys = [
+        ForeignKey(
+            entity = SenderAddressEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["sender_address_id"],
+            onDelete = ForeignKey.SET_NULL
+        )
+    ],
+    indices = [Index(value = ["sender_address_id"], unique = false)]
+)
+data class SmsEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long = 0,
 
     @ColumnInfo(name = "android_sms_id")  // Unique SMS ID from the system
-    val androidSMSId: Int?,
+    val androidSmsId: Int?,
 
-    @ColumnInfo(name = "address")  // Sender/Receiver Number
-    val address: String,
+    @ColumnInfo(name = "sender_address_id")  // Row updated-at, in epoch
+    val senderAddressId: Long,
+
+    @ColumnInfo(name = "raw_address")  // Sender/Receiver Number
+    val rawAddress: String,
 
     @ColumnInfo(name = "body")  // SMS content
     val body: String,
@@ -43,10 +60,13 @@ data class SMSEntity(
     @ColumnInfo(name = "subscription_id")  // SIM ID (Useful for dual SIM)
     val subscriptionId: Int?,
 
-    @ColumnInfo(name = "classification")  // Bert classification
-    val classification: String?,
+    @ColumnInfo(name = "sms_classification_type_id")  // Bert classification mapped to classification_type table
+    val smsClassificationTypeId: Int?,
 
-    @ColumnInfo(name = "confidence_score")  // Bert classification
+    @ColumnInfo(name = "importance_score")  // Bert message importance score
+    val importanceScore: Int?,
+
+    @ColumnInfo(name = "confidence_score")  // Bert confidence score
     val confidenceScore: Float?,
 
     @ColumnInfo(name = "created_at_app")  // Row created-at, in epoch
@@ -54,4 +74,8 @@ data class SMSEntity(
 
     @ColumnInfo(name = "updated_at_app")  // Row updated-at, in epoch
     val updatedAtApp: Long,
-)
+) {
+    companion object {
+        const val TABLE_NAME = "sms_messages"
+    }
+}

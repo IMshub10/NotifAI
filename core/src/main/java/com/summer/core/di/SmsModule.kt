@@ -2,13 +2,14 @@ package com.summer.core.di
 
 import android.content.ContentResolver
 import android.content.Context
-import com.summer.core.android.sms.data.ISMSContentProvider
-import com.summer.core.android.sms.data.SMSContentProvider
+import com.summer.core.android.sms.data.ISmsContentProvider
+import com.summer.core.android.sms.data.SmsContentProvider
 import com.summer.core.android.sms.processor.SmsBatchProcessor
-import com.summer.core.data.local.dao.SMSDao
+import com.summer.core.data.local.dao.SmsDao
 import com.summer.core.data.local.preference.SharedPreferencesManager
-import com.summer.core.ml.model.SMSClassifierModel
+import com.summer.core.ml.model.SmsClassifierModel
 import com.summer.core.repository.SmsRepository
+import com.summer.core.util.CountryCodeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SMSModule {
+object SmsModule {
 
     @Provides
     @Singleton
@@ -28,18 +29,24 @@ object SMSModule {
 
     @Provides
     @Singleton
-    fun provideSMSContentProvider(contentResolver: ContentResolver): ISMSContentProvider {
-        return SMSContentProvider(contentResolver)
+    fun provideSmsContentProvider(contentResolver: ContentResolver): ISmsContentProvider {
+        return SmsContentProvider(contentResolver)
     }
 
     @Provides
     @Singleton
-    fun provideSMSBatchProcessor(
-        smsContentProvider: ISMSContentProvider,
-        smsDao: SMSDao,
-        smsClassifierModel: SMSClassifierModel
+    fun provideSmsBatchProcessor(
+        smsContentProvider: ISmsContentProvider,
+        smsDao: SmsDao,
+        smsClassifierModel: SmsClassifierModel,
+        countryCodeProvider: CountryCodeProvider
     ): SmsBatchProcessor {
-        return SmsBatchProcessor(smsContentProvider, smsDao, smsClassifierModel)
+        return SmsBatchProcessor(
+            smsContentProvider,
+            smsDao,
+            smsClassifierModel,
+            countryCodeProvider
+        )
     }
 
     @Provides

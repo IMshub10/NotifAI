@@ -11,13 +11,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SMSContentProvider @Inject constructor(
+class SmsContentProvider @Inject constructor(
     private val contentResolver: ContentResolver
-) : ISMSContentProvider {
+) : ISmsContentProvider {
 
     private val smsUri: Uri = Telephony.Sms.CONTENT_URI
 
-    override fun getSMSCursor(
+    override fun getSmsCursor(
         limit: Int,
         offset: Int,
         lastFetchedDate: Long?,
@@ -43,7 +43,7 @@ class SMSContentProvider @Inject constructor(
         )
     }
 
-    override fun getTotalSMSCount(): Int {
+    override fun getTotalSmsCount(): Int {
         val cursor: Cursor? = contentResolver.query(
             smsUri,
             arrayOf("COUNT(*) AS $COLUMN_TOTAL_SMS_COUNT"),  // Query to count total SMS

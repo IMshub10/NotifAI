@@ -13,12 +13,12 @@ import javax.inject.Singleton
 class SmsRepository @Inject constructor(
     private val smsBatchProcessor: SmsBatchProcessor,
     private val sharedPreferencesManager: SharedPreferencesManager
-) : ISMSRepository {
-    override suspend fun fetchSMSFromDevice(): Flow<FetchResult> {
-        return smsBatchProcessor.processSMSInBatches(BATCH_SIZE)
+) : ISmsRepository {
+    override suspend fun fetchSmsMessagesFromDevice(): Flow<FetchResult> {
+        return smsBatchProcessor.processSmsInBatches(BATCH_SIZE)
     }
 
-    override fun setSMSProcessingStatusCompleted(isCompleted: Boolean) {
+    override fun setSmsProcessingStatusCompleted(isCompleted: Boolean) {
         sharedPreferencesManager.saveData(PreferenceKeys.SMS_PROCESSING_STATUS, isCompleted)
     }
 }

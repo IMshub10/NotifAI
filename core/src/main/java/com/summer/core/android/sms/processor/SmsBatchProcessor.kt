@@ -1,13 +1,13 @@
 package com.summer.core.android.sms.processor
 
 import android.util.Log
-import com.google.firebase.Firebase
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.summer.core.android.sms.data.ISMSContentProvider
+import com.summer.core.android.sms.data.ISmsContentProvider
 import com.summer.core.android.sms.mapper.SMSMapper
 import com.summer.core.data.domain.model.FetchResult
-import com.summer.core.data.local.dao.SMSDao
-import com.summer.core.ml.model.SMSClassifierModel
+import com.summer.core.data.local.dao.SmsDao
+import com.summer.core.ml.model.SmsClassifierModel
+import com.summer.core.util.CountryCodeProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -24,9 +24,10 @@ import javax.inject.Singleton
  */
 @Singleton
 class SmsBatchProcessor @Inject constructor(
-    private val smsContentProvider: ISMSContentProvider,
-    private val smsDao: SMSDao,
-    private val smsClassifierModel: SMSClassifierModel
+    private val smsContentProvider: ISmsContentProvider,
+    private val smsDao: SmsDao,
+    private val smsClassifierModel: SmsClassifierModel,
+    private val countryCodeProvider: CountryCodeProvider
 ) {
 
     /**
@@ -36,18 +37,18 @@ class SmsBatchProcessor @Inject constructor(
      * @param batchSize Number of SMS messages to process per batch.
      * @return A Flow emitting [FetchResult] to track progress and completion.
      */
-    fun processSMSInBatches(batchSize: Int): Flow<FetchResult> = flow {
+    fun processSmsInBatches(batchSize: Int): Flow<FetchResult> = flow {
         try {
             // Retrieve the last processed SMS from the database
-            val lastSms = smsDao.getLastInsertedSMS()
+            val lastSms = smsDao.getLastInsertedSmsMessage()
             val lastFetchedDate = lastSms?.date
-            val lastFetchedId = lastSms?.androidSMSId
+            val lastFetchedId = lastSms?.androidSmsId
 
             // Get the total SMS count and already processed messages count
             val totalCount =
-                smsContentProvider.getTotalSMSCount().coerceAtLeast(0) // Ensure non-negative
+                smsContentProvider.getTotalSmsCount().coerceAtLeast(0) // Ensure non-negative
             val processedCount =
-                smsDao.getTotalProcessedSMSCount().coerceAtLeast(0) // Ensure non-negative
+                smsDao.getTotalProcessedSmsCount().coerceAtLeast(0) // Ensure non-negative
 
             // Avoid division by zero or negative values
             val validBatchSize = batchSize.coerceAtLeast(1)
@@ -64,14 +65,18 @@ class SmsBatchProcessor @Inject constructor(
                 val start = System.currentTimeMillis()
                 emit(FetchResult.Loading(batchNumber, totalBatches)) // Emit progress
 
-                // Fetch SMS batch from content providerbut
-                val cursor = smsContentProvider.getSMSCursor(
+                // Fetch SMS batch from content provider
+                val cursor = smsContentProvider.getSmsCursor(
                     batchSize,
                     offset,
                     lastFetchedDate,
                     lastFetchedId
                 )
-                val smsBatch = SMSMapper.mapCursorToSmsList(cursor)
+                val smsBatch = SMSMapper.mapCursorToSmsList(
+                    cursor,
+                    smsDao,
+                    countryCodeProvider.getMyCountryCode()
+                )
 
                 // Check if the batch is empty, marking the end of processing
                 if (smsBatch.isEmpty()) {
@@ -81,10 +86,11 @@ class SmsBatchProcessor @Inject constructor(
                     val classifiedSms = smsBatch.map { sms ->
                         try {
                             val classification =
-                                smsClassifierModel.classifySms(sms.address, sms.body)
+                                smsClassifierModel.classifySms(sms.rawAddress, sms.body)
                             sms.copy(
-                                classification = classification.first,
-                                confidenceScore = classification.second
+                                importanceScore = classification.importanceScore,
+                                smsClassificationTypeId = classification.smsClassificationTypeId,
+                                confidenceScore = classification.confidenceScore
                             )
                         } catch (e: Exception) {
                             FirebaseCrashlytics.getInstance().recordException(e)
@@ -94,7 +100,7 @@ class SmsBatchProcessor @Inject constructor(
                     }
 
                     // Insert classified messages into the Room database
-                    smsDao.insertAll(classifiedSms)
+                    smsDao.insertAllSmsMessages(classifiedSms)
 
                     // Update offset dynamically based on actual batch size
                     offset += smsBatch.size

@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/smsProcessingFrag"
-        android:name="com.summer.notifai.ui.onboarding.processor.SMSProcessingFrag"
+        android:name="com.summer.notifai.ui.onboarding.processor.SmsProcessingFrag"
         android:label="SMSProcessingFrag"
         tools:layout="@layout/frag_sms_processing" />
 </navigation>

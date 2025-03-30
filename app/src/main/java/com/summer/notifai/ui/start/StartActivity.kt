@@ -2,7 +2,7 @@ package com.summer.notifai.ui.start
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.summer.core.ml.model.SMSClassifierModel
+import com.summer.core.ml.model.SmsClassifierModel
 import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.MainActivity
 import com.summer.notifai.R
@@ -20,7 +20,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
         get() = R.layout.activity_start
 
     @Inject
-    lateinit var smsClassifierModel: SMSClassifierModel
+    lateinit var smsClassifierModel: SmsClassifierModel
 
     private val startViewModel: StartViewModel by viewModels()
 
@@ -34,10 +34,10 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
 
     private fun observers() {
         startViewModel.uiState.observe(this) { uiState ->
-            if (uiState.hasAgreedToUserAgreement != null && uiState.isSMSProcessingCompleted != null) {
+            if (uiState.hasAgreedToUserAgreement != null && uiState.isSmsProcessingCompleted != null) {
                 val hasRequiredPermissions = permissionManager.hasRequiredPermissions()
                 when {
-                    uiState.hasAgreedToUserAgreement && uiState.isSMSProcessingCompleted -> {
+                    uiState.hasAgreedToUserAgreement && uiState.isSmsProcessingCompleted -> {
                         startActivityWithClearTop(this, MainActivity::class.java)
                     }
 
