@@ -48,13 +48,4 @@ object SmsModule {
             countryCodeProvider
         )
     }
-
-    @Provides
-    @Singleton
-    fun provideSmsRepository(
-        batchProcessor: SmsBatchProcessor,
-        sharedPreferencesManager: SharedPreferencesManager
-    ): SmsRepository {
-        return SmsRepository(batchProcessor, sharedPreferencesManager)
-    }
 }

@@ -10,17 +10,24 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.summer.core.android.phone.processor.ContactProcessor
 import com.summer.core.android.sms.service.SmsProcessingService
 import com.summer.core.android.sms.util.ServiceUtils
 import com.summer.core.data.domain.model.FetchResult
+import com.summer.core.data.local.entities.ContactEntity
 import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.MainActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsProcessingBinding
 import com.summer.notifai.ui.onboarding.OnboardingViewModel
-import com.summer.passwordmanager.base.ui.BaseFragment
+import com.summer.core.ui.BaseFragment
+import com.summer.core.util.ResultState
+import com.summer.core.util.showShortToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
@@ -91,10 +98,46 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
                 }
             }
         }
+        onboardingViewModel.contactsSync.observe(viewLifecycleOwner) {
+            when (it) {
+                is FetchResult.Error -> {
+                    showShortToast(message = getString(R.string.something_went_wrong))
+                }
+
+                is FetchResult.Loading -> {
+                }
+
+                FetchResult.Success -> {
+                    startSmsProcessingService()
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        if (!onboardingViewModel.areContactsSynced()) {
+            lifecycleScope.launch {
+                ContactProcessor<ContactEntity>(requireContext()).fetchContacts()
+                    .collectLatest { state ->
+                        when (state) {
+                            is ResultState.Failed -> {
+                                showShortToast(message = getString(R.string.something_went_wrong))
+                            }
+
+                            ResultState.InProgress -> {}
+                            is ResultState.Success -> {
+                                onboardingViewModel.syncContacts(state.data)
+                            }
+                        }
+                    }
+            }
+        } else {
+            startSmsProcessingService()
+        }
+    }
+
+    private fun startSmsProcessingService() {
         if (!ServiceUtils.isServiceRunning(
                 requireContext(),
                 SmsProcessingService::class.java

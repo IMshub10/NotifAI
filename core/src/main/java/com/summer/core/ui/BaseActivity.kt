@@ -1,4 +1,4 @@
-package com.summer.passwordmanager.base.ui
+package com.summer.core.ui
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,13 +8,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
-
 abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
 
     @get:LayoutRes
     protected abstract val layoutResId: Int
-
-
+    
     private var binding: B? = null
     protected val mBinding: B
         get() = binding!!

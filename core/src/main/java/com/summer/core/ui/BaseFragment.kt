@@ -1,4 +1,4 @@
-package com.summer.passwordmanager.base.ui
+package com.summer.core.ui
 
 
 import android.os.Bundle

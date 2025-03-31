@@ -31,4 +31,12 @@ class OnboardingRepository @Inject constructor(
     override fun isSmsProcessingCompleted(): Boolean {
         return sharedPreferencesManager.getDataBoolean(PreferenceKeys.SMS_PROCESSING_STATUS)
     }
+
+    override fun setPhoneTableLastUpdated(timeInMillis: Long) {
+        sharedPreferencesManager.saveData(PreferenceKeys.PHONE_TABLE_LAST_UPDATED, timeInMillis)
+    }
+
+    override fun areContactsSynced(): Boolean {
+        return sharedPreferencesManager.getDataLong(PreferenceKeys.PHONE_TABLE_LAST_UPDATED) != 0L
+    }
 }

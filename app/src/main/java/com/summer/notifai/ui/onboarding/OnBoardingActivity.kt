@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityOnboardingBinding
-import com.summer.passwordmanager.base.ui.BaseActivity
+import com.summer.core.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

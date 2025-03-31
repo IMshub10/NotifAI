@@ -19,8 +19,10 @@ import com.summer.notifai.R
 import com.summer.notifai.databinding.FragPermissionsBinding
 import com.summer.notifai.manager.permission.PermissionManagerImpl
 import com.summer.notifai.ui.datamodel.PermissionItemModel
-import com.summer.passwordmanager.base.ui.BaseFragment
+import com.summer.core.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_permissions

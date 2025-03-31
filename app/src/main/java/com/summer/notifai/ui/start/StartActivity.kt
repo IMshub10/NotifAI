@@ -10,7 +10,7 @@ import com.summer.notifai.databinding.ActivityStartBinding
 import com.summer.notifai.manager.permission.PermissionManagerImpl
 import com.summer.notifai.ui.onboarding.OnBoardingActivity
 import com.summer.notifai.ui.onboarding.OnboardingFlowType
-import com.summer.passwordmanager.base.ui.BaseActivity
+import com.summer.core.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

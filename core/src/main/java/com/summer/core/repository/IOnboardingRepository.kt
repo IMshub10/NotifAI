@@ -5,4 +5,6 @@ interface IOnboardingRepository {
     fun setUserAgreement(agreed: Boolean)
     fun setDataSharing(enabled: Boolean)
     fun isSmsProcessingCompleted(): Boolean
+    fun setPhoneTableLastUpdated(timeInMillis: Long)
+    fun areContactsSynced(): Boolean
 }

@@ -7,8 +7,10 @@ import androidx.navigation.fragment.findNavController
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragUserAgreementBinding
 import com.summer.notifai.ui.onboarding.OnboardingViewModel
-import com.summer.passwordmanager.base.ui.BaseFragment
+import com.summer.core.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_user_agreement

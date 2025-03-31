@@ -5,7 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.summer.core.data.local.dao.ContactDao
 import com.summer.core.data.local.dao.SmsDao
+import com.summer.core.data.local.entities.ContactEntity
 import com.summer.core.data.local.entities.SenderAddressEntity
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.data.local.entities.SmsClassificationTypeEntity
@@ -14,12 +16,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [SmsEntity::class, SmsClassificationTypeEntity::class, SenderAddressEntity::class],
+    entities = [SmsEntity::class, SmsClassificationTypeEntity::class, SenderAddressEntity::class, ContactEntity::class],
     version = 1
 )
 abstract class SmsDatabase : RoomDatabase() {
 
     abstract fun smsDao(): SmsDao
+    abstract fun contactDao(): ContactDao
 
     companion object {
         private const val DB_NAME = "sms_database"
