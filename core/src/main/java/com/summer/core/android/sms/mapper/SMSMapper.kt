@@ -18,7 +18,9 @@ object SMSMapper {
         SMSColumnNames.COLUMN_STATUS,
         SMSColumnNames.COLUMN_SERVICE_CENTER,
         SMSColumnNames.COLUMN_LOCKED,
-        SMSColumnNames.COLUMN_PERSON
+        SMSColumnNames.COLUMN_PERSON,
+        SMSColumnNames.COLUMN_READ,
+        SMSColumnNames.COLUMN_SUBSCRIPTION_ID,
     )
 
     fun mapCursorToSmsList(
@@ -49,10 +51,10 @@ object SMSMapper {
                     dateSent = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_DATE_SENT)),
                     type = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_TYPE)),
                     threadId = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_THREAD_ID)),
-                    read = 0, // Default value (can be fetched if needed)
+                    read = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_READ)),
                     status = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_STATUS)),
                     serviceCenter = it.getString(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_SERVICE_CENTER)),
-                    subscriptionId = null, // Can be added if needed,
+                    subscriptionId = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_SUBSCRIPTION_ID)),
                     smsClassificationTypeId = null,
                     importanceScore = null,
                     confidenceScore = null,

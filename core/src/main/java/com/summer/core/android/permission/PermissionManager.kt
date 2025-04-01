@@ -1,4 +1,4 @@
-package com.summer.notifai.manager.permission
+package com.summer.core.android.permission
 
 interface PermissionManager {
     fun isDefaultSms(): Boolean

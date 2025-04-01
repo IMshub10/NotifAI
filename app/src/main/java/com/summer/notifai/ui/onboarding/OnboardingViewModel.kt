@@ -10,9 +10,11 @@ import com.summer.core.repository.IOnboardingRepository
 import com.summer.core.usecase.SyncContactsUseCase
 import com.summer.core.util.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +27,7 @@ class OnboardingViewModel @Inject constructor(
     val fetchStatus: LiveData<FetchResult> get() = _fetchStatus
 
     private val _contactsSync = MutableLiveData<ResultState<Int>>()
-    val contactsSync: LiveData<FetchResult> get() = _fetchStatus
+    val contactsSync: LiveData<ResultState<Int>> get() = _contactsSync
 
     private fun setUserAgreement() {
         viewModelScope.launch {
@@ -59,17 +61,17 @@ class OnboardingViewModel @Inject constructor(
 
     fun syncContacts(contacts: List<ContactEntity>) {
         syncContactsUseCase.execute(contacts).map {
-            when (it) {
-                is ResultState.Failed -> {
-                    _contactsSync.postValue(it)
-                }
+            withContext(Dispatchers.Main) {
+                when (it) {
+                    is ResultState.Failed -> {
+                        _contactsSync.postValue(it)
+                    }
 
-                ResultState.InProgress -> {
-                    _contactsSync.postValue(it)
-                }
+                    ResultState.InProgress -> {
+                        _contactsSync.postValue(it)
+                    }
 
-                is ResultState.Success<*> -> {
-                    viewModelScope.launch {
+                    is ResultState.Success<*> -> {
                         _contactsSync.postValue(it)
                     }
                 }

@@ -1,4 +1,4 @@
-package com.summer.notifai.manager.permission
+package com.summer.core.android.permission
 
 import android.Manifest
 import android.app.role.RoleManager

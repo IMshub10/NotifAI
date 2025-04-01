@@ -10,7 +10,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.summer.core.util.showShortToast
-import com.summer.notifai.manager.permission.PermissionManagerImpl
+import com.summer.core.android.permission.PermissionManagerImpl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

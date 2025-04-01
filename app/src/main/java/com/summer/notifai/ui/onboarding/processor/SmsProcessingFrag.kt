@@ -87,7 +87,9 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
                     mBinding.tvStatusIndicator.text = getString(R.string.processing_complete)
                     mBinding.tvStatusIndicator.visibility = View.GONE
                     Handler(Looper.getMainLooper()).postDelayed({
-                        startActivityWithClearTop(requireActivity(), MainActivity::class.java)
+                        activity?.let {
+                            startActivityWithClearTop(it, MainActivity::class.java)
+                        }
                     }, 400L)
                 }
 
@@ -100,14 +102,15 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
         }
         onboardingViewModel.contactsSync.observe(viewLifecycleOwner) {
             when (it) {
-                is FetchResult.Error -> {
+                is ResultState.Failed -> {
                     showShortToast(message = getString(R.string.something_went_wrong))
                 }
 
-                is FetchResult.Loading -> {
+                ResultState.InProgress -> {
+
                 }
 
-                FetchResult.Success -> {
+                is ResultState.Success<*> -> {
                     startSmsProcessingService()
                 }
             }

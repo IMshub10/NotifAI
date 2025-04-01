@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.summer.core.util.showShortToast
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragPermissionsBinding
-import com.summer.notifai.manager.permission.PermissionManagerImpl
+import com.summer.core.android.permission.PermissionManagerImpl
 import com.summer.notifai.ui.datamodel.PermissionItemModel
 import com.summer.core.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

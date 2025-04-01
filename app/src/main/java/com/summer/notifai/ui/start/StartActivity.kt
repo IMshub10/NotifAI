@@ -7,7 +7,7 @@ import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.MainActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityStartBinding
-import com.summer.notifai.manager.permission.PermissionManagerImpl
+import com.summer.core.android.permission.PermissionManagerImpl
 import com.summer.notifai.ui.onboarding.OnBoardingActivity
 import com.summer.notifai.ui.onboarding.OnboardingFlowType
 import com.summer.core.ui.BaseActivity

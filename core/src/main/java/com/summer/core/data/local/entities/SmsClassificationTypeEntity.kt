@@ -18,7 +18,10 @@ data class SmsClassificationTypeEntity(
     val smsType: String?,
 
     @ColumnInfo(name = "aggregate_sms_type")
-    val aggregateSmsType: String?
+    val aggregateSmsType: String?,
+
+    @ColumnInfo(name = "is_important")
+    val isImportant: Boolean,
 ) {
     companion object {
         const val TABLE_NAME = "sms_classification_types"

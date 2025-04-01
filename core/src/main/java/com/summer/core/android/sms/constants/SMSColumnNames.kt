@@ -14,6 +14,8 @@ object SMSColumnNames {
     const val COLUMN_SERVICE_CENTER = Telephony.Sms.SERVICE_CENTER
     const val COLUMN_LOCKED = Telephony.Sms.LOCKED
     const val COLUMN_PERSON = Telephony.Sms.PERSON
+    const val COLUMN_READ = Telephony.Sms.READ
+    const val COLUMN_SUBSCRIPTION_ID = Telephony.Sms.SUBSCRIPTION_ID
 
     const val COLUMN_TOTAL_SMS_COUNT = "total_sms_count"
 }
