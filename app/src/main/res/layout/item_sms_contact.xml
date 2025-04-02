@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_itemSmsContact_icon"
+            android:layout_width="@dimen/spacing_xx_large"
+            android:layout_height="@dimen/spacing_xx_large"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:background="@drawable/shape_circle_color_surface"
+            android:backgroundTint="?colorOnSecondary"
+            android:padding="@dimen/spacing_small"
+            android:src="@drawable/ic_sms_24x24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?colorOnPrimary" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsContact_senderName"
+            style="@style/text_body_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@{model.senderName}"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_itemSmsContact_lastSms"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemSmsContact_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_itemSmsContact_icon"
+            tools:text="HDFC Bank" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsContact_lastSms"
+            style="@style/text_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="?colorOnPrimary"
+            android:textSize="13sp"
+            app:htmlText="@{model.lastMessage}"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_itemSmsContact_icon"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemSmsContact_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemSmsContact_senderName"
+            tools:text="Rs. 800 has been deposited to your bank account" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsContact_lastSmsDate"
+            style="@style/text_body_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:lines="1"
+            android:text="@{model.lastMessageDate}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_itemSmsContact_senderName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
+            app:layout_constraintTop_toTopOf="@+id/tv_itemSmsContact_senderName"
+            tools:text="12:45 am" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsContact_unreadSmsCount"
+            style="@style/text_body_bold"
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:background="@drawable/shape_color_surface_radius_small"
+            android:backgroundTint="@color/primaryDark"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingHorizontal="@dimen/spacing_minute"
+            android:textColor="@color/white_hole"
+            android:textSize="12dp"
+            android:visibility="@{model.unreadCount != null ? View.VISIBLE : View.GONE}"
+            app:hideOrShowText="@{model.unreadCount}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_itemSmsContact_lastSms"
+            app:layout_constraintEnd_toEndOf="@+id/tv_itemSmsContact_lastSmsDate"
+            app:layout_constraintTop_toTopOf="@+id/tv_itemSmsContact_lastSms"
+            tools:ignore="SpUsage"
+            tools:text="1+" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:background="?colorPrimaryLight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_itemSmsContact_lastSms"
+            app:layout_constraintTop_toBottomOf="@+id/iv_itemSmsContact_icon" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

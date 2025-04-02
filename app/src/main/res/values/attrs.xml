@@ -2,6 +2,7 @@
 <resources>
     <attr name="label" format="color" />
     <attr name="boxBackground" format="color" />
+    <attr name="surfaceBackground" format="color" />
     <attr name="tagBackground" format="color" />
     <attr name="labelSecondary" format="color" />
     <attr name="labelTertiary" format="color" />

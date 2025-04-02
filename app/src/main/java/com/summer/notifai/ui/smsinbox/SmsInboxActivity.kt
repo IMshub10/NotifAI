@@ -1,4 +1,4 @@
-package com.summer.notifai
+package com.summer.notifai.ui.smsinbox
 
 import android.app.Activity
 import android.app.role.RoleManager
@@ -9,12 +9,19 @@ import android.provider.Telephony
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
 import com.summer.core.util.showShortToast
 import com.summer.core.android.permission.PermissionManagerImpl
+import com.summer.core.ui.BaseActivity
+import com.summer.notifai.R
+import com.summer.notifai.databinding.ActivityOnboardingBinding
+import com.summer.notifai.databinding.ActivitySmsInboxBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
+    override val layoutResId: Int
+        get() = R.layout.activity_sms_inbox
 
     private val permissionManager by lazy {
         PermissionManagerImpl(this)
@@ -30,12 +37,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        if (!permissionManager.isDefaultSms()){
+    override fun onActivityReady(savedInstanceState: Bundle?) {
+        setupNavController(R.id.contactListFrag)
+        if (!permissionManager.isDefaultSms()) {
             promptToSetDefaultSmsApp()
         }
+    }
+
+    private fun setupNavController(startDestination: Int) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fcv_smsInbox_navHost) as? NavHostFragment
+        val navController =
+            navHostFragment?.navController ?: throw IllegalStateException("NavController is null")
+
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_sms_inbox)
+        navGraph.setStartDestination(startDestination)
+        navController.graph = navGraph
     }
 
     /**

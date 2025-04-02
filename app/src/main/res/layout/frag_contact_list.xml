@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.summer.notifai.ui.smsinbox.SmsInboxViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Chip Group -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_fragContactList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:selectFirstChip="@={viewModel.isImportant}"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipImportant"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/important"
+                android:textColor="@drawable/chip_text_color_selector"
+                app:chipBackgroundColor="@drawable/chip_background_selector" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOthers"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/others"
+                android:textColor="@drawable/chip_text_color_selector"
+                app:chipBackgroundColor="@drawable/chip_background_selector" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- SwipeRefresh + RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_fragContactList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cg_fragContactList"
+            tools:listitem="@layout/item_sms_contact" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -69,4 +69,10 @@ dependencies {
 
     //Google Phone number
     implementation(libs.libphonenumber)
+
+    //paging
+    // ✅ Required for PagingSource support in DAO
+    api(libs.androidx.room.paging)
+    // Paging 3 core (you probably already have this)
+    api(libs.androidx.paging.runtime)
 }

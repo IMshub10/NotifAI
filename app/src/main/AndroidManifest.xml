@@ -57,7 +57,7 @@
 
         <!-- Activity that allows the user to send new SMS/MMS messages -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.smsinbox.SmsInboxActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

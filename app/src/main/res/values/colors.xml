@@ -48,6 +48,9 @@
     <color name="background_light">#FFF4FCFF</color>
     <color name="background_dark">#2c2c2e</color>
 
+    <color name="circle_background_light">#CCE8FF</color> <!-- soft sky blue -->
+    <color name="circle_background_dark">#3D80F9</color> <!-- vibrant but not harsh blue -->
+
     <color name="charcoal">#333333</color>
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#48484a</color>

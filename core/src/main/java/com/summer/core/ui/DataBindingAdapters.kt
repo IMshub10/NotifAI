@@ -6,7 +6,12 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.summer.core.R
 
 object DataBindingAdapters {
@@ -62,5 +67,50 @@ object DataBindingAdapters {
         }
 
         this.layoutParams = layoutParams
+    }
+
+
+    @JvmStatic
+    @BindingAdapter("hideOrShowText")
+    fun AppCompatTextView.hideOrShowText(string: String?) {
+        isVisible = string != null
+        string?.let {
+            text = it
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("selectFirstChip")
+    fun ChipGroup.setSelectedChip(isFirst: Boolean?) {
+        if (childCount < 2 || isFirst == null) return
+
+        val chipToSelect = if (isFirst) getChildAt(0) else getChildAt(1)
+
+        if (chipToSelect is Chip && chipToSelect.id != checkedChipId) {
+            check(chipToSelect.id)
+        }
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectedChipId", event = "selectedChipIdAttrChanged")
+    fun ChipGroup.getSelectedChipId(): Int {
+        return checkedChipId
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "selectFirstChip", event = "selectFirstChipAttrChanged")
+    fun ChipGroup.isFirstChipSelected(): Boolean {
+        if (childCount < 2) return true // default to first if not enough chips
+        return checkedChipId == (getChildAt(0) as? Chip)?.id
+    }
+
+    @JvmStatic
+    @BindingAdapter("selectFirstChipAttrChanged")
+    fun ChipGroup.setSelectFirstChipAttrChanged(listener: InverseBindingListener?) {
+        if (listener != null) {
+            setOnCheckedStateChangeListener { _, _ ->
+                listener.onChange()
+            }
+        }
     }
 }

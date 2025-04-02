@@ -18,7 +18,7 @@ import com.summer.core.android.sms.util.ServiceUtils
 import com.summer.core.data.domain.model.FetchResult
 import com.summer.core.data.local.entities.ContactEntity
 import com.summer.core.util.startActivityWithClearTop
-import com.summer.notifai.MainActivity
+import com.summer.notifai.ui.smsinbox.SmsInboxActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsProcessingBinding
 import com.summer.notifai.ui.onboarding.OnboardingViewModel
@@ -88,7 +88,7 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
                     mBinding.tvStatusIndicator.visibility = View.GONE
                     Handler(Looper.getMainLooper()).postDelayed({
                         activity?.let {
-                            startActivityWithClearTop(it, MainActivity::class.java)
+                            startActivityWithClearTop(it, SmsInboxActivity::class.java)
                         }
                     }, 400L)
                 }
