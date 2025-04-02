@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">NotifAI</string>
     <string name="permissions">Permissions</string>
     <string name="title_user_agreement">User Agreement</string>
@@ -59,6 +59,6 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="important">Important</string>
     <string name="others">Others</string>
-    <string name="retry">Retry</string>
-
+    <string name="retry" tools:ignore="PrivateResource">Retry</string>
+    <string name="messages">Messages</string>
 </resources>

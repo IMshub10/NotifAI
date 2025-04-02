@@ -1,62 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.summer.notifai.ui.smsinbox.SmsInboxViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Chip Group -->
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_fragContactList"
+        <!-- Collapsing AppBar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:selectFirstChip="@={viewModel.isImportant}"
-            app:selectionRequired="true"
-            app:singleSelection="true">
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            android:fitsSystemWindows="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipImportant"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/important"
-                android:textColor="@drawable/chip_text_color_selector"
-                app:chipBackgroundColor="@drawable/chip_background_selector" />
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="?colorSurface"
+                app:titleEnabled="false">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipOthers"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/others"
-                android:textColor="@drawable/chip_text_color_selector"
-                app:chipBackgroundColor="@drawable/chip_background_selector" />
-        </com.google.android.material.chip.ChipGroup>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="pin">
 
-        <!-- SwipeRefresh + RecyclerView -->
+                    <!-- Header -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/header_title"
+                        style="@style/text_header_bold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/spacing_x_medium"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/messages"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_fragContactList_search"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_fragContactList_search"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!-- Search Icon -->
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_fragContactList_search"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginEnd="@dimen/spacing_x_medium"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_search_24x24" />
+
+                    <!-- ChipGroup -->
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_fragContactList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/spacing_small"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_fragContactList_search"
+                        app:selectFirstChip="@={viewModel.isImportant}"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipImportant"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/important"
+                            android:textColor="@drawable/chip_text_color_selector"
+                            app:chipBackgroundColor="@drawable/chip_background_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipOthers"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/others"
+                            android:textColor="@drawable/chip_text_color_selector"
+                            app:chipBackgroundColor="@drawable/chip_background_selector" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- RecyclerView with correct behavior -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_fragContactList"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_fragContactList"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_sms_contact" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
