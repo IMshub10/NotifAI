@@ -10,9 +10,9 @@
 
     <color name="blue_link">#36a6ff</color>
 
-    <color name="primaryLight">#FFD7F4FF</color>
-    <color name="primary">#FF2D9CDB</color>
-    <color name="primaryDark">#FF177FA7</color>
+    <color name="primary">#FB8C00</color>         <!-- Muted Orange 600 -->
+    <color name="primaryLight">#FFE0B2</color>    <!-- Soft Orange 100 -->
+    <color name="primaryDark">#EF6C00</color>     <!-- Deep Muted Orange 800 -->
 
     <color name="blue_grey_dark">#455a64</color>
     <color name="blue_grey_light">#b0bec5</color>
