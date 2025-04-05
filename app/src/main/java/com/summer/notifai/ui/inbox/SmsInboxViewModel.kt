@@ -80,9 +80,7 @@ class SmsInboxViewModel @Inject constructor(
                         // Insert header when date changes
                         if (beforeDay != null && afterDay != null && beforeDay != afterDay) {
                             return@insertSeparators SmsInboxListItem.Header(
-                                SmsMessageHeaderModel(
-                                    afterDay
-                                )
+                                SmsMessageHeaderModel(beforeDay)
                             )
                         }
                         null

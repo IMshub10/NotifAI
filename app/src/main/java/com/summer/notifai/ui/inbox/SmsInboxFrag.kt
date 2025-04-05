@@ -73,10 +73,10 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
         mBinding.rvSmsMessages.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val lm = recyclerView.layoutManager as? LinearLayoutManager ?: return
-                val topPos = lm.findFirstVisibleItemPosition()
+                val topPos = lm.findLastVisibleItemPosition()
 
                 val visibleTop = lm.findFirstVisibleItemPosition()
-                isAtBottom = visibleTop <= 1 // or <= 2 if needed
+                isAtBottom = visibleTop <= 1
 
                 // Floating date label logic
                 if (topPos != RecyclerView.NO_POSITION) {

@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.PagingData
 import com.summer.core.ui.BaseFragment
-import com.summer.core.ui.SmsImportanceType
 import com.summer.core.ui.SmsImportanceType.Companion.toSmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragContactListBinding
@@ -30,25 +30,41 @@ class ContactListFrag : BaseFragment<FragContactListBinding>() {
     private val contactListPagingAdapter
         get() = _contactListPagingAdapter!!
 
+    private var lastImportanceFilter: Boolean? = null
+
     override fun onFragmentReady(instanceState: Bundle?) {
         super.onFragmentReady(instanceState)
         mBinding.viewModel = smsContactListViewModel
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         observePagingData()
     }
 
-    private suspend fun setupAdapter(data: PagingData<ContactMessageInfoDataModel>) {
-        // Create a fresh adapter every time
+    private fun observePagingData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                smsContactListViewModel.isImportant.asFlow().collectLatest { currentImportance ->
+                    val isImportanceChanged = lastImportanceFilter != currentImportance
+                    lastImportanceFilter = currentImportance
+
+                    if (isImportanceChanged || _contactListPagingAdapter == null) {
+                        setupAdapter(currentImportance)
+                    }
+
+                    smsContactListViewModel.pagedContacts.collectLatest { pagingData ->
+                        contactListPagingAdapter.submitData(pagingData)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupAdapter(currentImportance: Boolean) {
         _contactListPagingAdapter = ContactListPagingAdapter { model ->
             activity?.let {
                 startActivity(
                     SmsInboxActivity.onNewInstance(
                         context = it,
                         senderAddressId = model.senderAddressId,
-                        smsImportanceType = smsContactListViewModel.isImportant.value.toSmsImportanceType()
+                        smsImportanceType = currentImportance.toSmsImportanceType()
                     )
                 )
             }
@@ -59,40 +75,15 @@ class ContactListFrag : BaseFragment<FragContactListBinding>() {
             footer = PagingLoadStateAdapter { contactListPagingAdapter.retry() }
         )
 
-        // Submit new data
-        contactListPagingAdapter.submitData(data)
-
-        // Optional fade animation
-        mBinding.rvFragContactList.alpha = 0f
-        mBinding.rvFragContactList.animate()
-            .alpha(1f)
-            .setDuration(250)
-            .start()
-
-        mBinding.rvFragContactList.apply {
-            adapter = contactListPagingAdapter.withLoadStateHeaderAndFooter(
-                header = PagingLoadStateAdapter { contactListPagingAdapter.retry() },
-                footer = PagingLoadStateAdapter { contactListPagingAdapter.retry() }
-            )
-
-            // Optional: fade-in animation
-            itemAnimator?.apply {
-                addDuration = 120
-                removeDuration = 120
-                changeDuration = 100
-                moveDuration = 100
-            }
+        mBinding.rvFragContactList.itemAnimator?.apply {
+            addDuration = 120
+            removeDuration = 120
+            changeDuration = 100
+            moveDuration = 100
         }
-    }
 
-    private fun observePagingData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                smsContactListViewModel.pagedContacts.collectLatest { pagingData ->
-                    setupAdapter(pagingData)
-                }
-            }
-        }
+        // Optional scroll-to-top when filter changes
+        mBinding.rvFragContactList.scrollToPosition(0)
     }
 
     override fun onDestroyView() {
