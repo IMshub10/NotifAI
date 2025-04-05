@@ -44,7 +44,8 @@ class ContactObserver
 
     fun syncContacts() {
         if (!permissionManager.hasReadContacts()) {
-            FirebaseCrashlytics.getInstance().recordException(MissingPermissionException())
+            FirebaseCrashlytics.getInstance()
+                .recordException(MissingPermissionException(exceptionMessage = "Missing READ_CONTACTS"))
             return
         }
         val hiltEntryPoint =

@@ -3,7 +3,7 @@ package com.summer.core.android.sms.processor
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.summer.core.android.sms.data.ISmsContentProvider
-import com.summer.core.android.sms.mapper.SMSMapper
+import com.summer.core.android.sms.mapper.SmsMapper
 import com.summer.core.data.domain.model.FetchResult
 import com.summer.core.data.local.dao.SmsDao
 import com.summer.core.data.local.entities.SmsEntity
@@ -119,7 +119,7 @@ class SmsBatchProcessor @Inject constructor(
         val cursor =
             smsContentProvider.getSmsCursor(batchSize, offset, lastFetchedDate, lastFetchedId)
         return cursor?.use {
-            SMSMapper.mapCursorToSmsList(
+            SmsMapper.mapCursorToSmsList(
                 it,
                 smsDao,
                 countryCodeProvider.getMyCountryCode()

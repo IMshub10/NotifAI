@@ -6,9 +6,7 @@ import com.summer.core.android.sms.data.ISmsContentProvider
 import com.summer.core.android.sms.data.SmsContentProvider
 import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.data.local.dao.SmsDao
-import com.summer.core.data.local.preference.SharedPreferencesManager
 import com.summer.core.ml.model.SmsClassifierModel
-import com.summer.core.repository.SmsRepository
 import com.summer.core.util.CountryCodeProvider
 import dagger.Module
 import dagger.Provides

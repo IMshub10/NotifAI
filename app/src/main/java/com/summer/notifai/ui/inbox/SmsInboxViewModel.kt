@@ -22,7 +22,6 @@ import com.summer.notifai.ui.datamodel.mapper.SmsMessageMapper.toSmsMessageDataM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -75,9 +74,11 @@ class SmsInboxViewModel @Inject constructor(
                         val beforeDate = before?.data?.dateInEpoch
                         val afterDate = after?.data?.dateInEpoch
 
+                        val beforeDay = beforeDate?.let { DateUtils.formatDayHeader(it) }
+                        val afterDay = afterDate?.let { DateUtils.formatDayHeader(it) }
+
                         // Insert header when date changes
-                        if (beforeDate != null && afterDate != null && beforeDate != afterDate) {
-                            val afterDay = DateUtils.formatDayHeader(afterDate)
+                        if (beforeDay != null && afterDay != null && beforeDay != afterDay) {
                             return@insertSeparators SmsInboxListItem.Header(
                                 SmsMessageHeaderModel(
                                     afterDay

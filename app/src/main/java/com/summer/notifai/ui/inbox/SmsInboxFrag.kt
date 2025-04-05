@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +36,8 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
     private val scrollHandler = Handler(Looper.getMainLooper())
     private var scrollHideRunnable: Runnable? = null
+
+    private var isAtBottom = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,16 +74,19 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val lm = recyclerView.layoutManager as? LinearLayoutManager ?: return
                 val topPos = lm.findFirstVisibleItemPosition()
-                if (topPos == RecyclerView.NO_POSITION) return
 
-                val item = smsInboxPagingAdapter.peek(topPos) ?: return
+                val visibleTop = lm.findFirstVisibleItemPosition()
+                isAtBottom = visibleTop <= 1 // or <= 2 if needed
 
-                val label = when (item) {
-                    is SmsInboxListItem.Message -> DateUtils.formatDayHeader(item.data.dateInEpoch)
-                    is SmsInboxListItem.Header -> item.header.label
+                // Floating date label logic
+                if (topPos != RecyclerView.NO_POSITION) {
+                    val item = smsInboxPagingAdapter.peek(topPos) ?: return
+                    val label = when (item) {
+                        is SmsInboxListItem.Message -> DateUtils.formatDayHeader(item.data.dateInEpoch)
+                        is SmsInboxListItem.Header -> item.header.label
+                    }
+                    showFloatingDateLabel(label)
                 }
-
-                showFloatingDateLabel(label)
             }
         })
     }
@@ -111,6 +117,11 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
     private suspend fun setupAdapter(data: PagingData<SmsInboxListItem>) {
         smsInboxPagingAdapter.submitData(data)
+        smsInboxPagingAdapter.addLoadStateListener { loadState ->
+            if (loadState.refresh is LoadState.NotLoading && smsInboxPagingAdapter.itemCount > 0 && isAtBottom) {
+                mBinding.rvSmsMessages.scrollToPosition(0) // Scroll to bottom
+            }
+        }
     }
 
     override fun onDestroyView() {

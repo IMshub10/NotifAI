@@ -6,7 +6,7 @@ import android.net.Uri
 import android.provider.Telephony
 import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.constants.SMSColumnNames.COLUMN_TOTAL_SMS_COUNT
-import com.summer.core.android.sms.mapper.SMSMapper
+import com.summer.core.android.sms.mapper.SmsMapper
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,7 +36,7 @@ class SmsContentProvider @Inject constructor(
 
         return contentResolver.query(
             smsUri,
-            SMSMapper.projection,
+            SmsMapper.projection,
             selection,
             selectionArgs,
             "${SMSColumnNames.COLUMN_DATE} DESC, ${SMSColumnNames.COLUMN_ID} DESC LIMIT $limit OFFSET $offset"

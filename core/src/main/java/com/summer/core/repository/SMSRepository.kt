@@ -1,7 +1,12 @@
 package com.summer.core.repository
 
+import android.content.Context
+import android.provider.Telephony
+import android.util.Log
 import androidx.paging.PagingSource
 import com.summer.core.android.sms.constants.Constants.BATCH_SIZE
+import com.summer.core.android.sms.data.SmsInfoModel
+import com.summer.core.android.sms.mapper.SmsContentValuesBuilder
 import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.data.domain.model.FetchResult
 import com.summer.core.data.local.dao.SmsDao
@@ -36,5 +41,16 @@ class SmsRepository @Inject constructor(
             senderAddressId,
             smsImportanceType.value
         )
+    }
+
+    override suspend fun insertSms(context: Context, sms: SmsInfoModel, threadId: Long?): Long? {
+        val values = SmsContentValuesBuilder.build(sms, threadId)
+        return try {
+            val uri = context.contentResolver.insert(Telephony.Sms.Inbox.CONTENT_URI, values)
+            uri?.lastPathSegment?.toLongOrNull()
+        } catch (e: Exception) {
+            Log.e("SmsRepository", "Failed to insert SMS", e)
+            null
+        }
     }
 }

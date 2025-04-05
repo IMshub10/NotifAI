@@ -32,6 +32,7 @@ class SmsContactListActivity : BaseActivity<ActivitySmsInboxBinding>() {
             showShortToast("Permission set as default")
         } else {
             showShortToast("App must be set as default SMS app to function properly.")
+            fallbackToLegacyIntent()
         }
     }
 
@@ -40,6 +41,12 @@ class SmsContactListActivity : BaseActivity<ActivitySmsInboxBinding>() {
         if (!permissionManager.isDefaultSms()) {
             promptToSetDefaultSmsApp()
         }
+    }
+
+    private fun fallbackToLegacyIntent() {
+        val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, packageName)
+        startActivity(intent)
     }
 
     private fun setupNavController(startDestination: Int) {

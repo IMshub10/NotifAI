@@ -19,7 +19,8 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.POST_NOTIFICATIONS,
                 Manifest.permission.FOREGROUND_SERVICE,
-                Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC
+                Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,
+                Manifest.permission.SEND_SMS
             )
         } else {
             arrayOf(
@@ -28,7 +29,8 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
                 Manifest.permission.RECEIVE_MMS,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.POST_NOTIFICATIONS,
-                Manifest.permission.FOREGROUND_SERVICE
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.SEND_SMS
             )
         }
     } else {
@@ -37,7 +39,8 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
             Manifest.permission.READ_SMS,
             Manifest.permission.RECEIVE_MMS,
             Manifest.permission.READ_CONTACTS,
-            Manifest.permission.FOREGROUND_SERVICE
+            Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.SEND_SMS
         )
     }
 
@@ -51,14 +54,14 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
     }
 
     override fun isDefaultSms(): Boolean {
-        return true
-        //TODO()for testing
-        /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            context.getSystemService(RoleManager::class.java)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleHeld = context.getSystemService(RoleManager::class.java)
                 ?.isRoleHeld(RoleManager.ROLE_SMS) == true
+            val isDefault = Telephony.Sms.getDefaultSmsPackage(context) == context.packageName
+            roleHeld || isDefault
         } else {
             Telephony.Sms.getDefaultSmsPackage(context) == context.packageName
-        }*/
+        }
     }
 
     override fun hasReadSms(): Boolean = hasPermission(Manifest.permission.READ_SMS)

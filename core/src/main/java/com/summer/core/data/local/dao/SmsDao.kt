@@ -21,6 +21,9 @@ interface SmsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAllSmsMessages(smsList: List<SmsEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSmsMessage(sms: SmsEntity)
+
     @Query("SELECT * FROM sms_messages ORDER BY date DESC, android_sms_id DESC LIMIT 1")
     suspend fun getLastInsertedSmsMessage(): SmsEntity?
 

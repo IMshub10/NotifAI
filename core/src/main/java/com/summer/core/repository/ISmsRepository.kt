@@ -1,7 +1,9 @@
 package com.summer.core.repository
 
+import android.content.Context
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
+import com.summer.core.android.sms.data.SmsInfoModel
 import com.summer.core.data.domain.model.FetchResult
 import com.summer.core.data.local.model.ContactMessageInfoModel
 import com.summer.core.data.local.model.SmsMessageModel
@@ -19,4 +21,6 @@ interface ISmsRepository {
         senderAddressId: Long,
         smsImportanceType: SmsImportanceType
     ): PagingSource<Int, SmsMessageModel>
+
+    suspend fun insertSms(context: Context,sms: SmsInfoModel, threadId: Long?): Long?
 }
