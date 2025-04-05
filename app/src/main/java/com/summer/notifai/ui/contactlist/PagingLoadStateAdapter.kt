@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.smsinbox.contactlist
+package com.summer.notifai.ui.contactlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

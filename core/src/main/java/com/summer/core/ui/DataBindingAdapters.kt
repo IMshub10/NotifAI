@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -112,5 +113,27 @@ object DataBindingAdapters {
                 listener.onChange()
             }
         }
+    }@JvmStatic
+    @BindingAdapter("setSmsMessageTextNBackgroundColor")
+    fun AppCompatTextView.setSmsMessageTextNBackgroundColor(classificationType: SmsClassificationType?) {
+        if (classificationType == null) return
+
+        // Set common shaped drawable as background
+        setBackgroundResource(R.drawable.shape_color_surface_radius_tiny)  // your shape drawable
+
+        val (tintColorRes, textColorRes) = when (classificationType) {
+            SmsClassificationType.SCAM -> R.color.scam_light_background to R.color.scam_dark_text
+            SmsClassificationType.PROMOTIONAL -> R.color.promotional_light_background to R.color.promotional_dark_text
+            SmsClassificationType.IMPORTANT -> R.color.important_light_background to R.color.important_dark_text
+            SmsClassificationType.TRANSACTION -> R.color.transaction_light_background to R.color.transaction_dark_text
+            SmsClassificationType.OTP -> R.color.otp_light_background to R.color.otp_dark_text
+            SmsClassificationType.ALERT -> R.color.alert_light_background to R.color.alert_dark_text
+        }
+
+        // Apply tint
+        backgroundTintList = ContextCompat.getColorStateList(context, tintColorRes)
+
+        // Apply text color
+        setTextColor(ContextCompat.getColor(context, textColorRes))
     }
 }

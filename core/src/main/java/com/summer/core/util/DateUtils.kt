@@ -1,34 +1,75 @@
 package com.summer.core.util
 
+import android.text.format.DateUtils as AndroidDateUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * Formats an epoch timestamp (in milliseconds) into a user-friendly date/time string.
- *
- * If the input time corresponds to the current day, it returns the time in "hh:mm a" format (e.g., "08:30 AM").
- * Otherwise, it returns the date in two formats separated by a newline:
- * - "dd MMMM" (e.g., "01 April")
- * - "dd-MM-yy" (e.g., "01-04-25")
- *
- * @param timeInMillis The epoch time in milliseconds to format.
- * @return A formatted string representing the time or date, depending on whether it is today.
- *
- * @sample
- * val formatted = formatEpoch(1711966200000L)
- * println(formatted) // Output: "08:30 AM" (if today) or "01 April\n01-04-25"
- */
-fun formatEpoch(timeInMillis: Long): String {
-    val inputDate = Calendar.getInstance().apply { this.timeInMillis = timeInMillis }
-    val currentDate = Calendar.getInstance()
+object DateUtils {
 
-    return if (inputDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-        inputDate.get(Calendar.DAY_OF_YEAR) == currentDate.get(Calendar.DAY_OF_YEAR)
-    ) {
-        SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date(timeInMillis))
-    } else {
-        val dayMonthFormat = SimpleDateFormat("dd MMMM", Locale.getDefault()).format(Date(timeInMillis))
-        val fullDateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault()).format(Date(timeInMillis))
-        "$dayMonthFormat\n$fullDateFormat"
+    private const val FORMAT_TIME_12_HOUR = "hh:mm a"
+    private const val FORMAT_DAY_MONTH = "dd MMMM"
+    private const val FORMAT_FULL_DATE = "dd-MM-yy"
+    private const val FORMAT_DAY_HEADER_SAME_YEAR = "EEEE, d MMMM"
+    private const val FORMAT_DAY_HEADER_DIFF_YEAR = "EEEE, d MMMM yyyy"
+
+    /**
+     * Formats an epoch timestamp into a user-friendly string:
+     * - If it's today → returns "hh:mm a"
+     * - Else → returns "dd MMMM\n dd-MM-yy"
+     *
+     * @param timeInMillis Epoch time in milliseconds
+     * @return Formatted string based on whether it's today
+     */
+    fun formatDisplayDateTime(timeInMillis: Long): String {
+        val inputDate = Calendar.getInstance().apply { this.timeInMillis = timeInMillis }
+        val currentDate = Calendar.getInstance()
+
+        return if (inputDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+            inputDate.get(Calendar.DAY_OF_YEAR) == currentDate.get(Calendar.DAY_OF_YEAR)
+        ) {
+            SimpleDateFormat(FORMAT_TIME_12_HOUR, Locale.getDefault()).format(Date(timeInMillis))
+        } else {
+            val dayMonth = SimpleDateFormat(FORMAT_DAY_MONTH, Locale.getDefault()).format(Date(timeInMillis))
+            val fullDate = SimpleDateFormat(FORMAT_FULL_DATE, Locale.getDefault()).format(Date(timeInMillis))
+            "$dayMonth\n$fullDate"
+        }
+    }
+
+    /**
+     * Converts epoch time to "hh:mm a" (e.g., "08:30 AM") in device locale.
+     *
+     * @param timeInMillis Epoch time
+     * @return Time string
+     */
+    fun formatTimeOnly(timeInMillis: Long): String {
+        return SimpleDateFormat(FORMAT_TIME_12_HOUR, Locale.getDefault()).format(Date(timeInMillis))
+    }
+
+    /**
+     * Returns a localized day header string for grouping:
+     * - "Today", "Yesterday" if applicable
+     * - Else → "Tuesday, 2 April" or "Tuesday, 2 April 2023"
+     *
+     * @param dateInEpoch Epoch millis
+     * @return Formatted label string
+     */
+    fun formatDayHeader(dateInEpoch: Long): String {
+        val now = System.currentTimeMillis()
+
+        val isToday = AndroidDateUtils.isToday(dateInEpoch)
+        val isYesterday = AndroidDateUtils.isToday(dateInEpoch + AndroidDateUtils.DAY_IN_MILLIS)
+
+        return when {
+            isToday || isYesterday -> AndroidDateUtils.getRelativeTimeSpanString(
+                dateInEpoch, now, AndroidDateUtils.DAY_IN_MILLIS, AndroidDateUtils.FORMAT_ABBREV_RELATIVE
+            ).toString()
+
+            else -> {
+                val smsCal = Calendar.getInstance().apply { timeInMillis = dateInEpoch }
+                val thisYear = Calendar.getInstance().get(Calendar.YEAR) == smsCal.get(Calendar.YEAR)
+                val pattern = if (thisYear) FORMAT_DAY_HEADER_SAME_YEAR else FORMAT_DAY_HEADER_DIFF_YEAR
+                SimpleDateFormat(pattern, Locale.getDefault()).format(Date(dateInEpoch))
+            }
+        }
     }
 }

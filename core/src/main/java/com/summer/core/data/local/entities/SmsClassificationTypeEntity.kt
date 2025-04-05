@@ -22,6 +22,9 @@ data class SmsClassificationTypeEntity(
 
     @ColumnInfo(name = "is_important")
     val isImportant: Boolean,
+
+    @ColumnInfo(name = "compact_sms_type")
+    val compactSmsType: String?,
 ) {
     companion object {
         const val TABLE_NAME = "sms_classification_types"

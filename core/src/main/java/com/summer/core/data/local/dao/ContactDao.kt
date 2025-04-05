@@ -3,7 +3,9 @@ package com.summer.core.data.local.dao
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.summer.core.data.local.entities.ContactEntity
+import com.summer.core.data.local.model.ContactInfoInboxModel
 import com.summer.core.data.local.model.ContactMessageInfoModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContactDao {
@@ -20,12 +22,14 @@ interface ContactDao {
     @Query("DELETE FROM contacts")
     suspend fun clearContacts()
 
-    @Query("""
+    @Query(
+        """
     SELECT 
     COALESCE(c.name, sa.sender_address) AS sender_name,
     s.raw_address,
     s.body AS last_message,
     s.date AS last_message_date,
+    sa.id AS sender_address_id,
     (
         SELECT COUNT(*) 
         FROM sms_messages sm
@@ -47,6 +51,32 @@ interface ContactDao {
 LEFT JOIN contacts c ON c.phone_number = sa.sender_address
 GROUP BY s.id
 ORDER BY s.date DESC
-""")
+"""
+    )
     fun getContactListByImportancePaged(isImportant: Boolean): PagingSource<Int, ContactMessageInfoModel>
+
+
+
+    @Query(
+        """
+    SELECT 
+    COALESCE(c.name, sa.sender_address) AS sender_name,
+    sa.id AS sender_address_id,
+    (
+        SELECT COUNT(*) 
+        FROM sms_messages sm
+        INNER JOIN sms_classification_types sct ON sm.sms_classification_type_id = sct.id
+        WHERE sm.sender_address_id = sa.id
+          AND sm.read = 0
+          AND (:important = -1 OR sct.is_important = :important )
+    ) AS unread_count
+    FROM sender_addresses sa
+LEFT JOIN contacts c ON c.phone_number = sa.sender_address
+where sa.id = :senderAddressId
+    """
+    )
+    fun getContactInfoBySenderAddressId(
+        senderAddressId: Long,
+        important: Int
+    ): Flow<ContactInfoInboxModel?>
 }

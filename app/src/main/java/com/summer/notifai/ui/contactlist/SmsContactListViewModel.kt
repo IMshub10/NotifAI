@@ -1,6 +1,5 @@
-package com.summer.notifai.ui.smsinbox
+package com.summer.notifai.ui.contactlist
 
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
@@ -10,10 +9,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.summer.core.android.sms.constants.Constants.CONTACT_LIST_PAGE_SIZE
 import com.summer.core.usecase.GetContactListByImportanceUseCase
-import com.summer.core.util.formatEpoch
-import com.summer.notifai.R
 import com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel
+import com.summer.notifai.ui.datamodel.mapper.ContactInfoMapper.toContactMessageInfoDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +24,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SmsInboxViewModel @Inject constructor(
+class SmsContactListViewModel @Inject constructor(
     private val getContactListByImportanceUseCase: GetContactListByImportanceUseCase
 ) : ViewModel() {
 
@@ -42,21 +41,14 @@ class SmsInboxViewModel @Inject constructor(
 
     private fun getPagedContacts(isImportant: Boolean): Flow<PagingData<ContactMessageInfoDataModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            config = PagingConfig(pageSize = CONTACT_LIST_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = {
                 getContactListByImportanceUseCase.invoke(isImportant)
             }
         ).flow
             .map { pagingData ->
                 pagingData.map { contact ->
-                    ContactMessageInfoDataModel(
-                        icon = R.drawable.ic_sms_24x24,
-                        senderName = contact.senderName,
-                        rawAddress = contact.rawAddress,
-                        lastMessage = contact.lastMessage,
-                        lastMessageDate = formatEpoch(contact.lastMessageDate),
-                        unreadCount = contact.unreadCount.takeIf { it != 0 }?.toString()
-                    )
+                    contact.toContactMessageInfoDataModel()
                 }
             }
             .cachedIn(viewModelScope)

@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.smsinbox
+package com.summer.notifai.ui.contactlist
 
 import android.app.Activity
 import android.app.role.RoleManager
@@ -8,20 +8,18 @@ import android.os.Bundle
 import android.provider.Telephony
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.summer.core.util.showShortToast
 import com.summer.core.android.permission.PermissionManagerImpl
 import com.summer.core.ui.BaseActivity
 import com.summer.notifai.R
-import com.summer.notifai.databinding.ActivityOnboardingBinding
 import com.summer.notifai.databinding.ActivitySmsInboxBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
+class SmsContactListActivity : BaseActivity<ActivitySmsInboxBinding>() {
     override val layoutResId: Int
-        get() = R.layout.activity_sms_inbox
+        get() = R.layout.activity_contact_list
 
     private val permissionManager by lazy {
         PermissionManagerImpl(this)
@@ -46,11 +44,11 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
 
     private fun setupNavController(startDestination: Int) {
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fcv_smsInbox_navHost) as? NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.fcv_contactList_navHost) as? NavHostFragment
         val navController =
             navHostFragment?.navController ?: throw IllegalStateException("NavController is null")
 
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_sms_inbox)
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_contact_list)
         navGraph.setStartDestination(startDestination)
         navController.graph = navGraph
     }

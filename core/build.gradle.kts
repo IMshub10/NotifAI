@@ -75,4 +75,7 @@ dependencies {
     api(libs.androidx.room.paging)
     // Paging 3 core (you probably already have this)
     api(libs.androidx.paging.runtime)
+
+    debugImplementation(libs.leakcanary.android)
+
 }

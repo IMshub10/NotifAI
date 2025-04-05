@@ -1,20 +1,14 @@
 package com.summer.core.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
-import androidx.paging.cachedIn
-import com.summer.core.android.sms.constants.Constants
 import com.summer.core.data.local.dao.ContactDao
 import com.summer.core.data.local.entities.ContactEntity
+import com.summer.core.data.local.model.ContactInfoInboxModel
 import com.summer.core.data.local.model.ContactMessageInfoModel
 import com.summer.core.data.local.preference.PreferenceKeys
 import com.summer.core.data.local.preference.SharedPreferencesManager
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,5 +46,15 @@ class ContactRepository @Inject constructor(
         isImportant: Boolean,
     ): PagingSource<Int, ContactMessageInfoModel> {
         return contactDao.getContactListByImportancePaged(isImportant)
+    }
+
+    override fun getContactInfoBySenderAddressId(
+        senderAddressId: Long,
+        important: Int
+    ): Flow<ContactInfoInboxModel?> {
+        return contactDao.getContactInfoBySenderAddressId(
+            senderAddressId = senderAddressId,
+            important = important
+        )
     }
 }

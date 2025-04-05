@@ -2,10 +2,12 @@ package com.summer.notifai
 
 import android.app.Application
 import android.content.Context
+import android.os.StrictMode
 import android.provider.ContactsContract
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.airbnb.lottie.BuildConfig
 import com.summer.core.android.permission.PermissionManagerImpl
 import com.summer.core.android.phone.processor.ContactProcessor
 import com.summer.core.android.phone.service.ContactObserver
@@ -30,6 +32,21 @@ class App : Application() {
                     observer.syncContacts()
                 }
             })
+        }
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
+
+            StrictMode.setVmPolicy(
+                StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
         }
     }
 

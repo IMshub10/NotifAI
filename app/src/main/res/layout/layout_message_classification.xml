@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.summer.notifai.ui.datamodel.SmsClassificationDataModel" />
+    </data>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/text_body_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_color_surface_radius_tiny"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/spacing_small"
+        android:paddingVertical="@dimen/spacing_tiny"
+        android:text="@{model.smsType}"
+        android:textSize="12sp"
+        app:setSmsMessageTextNBackgroundColor="@{model.type}"
+        tools:backgroundTint="@color/scam_light_background"
+        tools:text="Scam"
+        tools:textColor="@color/scam_dark_text" />
+</layout>

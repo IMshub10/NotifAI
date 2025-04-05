@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SCAM -->
+    <color name="scam_light_background">#FFFFE0E0</color>
+    <color name="scam_dark_text">#FFDF1C1C</color>
+
+    <!-- PROMOTIONAL -->
+    <color name="promotional_light_background">#FFFFF0D9</color>
+    <color name="promotional_dark_text">#FFBF6000</color>
+
+    <!-- IMPORTANT -->
+    <color name="important_light_background">#FFE0FFF3</color>
+    <color name="important_dark_text">#FF008060</color>
+
+    <!-- TRANSACTION -->
+    <color name="transaction_light_background">#FFE8F5E9</color>
+    <color name="transaction_dark_text">#FF2E7D32</color>
+
+    <!-- OTP -->
+    <color name="otp_light_background">#FFFFF3E0</color>
+    <color name="otp_dark_text">#FFF57C00</color>
+
+    <!-- ALERT -->
+    <color name="alert_light_background">#FFE3F2FD</color>
+    <color name="alert_dark_text">#FF1976D2</color>
+</resources>

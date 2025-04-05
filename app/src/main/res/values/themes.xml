@@ -67,8 +67,14 @@
     <style name="Theme.Application.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="android:background">?attr/toolbarBackground</item>
+        <item name="titleTextAppearance">@style/ToolbarTitleTextStyle</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
+    <style name="ToolbarTitleTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/roboto_mono_bold</item>
+        <item name="android:textColor">?attr/label</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
