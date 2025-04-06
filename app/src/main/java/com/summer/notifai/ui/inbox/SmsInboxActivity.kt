@@ -29,6 +29,9 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
 
     override fun onActivityReady(savedInstanceState: Bundle?) {
         setupActionBar(mBinding.mtActSmsInboxToolbar)
+        mBinding.mtActSmsInboxToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         initData()
         setupNavController(R.id.smsInboxFrag)
         observeViewModel()
