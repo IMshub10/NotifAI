@@ -15,8 +15,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.summer.core.android.phone.processor.ContactProcessor
 import com.summer.core.android.sms.service.SmsProcessingService
 import com.summer.core.android.sms.util.ServiceUtils
-import com.summer.core.data.domain.model.FetchResult
-import com.summer.core.data.local.entities.ContactEntity
+import com.summer.core.domain.model.FetchResult
+import com.summer.core.android.phone.data.entity.ContactEntity
 import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.ui.contactlist.SmsContactListActivity
 import com.summer.notifai.R

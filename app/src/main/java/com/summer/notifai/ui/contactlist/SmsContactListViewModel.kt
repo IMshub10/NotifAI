@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.summer.core.android.sms.constants.Constants.CONTACT_LIST_PAGE_SIZE
-import com.summer.core.usecase.GetContactListByImportanceUseCase
+import com.summer.core.domain.usecase.GetContactListByImportanceUseCase
 import com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel
 import com.summer.notifai.ui.datamodel.mapper.ContactInfoMapper.toContactMessageInfoDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel

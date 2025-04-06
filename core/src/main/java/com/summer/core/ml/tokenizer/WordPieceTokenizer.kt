@@ -1,10 +1,10 @@
 package com.summer.core.ml.tokenizer
 
-import com.summer.core.ml.utils.Constants.CLS_TOKEN
-import com.summer.core.ml.utils.Constants.PADDING_TOKEN
-import com.summer.core.ml.utils.Constants.SEPARATOR_TOKEN
-import com.summer.core.ml.utils.Constants.TOKEN_MAX_LENGTH
-import com.summer.core.ml.utils.Constants.UNKNOWN_TOKEN
+import com.summer.core.ml.util.Constants.CLS_TOKEN
+import com.summer.core.ml.util.Constants.PADDING_TOKEN
+import com.summer.core.ml.util.Constants.SEPARATOR_TOKEN
+import com.summer.core.ml.util.Constants.TOKEN_MAX_LENGTH
+import com.summer.core.ml.util.Constants.UNKNOWN_TOKEN
 
 class WordPieceTokenizer(private val vocab: Map<String, Long>) {
 

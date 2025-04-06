@@ -1,5 +1,6 @@
 package com.summer.notifai.ui.inbox
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
@@ -13,22 +14,34 @@ import androidx.paging.map
 import com.summer.core.android.sms.constants.Constants.SMS_LIST_PAGE_SIZE
 import com.summer.core.data.local.model.ContactInfoInboxModel
 import com.summer.core.ui.SmsImportanceType
-import com.summer.core.usecase.GetContactInfoInboxModelUseCase
-import com.summer.core.usecase.GetSmsMessagesBySenderIdUseCase
+import com.summer.core.domain.usecase.GetContactInfoInboxModelUseCase
+import com.summer.core.domain.usecase.GetSmsMessagesBySenderIdUseCase
+import com.summer.core.domain.usecase.MarkSmsAsReadForSenderUseCase
 import com.summer.core.util.DateUtils
 import com.summer.notifai.ui.datamodel.SmsInboxListItem
 import com.summer.notifai.ui.datamodel.SmsMessageHeaderModel
 import com.summer.notifai.ui.datamodel.mapper.SmsMessageMapper.toSmsMessageDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
-import java.util.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SmsInboxViewModel @Inject constructor(
     private val getSmsMessagesBySenderIdUseCase: GetSmsMessagesBySenderIdUseCase,
-    private val getContactInfoInboxModelUseCase: GetContactInfoInboxModelUseCase
+    private val getContactInfoInboxModelUseCase: GetContactInfoInboxModelUseCase,
+    private val markSmsAsReadForSenderUseCase: MarkSmsAsReadForSenderUseCase
 ) : ViewModel() {
 
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
@@ -89,8 +102,9 @@ class SmsInboxViewModel @Inject constructor(
             .cachedIn(viewModelScope)
     }
 
-    private fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+    fun markSmsListAsRead(context: Context, senderAddressId: Long) {
+        viewModelScope.launch(Dispatchers.Default) {
+            markSmsAsReadForSenderUseCase.invoke(context, senderAddressId = senderAddressId)
+        }
     }
 }

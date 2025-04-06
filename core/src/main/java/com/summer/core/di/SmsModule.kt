@@ -2,8 +2,8 @@ package com.summer.core.di
 
 import android.content.ContentResolver
 import android.content.Context
-import com.summer.core.android.sms.data.ISmsContentProvider
-import com.summer.core.android.sms.data.SmsContentProvider
+import com.summer.core.android.sms.data.source.ISmsContentProvider
+import com.summer.core.android.sms.data.source.SmsContentProvider
 import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.data.local.dao.SmsDao
 import com.summer.core.ml.model.SmsClassifierModel

@@ -26,7 +26,7 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
     }
 
     private fun observeViewModel() {
-        viewmodel.contactInfoModel.observe(this){
+        viewmodel.contactInfoModel.observe(this) {
             it?.let { contact ->
                 mBinding.mtActSmsInboxToolbar.title = contact.senderName
             }
@@ -34,14 +34,16 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
     }
 
     private fun initData() {
+        val senderAddressId = intent.getLongExtra(KEY_SENDER_ADDRESS_ID, 0L)
         viewmodel.setContactInfoModel(
-            senderAddressId = intent.getLongExtra(KEY_SENDER_ADDRESS_ID, 0L),
+            senderAddressId = senderAddressId,
             smsImportanceType = SmsImportanceType.fromValue(
                 intent.getIntExtra(
                     KEY_IMPORTANT, -1
                 )
             ) ?: SmsImportanceType.ALL
         )
+        viewmodel.markSmsListAsRead(context = this, senderAddressId = senderAddressId)
     }
 
     private fun setupNavController(startDestination: Int) {

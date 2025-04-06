@@ -1,17 +1,13 @@
 package com.summer.core.di
 
-import com.summer.core.android.sms.processor.SmsBatchProcessor
-import com.summer.core.data.local.dao.ContactDao
-import com.summer.core.data.local.preference.SharedPreferencesManager
-import com.summer.core.repository.ContactRepository
-import com.summer.core.repository.IContactRepository
-import com.summer.core.repository.IOnboardingRepository
-import com.summer.core.repository.ISmsRepository
-import com.summer.core.repository.OnboardingRepository
-import com.summer.core.repository.SmsRepository
+import com.summer.core.data.repository.ContactRepository
+import com.summer.core.domain.repository.IContactRepository
+import com.summer.core.domain.repository.IOnboardingRepository
+import com.summer.core.domain.repository.ISmsRepository
+import com.summer.core.data.repository.OnboardingRepository
+import com.summer.core.data.repository.SmsRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton

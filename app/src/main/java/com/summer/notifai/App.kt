@@ -8,11 +8,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.airbnb.lottie.BuildConfig
-import com.summer.core.android.permission.PermissionManagerImpl
-import com.summer.core.android.phone.processor.ContactProcessor
+import com.summer.core.android.permission.manager.PermissionManagerImpl
 import com.summer.core.android.phone.service.ContactObserver
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {

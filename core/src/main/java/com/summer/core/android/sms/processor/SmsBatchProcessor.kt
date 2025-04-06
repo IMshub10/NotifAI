@@ -2,9 +2,9 @@ package com.summer.core.android.sms.processor
 
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.summer.core.android.sms.data.ISmsContentProvider
-import com.summer.core.android.sms.mapper.SmsMapper
-import com.summer.core.data.domain.model.FetchResult
+import com.summer.core.android.sms.data.source.ISmsContentProvider
+import com.summer.core.android.sms.data.mapper.SmsMapper
+import com.summer.core.domain.model.FetchResult
 import com.summer.core.data.local.dao.SmsDao
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.ml.model.SmsClassifierModel

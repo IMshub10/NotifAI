@@ -44,7 +44,7 @@
             android:text="@{model.senderName}"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_itemSmsContact_lastSms"
-            app:layout_constraintEnd_toEndOf="@+id/guideline_vertical"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_vertical2"
             app:layout_constraintStart_toEndOf="@+id/iv_itemSmsContact_icon"
             app:layout_constraintTop_toTopOf="@+id/iv_itemSmsContact_icon"
             tools:text="HDFC Bank" />
@@ -72,16 +72,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/spacing_x_small"
-            android:ellipsize="end"
             android:gravity="end"
             android:lines="1"
             android:text="@{model.lastMessageDate}"
+            android:textColor="?colorOnPrimary"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_itemSmsContact_senderName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
+            app:layout_constraintStart_toEndOf="@+id/guideline_vertical2"
             app:layout_constraintTop_toTopOf="@+id/tv_itemSmsContact_senderName"
-            tools:text="12:45 am" />
+            tools:text="05 May 2024" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_itemSmsContact_unreadSmsCount"
@@ -110,10 +110,10 @@
             android:layout_width="0dp"
             android:layout_height="0.5dp"
             android:layout_marginTop="@dimen/spacing_tiny"
-            android:background="?colorPrimaryLight"
+            android:background="?colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_itemSmsContact_lastSms"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/tv_itemSmsContact_lastSms" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_vertical"
@@ -121,6 +121,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

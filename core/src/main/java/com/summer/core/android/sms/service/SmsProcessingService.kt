@@ -15,8 +15,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.summer.core.data.domain.model.FetchResult
-import com.summer.core.repository.SmsRepository
+import com.summer.core.domain.model.FetchResult
+import com.summer.core.data.repository.SmsRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

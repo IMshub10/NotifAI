@@ -7,14 +7,13 @@ import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.util.SmsUtils
-import com.summer.core.android.sms.mapper.SmsMapper
-import com.summer.core.repository.ISmsRepository
+import com.summer.core.android.sms.data.mapper.SmsMapper
+import com.summer.core.domain.repository.ISmsRepository
 import com.summer.core.util.CountryCodeProvider
 import com.summer.core.data.local.dao.SmsDao
 import com.summer.core.data.local.entities.SmsEntity
-import com.summer.core.data.local.preference.PreferenceKeys
+import com.summer.core.data.local.preference.PreferenceKey
 import com.summer.core.data.local.preference.SharedPreferencesManager
-import com.summer.core.exception.SmsInsertionFailedException
 import com.summer.core.ml.model.SmsClassifierModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -40,11 +39,11 @@ class SmsInserter @Inject constructor(
      * @param context Context used for content resolver queries
      * @param intent The SMS_RECEIVED broadcast intent
      */
-    suspend fun processIncomingSms(context: Context, intent: Intent) = withContext(Dispatchers.IO) {
+    suspend fun processIncomingSms(context: Context, intent: Intent): SmsEntity? {
         val smsEnt = SmsUtils.extractSmsFromIntent(intent)
         val defaultCountryCode = countryCodeProvider.getMyCountryCode()
         val dontShareSmsData =
-            preferencesManager.getDataBoolean(PreferenceKeys.DONT_SHARE_SMS_DATA, false)
+            preferencesManager.getDataBoolean(PreferenceKey.DONT_SHARE_SMS_DATA, false)
 
         var smsEntity: SmsEntity? = null
 
@@ -70,7 +69,7 @@ class SmsInserter @Inject constructor(
                 }
             }
             if (smsEntity == null) {
-                smsEntity = SmsMapper.fromInfoModel(sms, smsDao, defaultCountryCode)
+                smsEntity = SmsMapper.smsInfoModelToSmsEntity(sms, smsDao, defaultCountryCode)
             }
         }
 
@@ -78,8 +77,8 @@ class SmsInserter @Inject constructor(
         smsEntity?.let {
             smsDao.insertSmsMessage(classifySms(it))
         }
+        return smsEntity
     }
-
 
     private suspend fun classifySms(sms: SmsEntity): SmsEntity {
         return try {

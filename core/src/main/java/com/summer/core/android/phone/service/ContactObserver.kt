@@ -7,13 +7,13 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.summer.core.android.permission.PermissionManagerImpl
+import com.summer.core.android.permission.manager.PermissionManagerImpl
 import com.summer.core.android.phone.processor.ContactProcessor
-import com.summer.core.data.local.entities.ContactEntity
+import com.summer.core.android.phone.data.entity.ContactEntity
 import com.summer.core.di.ContactObserverEntryPoint
 import com.summer.core.exception.MissingPermissionException
-import com.summer.core.repository.IContactRepository
-import com.summer.core.usecase.SyncContactsUseCase
+import com.summer.core.domain.repository.IContactRepository
+import com.summer.core.domain.usecase.SyncContactsUseCase
 import com.summer.core.util.ResultState
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext

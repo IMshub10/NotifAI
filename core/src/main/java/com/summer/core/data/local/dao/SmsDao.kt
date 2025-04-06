@@ -11,7 +11,6 @@ import com.summer.core.data.local.entities.SenderType
 import com.summer.core.data.local.entities.SmsClassificationTypeEntity
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.data.local.model.SmsMessageModel
-import com.summer.core.ui.SmsImportanceType
 import com.summer.core.util.determineSenderType
 import com.summer.core.util.normalizePhoneNumber
 import com.summer.core.util.trimSenderId
@@ -84,4 +83,11 @@ interface SmsDao {
         senderAddressId: Long,
         important: Int
     ): PagingSource<Int, SmsMessageModel>
+
+    @Query("SELECT android_sms_id FROM sms_messages WHERE sender_address_id = :senderAddressId")
+    suspend fun getAndroidSmsIdsBySenderAddressId(senderAddressId: Long): List<Long>
+
+    @Query("UPDATE sms_messages set read = 1 where sender_address_id = :senderAddressId")
+    suspend fun markSmsAsReadBySenderAddressId(senderAddressId: Long)
+
 }

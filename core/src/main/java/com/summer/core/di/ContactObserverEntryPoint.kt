@@ -1,7 +1,7 @@
 package com.summer.core.di
 
-import com.summer.core.repository.IContactRepository
-import com.summer.core.usecase.SyncContactsUseCase
+import com.summer.core.domain.repository.IContactRepository
+import com.summer.core.domain.usecase.SyncContactsUseCase
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
 import androidx.core.net.toUri
-import com.summer.core.android.sms.data.SmsInfoModel
+import com.summer.core.android.sms.data.model.SmsInfoModel
 
 object SmsUtils {
 
