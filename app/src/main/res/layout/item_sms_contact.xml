@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_tiny"
             android:background="@drawable/shape_color_surface_radius_small"
-            android:backgroundTint="@color/primaryDark"
+            android:backgroundTint="@color/green_dark"
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"

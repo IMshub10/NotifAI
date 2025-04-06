@@ -48,7 +48,7 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(requireContext()).apply {
             reverseLayout = true
-            stackFromEnd = false
+            stackFromEnd = true
         }
 
         mBinding.rvSmsMessages.layoutManager = layoutManager

@@ -14,15 +14,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_small"
-        android:layout_marginVertical="@dimen/spacing_x_small">
+        android:layout_marginVertical="@dimen/spacing_tiny">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
+            android:id="@+id/cl_itemSmsMessage_container"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_color_surface_radius_x_medium"
             android:backgroundTint="?boxBackground"
-            android:padding="@dimen/spacing_small"
+            android:padding="@dimen/spacing_x_small"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="@+id/guideline"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -32,59 +35,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="all"
+                android:textSize="14sp"
                 android:linksClickable="true"
                 android:text="@{model.message}"
                 android:textColorLink="@color/blue_link"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Lorem ipsum dolor sit amet consectetur. Tellus scelerisque adipiscing fermentum amet senectus. Pulvinar sem leo mi quam cras purus duis senectus bibendum. Neque justo a hac ac cursus metus ac quis. Vestibulum sagittis accumsan tristique vestibulum." />
+                tools:text="Lorem ipsum" />
 
             <include
                 android:id="@+id/tv_itemSmsMessage_classification"
                 layout="@layout/layout_message_classification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_x_medium"
+                android:layout_marginTop="@dimen/spacing_x_small"
+                android:layout_marginEnd="@dimen/spacing_small"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                android:layout_marginEnd="@dimen/spacing_small"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_itemSmsMessage_message"
                 app:model="@{model.smsClassificationDataModel}" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_itemSmsMessage_date"
-                style="@style/text_body"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_x_medium"
-                android:gravity="end"
-                android:text="@{model.date}"
-                android:textColor="?label"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_itemSmsMessage_classification"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/tv_itemSmsMessage_classification"
-                app:layout_constraintVertical_bias="1.0"
-                tools:text="12:45 AM" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.7" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsMessage_date"
+            style="@style/text_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_x_medium"
+            android:text="@{model.date}"
+            android:textColor="?colorOnPrimary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_itemSmsMessage_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_itemSmsMessage_container"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="12:45 AM" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8" />
-
+            app:layout_constraintGuide_percent="0.65" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.summer.notifai.ui.datamodel.SmsMessageDataModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_x_medium"
+        android:layout_marginVertical="@dimen/spacing_tiny">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsMessage_date"
+            style="@style/text_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_x_medium"
+            android:layout_marginEnd="@dimen/spacing_small"
+            android:gravity="end"
+            android:text="@{model.date}"
+            android:textColor="?colorOnPrimary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_itemSmsMessage_message"
+            app:layout_constraintEnd_toStartOf="@+id/tv_itemSmsMessage_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="12:45 AM" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsMessage_message"
+            style="@style/text_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="all"
+            android:background="@drawable/shape_color_surface_radius_x_medium"
+            android:backgroundTint="#075E54"
+            android:linksClickable="true"
+            android:padding="@dimen/spacing_x_small"
+            android:text="@{model.message}"
+            android:textColor="@color/white"
+            android:textColorLink="@color/blue_link"
+            android:textSize="14sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Lorem ipsum" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
