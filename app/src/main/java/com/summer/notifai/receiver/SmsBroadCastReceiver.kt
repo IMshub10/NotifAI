@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
+import com.summer.core.android.permission.manager.IPermissionManager
+import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.core.di.SmsReceiverEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +19,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
         Log.d("SMSBroadCastReceiver", intent?.dataString.orEmpty())
         if (context == null || intent == null) return
 
-        if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION || intent.action == Telephony.Sms.Intents.SMS_DELIVER_ACTION) {
+        if (intent.action == Telephony.Sms.Intents.SMS_DELIVER_ACTION) {
             val appContext = context.applicationContext
             val entryPoint = EntryPointAccessors.fromApplication(
                 appContext,
@@ -25,9 +27,14 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
             )
 
             val smsInserter = entryPoint.smsInserter()
+            val permissionManager: IPermissionManager = IPermissionManagerImpl(context = context)
+            val appNotificationManager = entryPoint.appNotificationManager()
 
             CoroutineScope(Dispatchers.IO).launch {
-                smsInserter.processIncomingSms(appContext, intent)
+                val sms = smsInserter.processIncomingSms(appContext, intent)
+                if (permissionManager.hasSendNotifications() && sms != null) {
+                    appNotificationManager.showNotificationForSms(sms = sms)
+                }
             }
         }
     }

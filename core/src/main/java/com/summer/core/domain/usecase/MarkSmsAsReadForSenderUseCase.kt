@@ -11,8 +11,8 @@ class MarkSmsAsReadForSenderUseCase @Inject constructor(
     suspend operator fun invoke(
         context: Context,
         senderAddressId: Long,
-    ) {
-        smsRepository.markSmsAsReadBySenderId(
+    ) : List<Long>{
+        return smsRepository.markSmsAsReadBySenderId(
             context = context,
             senderAddressId = senderAddressId
         )

@@ -7,7 +7,7 @@ import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.ui.contactlist.SmsContactListActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityStartBinding
-import com.summer.core.android.permission.manager.PermissionManagerImpl
+import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.notifai.ui.onboarding.OnBoardingActivity
 import com.summer.notifai.ui.onboarding.OnboardingFlowType
 import com.summer.core.ui.BaseActivity
@@ -25,7 +25,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
     private val startViewModel: StartViewModel by viewModels()
 
     private val permissionManager by lazy {
-        PermissionManagerImpl(this)
+        IPermissionManagerImpl(this)
     }
 
     override fun onActivityReady(savedInstanceState: Bundle?) {

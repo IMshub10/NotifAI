@@ -8,19 +8,25 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.airbnb.lottie.BuildConfig
-import com.summer.core.android.permission.manager.PermissionManagerImpl
+import com.summer.core.android.notification.AppNotificationManager
+import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.core.android.phone.service.ContactObserver
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
 
     private val permissionManager by lazy {
-        PermissionManagerImpl(this)
+        IPermissionManagerImpl(this)
     }
+
+    @Inject
+    lateinit var appNotificationManager: AppNotificationManager
 
     override fun onCreate() {
         super.onCreate()
+        appNotificationManager.createNotificationChannels()
         if (permissionManager.hasReadContacts()) {
             val observer = registerContactObserver(this)
             observer.onChange(true)

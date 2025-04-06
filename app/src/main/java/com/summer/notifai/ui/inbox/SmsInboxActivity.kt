@@ -5,16 +5,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.summer.core.android.notification.AppNotificationManager
+import com.summer.core.di.ChatSessionTracker
 import com.summer.core.ui.BaseActivity
 import com.summer.core.ui.SmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivitySmsInboxBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
     override val layoutResId: Int
         get() = R.layout.activity_sms_inbox
+
+    @Inject
+    lateinit var appNotificationManager: AppNotificationManager
+
+    @Inject
+    lateinit var chatSessionTracker: ChatSessionTracker
 
     private val viewmodel by viewModels<SmsInboxViewModel>()
 
@@ -23,6 +32,19 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
         initData()
         setupNavController(R.id.smsInboxFrag)
         observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        chatSessionTracker.activeSenderAddressId = viewmodel.senderAddressId
+        viewmodel.markSmsListAsRead(context = this, senderAddressId = viewmodel.senderAddressId) {
+            appNotificationManager.clearNotificationForSender(it)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        chatSessionTracker.activeSenderAddressId = null
     }
 
     private fun observeViewModel() {
@@ -43,7 +65,6 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
                 )
             ) ?: SmsImportanceType.ALL
         )
-        viewmodel.markSmsListAsRead(context = this, senderAddressId = senderAddressId)
     }
 
     private fun setupNavController(startDestination: Int) {

@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.summer.core.util.showShortToast
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragPermissionsBinding
-import com.summer.core.android.permission.manager.PermissionManagerImpl
+import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.notifai.ui.datamodel.PermissionItemModel
 import com.summer.core.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +28,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
         get() = R.layout.frag_permissions
 
     private val permissionManager by lazy {
-        PermissionManagerImpl(requireContext())
+        IPermissionManagerImpl(requireContext())
     }
 
     // Request Default SMS App

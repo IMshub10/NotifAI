@@ -3,6 +3,7 @@ package com.summer.core.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.summer.core.data.local.entities.SmsEntity.Companion.TABLE_NAME
@@ -18,6 +19,7 @@ import com.summer.core.data.local.entities.SmsEntity.Companion.TABLE_NAME
         )
     ],
     indices = [Index(value = ["sender_address_id"], unique = false)]
+    //TODO indices = [Index(value = ["sender_address_id"], unique = false), Index(value = ["android_sms_id"], unique = true)]
 )
 data class SmsEntity(
     @ColumnInfo(name = "id")
@@ -75,6 +77,10 @@ data class SmsEntity(
     @ColumnInfo(name = "updated_at_app")  // Row updated-at, in epoch
     val updatedAtApp: Long,
 ) {
+
+    @Ignore
+    var senderName: String? = null
+
     companion object {
         const val TABLE_NAME = "sms_messages"
     }

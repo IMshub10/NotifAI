@@ -7,7 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.summer.core.android.permission.manager.PermissionManagerImpl
+import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.core.android.phone.processor.ContactProcessor
 import com.summer.core.android.phone.data.entity.ContactEntity
 import com.summer.core.di.ContactObserverEntryPoint
@@ -33,7 +33,7 @@ class ContactObserver
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val permissionManager by lazy {
-        PermissionManagerImpl(context)
+        IPermissionManagerImpl(context)
     }
 
     override fun onChange(selfChange: Boolean, uri: Uri?) {

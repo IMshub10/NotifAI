@@ -8,6 +8,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.util.SmsUtils
 import com.summer.core.android.sms.data.mapper.SmsMapper
+import com.summer.core.data.local.dao.ContactDao
 import com.summer.core.domain.repository.ISmsRepository
 import com.summer.core.util.CountryCodeProvider
 import com.summer.core.data.local.dao.SmsDao
@@ -30,6 +31,7 @@ import javax.inject.Singleton
 class SmsInserter @Inject constructor(
     private val repository: ISmsRepository,
     private val smsDao: SmsDao,
+    private val contactDao: ContactDao,
     private val countryCodeProvider: CountryCodeProvider,
     private val preferencesManager: SharedPreferencesManager,
     private val smsClassifierModel: SmsClassifierModel
@@ -75,7 +77,11 @@ class SmsInserter @Inject constructor(
 
         // Insert all collected messages into the local DB at once
         smsEntity?.let {
-            smsDao.insertSmsMessage(classifySms(it))
+            val classifiedSms = classifySms(it)
+            val long = smsDao.insertSmsMessage(classifiedSms)
+            smsEntity = classifiedSms.copy(id = long).apply {
+                senderName = contactDao.getSenderNameById(senderAddressId)
+            }
         }
         return smsEntity
     }

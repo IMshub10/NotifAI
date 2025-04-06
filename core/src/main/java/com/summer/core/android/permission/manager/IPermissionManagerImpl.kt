@@ -8,7 +8,7 @@ import android.os.Build
 import android.provider.Telephony
 import androidx.core.content.ContextCompat
 
-class PermissionManagerImpl(private val context: Context) : PermissionManager {
+class IPermissionManagerImpl(private val context: Context) : IPermissionManager {
 
     val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -75,6 +75,13 @@ class PermissionManagerImpl(private val context: Context) : PermissionManager {
 
     override fun hasWriteExternalStorage(): Boolean =
         hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    override fun hasSendNotifications(): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            hasPermission(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            true
+        }
 
     private fun hasPermission(permission: String): Boolean =
         ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED

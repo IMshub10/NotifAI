@@ -10,7 +10,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.NavHostFragment
 import com.summer.core.util.showShortToast
-import com.summer.core.android.permission.manager.PermissionManagerImpl
+import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.core.ui.BaseActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivitySmsInboxBinding
@@ -22,7 +22,7 @@ class SmsContactListActivity : BaseActivity<ActivitySmsInboxBinding>() {
         get() = R.layout.activity_contact_list
 
     private val permissionManager by lazy {
-        PermissionManagerImpl(this)
+        IPermissionManagerImpl(this)
     }
 
     private val defaultSmsAppLauncher = registerForActivityResult(

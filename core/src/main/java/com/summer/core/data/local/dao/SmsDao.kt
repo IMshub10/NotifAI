@@ -21,7 +21,7 @@ interface SmsDao {
     suspend fun insertAllSmsMessages(smsList: List<SmsEntity>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSmsMessage(sms: SmsEntity)
+    suspend fun insertSmsMessage(sms: SmsEntity) : Long
 
     @Query("SELECT * FROM sms_messages ORDER BY date DESC, android_sms_id DESC LIMIT 1")
     suspend fun getLastInsertedSmsMessage(): SmsEntity?
@@ -84,8 +84,8 @@ interface SmsDao {
         important: Int
     ): PagingSource<Int, SmsMessageModel>
 
-    @Query("SELECT android_sms_id FROM sms_messages WHERE sender_address_id = :senderAddressId")
-    suspend fun getAndroidSmsIdsBySenderAddressId(senderAddressId: Long): List<Long>
+    @Query("SELECT android_sms_id FROM sms_messages WHERE sender_address_id = :senderAddressId and read = 0")
+    suspend fun getUnreadAndroidSmsIdsBySenderAddressId(senderAddressId: Long): List<Long>
 
     @Query("UPDATE sms_messages set read = 1 where sender_address_id = :senderAddressId")
     suspend fun markSmsAsReadBySenderAddressId(senderAddressId: Long)

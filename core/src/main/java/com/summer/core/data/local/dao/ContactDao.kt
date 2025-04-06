@@ -55,8 +55,6 @@ ORDER BY s.date DESC
     )
     fun getContactListByImportancePaged(isImportant: Boolean): PagingSource<Int, ContactMessageInfoModel>
 
-
-
     @Query(
         """
     SELECT 
@@ -79,4 +77,13 @@ where sa.id = :senderAddressId
         senderAddressId: Long,
         important: Int
     ): Flow<ContactInfoInboxModel?>
+
+    @Query("""
+    SELECT COALESCE(c.name, sa.sender_address) AS sender_name
+    FROM sender_addresses sa
+    LEFT JOIN contacts c ON c.phone_number = sa.sender_address
+    WHERE sa.id = :senderAddressId
+    LIMIT 1
+""")
+    suspend fun getSenderNameById(senderAddressId: Long): String
 }

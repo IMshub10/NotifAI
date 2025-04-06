@@ -1,10 +1,11 @@
 package com.summer.core.android.permission.manager
 
-interface PermissionManager {
+interface IPermissionManager {
     fun isDefaultSms(): Boolean
     fun hasReadSms(): Boolean
     fun hasReceiveSms(): Boolean
     fun hasReadContacts(): Boolean
     fun hasReadExternalStorage(): Boolean
     fun hasWriteExternalStorage(): Boolean
+    fun hasSendNotifications(): Boolean
 }

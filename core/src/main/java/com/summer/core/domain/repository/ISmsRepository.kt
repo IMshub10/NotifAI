@@ -21,5 +21,5 @@ interface ISmsRepository {
 
     suspend fun insertSms(context: Context, sms: SmsInfoModel, threadId: Long?): Long?
 
-    suspend fun markSmsAsReadBySenderId(context: Context, senderAddressId: Long)
+    suspend fun markSmsAsReadBySenderId(context: Context, senderAddressId: Long): List<Long>
 }

@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,6 +47,8 @@ class SmsInboxViewModel @Inject constructor(
 
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
     val contactInfoModel = _contactInfoModel
+
+    var senderAddressId = 0L
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedSmsData: StateFlow<PagingData<SmsInboxListItem>> =
@@ -61,6 +64,7 @@ class SmsInboxViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
     fun setContactInfoModel(senderAddressId: Long, smsImportanceType: SmsImportanceType) {
+        this.senderAddressId = senderAddressId
         getContactInfoInboxModelUseCase
             .invoke(senderAddressId, smsImportanceType.value)
             .onEach { contact ->
@@ -102,9 +106,17 @@ class SmsInboxViewModel @Inject constructor(
             .cachedIn(viewModelScope)
     }
 
-    fun markSmsListAsRead(context: Context, senderAddressId: Long) {
+    fun markSmsListAsRead(
+        context: Context,
+        senderAddressId: Long,
+        callback: (smsIds: List<Long>) -> Unit
+    ) {
         viewModelScope.launch(Dispatchers.Default) {
-            markSmsAsReadForSenderUseCase.invoke(context, senderAddressId = senderAddressId)
+            val smsIds =
+                markSmsAsReadForSenderUseCase.invoke(context, senderAddressId = senderAddressId)
+            withContext(Dispatchers.Main) {
+                callback(smsIds)
+            }
         }
     }
 }

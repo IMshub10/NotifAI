@@ -57,8 +57,8 @@ class SmsRepository @Inject constructor(
         }
     }
 
-    override suspend fun markSmsAsReadBySenderId(context: Context, senderAddressId: Long) {
-        val smsIds = smsDao.getAndroidSmsIdsBySenderAddressId(senderAddressId)
+    override suspend fun  markSmsAsReadBySenderId(context: Context, senderAddressId: Long) : List<Long>{
+        val smsIds = smsDao.getUnreadAndroidSmsIdsBySenderAddressId(senderAddressId)
         if (smsIds.isNotEmpty()) {
             try {
                 val values = ContentValues().apply {
@@ -87,5 +87,6 @@ class SmsRepository @Inject constructor(
                 Log.e("SmsUtils", "Failed to mark SMS list as read", e)
             }
         }
+        return smsIds
     }
 }
