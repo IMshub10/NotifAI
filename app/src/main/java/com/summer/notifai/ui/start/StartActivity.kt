@@ -2,12 +2,12 @@ package com.summer.notifai.ui.start
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.ml.model.SmsClassifierModel
 import com.summer.core.util.startActivityWithClearTop
 import com.summer.notifai.ui.contactlist.SmsContactListActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityStartBinding
-import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.notifai.ui.onboarding.OnBoardingActivity
 import com.summer.notifai.ui.onboarding.OnboardingFlowType
 import com.summer.core.ui.BaseActivity
@@ -24,9 +24,8 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
 
     private val startViewModel: StartViewModel by viewModels()
 
-    private val permissionManager by lazy {
-        IPermissionManagerImpl(this)
-    }
+    @Inject
+    lateinit var permissionManager: IPermissionManager
 
     override fun onActivityReady(savedInstanceState: Bundle?) {
         observers()

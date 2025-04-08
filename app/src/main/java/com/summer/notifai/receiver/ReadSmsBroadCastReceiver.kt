@@ -6,7 +6,6 @@ import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
 import com.summer.core.android.permission.manager.IPermissionManager
-import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.core.di.SmsReceiverEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +26,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
             )
 
             val smsInserter = entryPoint.smsInserter()
-            val permissionManager: IPermissionManager = IPermissionManagerImpl(context = context)
+            val permissionManager: IPermissionManager = entryPoint.permissionManager()
             val appNotificationManager = entryPoint.appNotificationManager()
 
             CoroutineScope(Dispatchers.IO).launch {

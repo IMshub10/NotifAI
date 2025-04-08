@@ -8,9 +8,9 @@ import android.os.Build
 import android.provider.Telephony
 import androidx.core.content.ContextCompat
 
-class IPermissionManagerImpl(private val context: Context) : IPermissionManager {
+class PermissionManagerImpl(private val context: Context) : IPermissionManager {
 
-    val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    override val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             arrayOf(
                 Manifest.permission.RECEIVE_SMS,
@@ -49,7 +49,7 @@ class IPermissionManagerImpl(private val context: Context) : IPermissionManager 
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
-    fun hasRequiredPermissions(): Boolean {
+    override fun hasRequiredPermissions(): Boolean {
         return requiredPermissions.all { hasPermission(it) }
     }
 
@@ -82,6 +82,9 @@ class IPermissionManagerImpl(private val context: Context) : IPermissionManager 
         } else {
             true
         }
+
+    override fun hasSendSms(): Boolean =
+        hasPermission(Manifest.permission.SEND_SMS)
 
     private fun hasPermission(permission: String): Boolean =
         ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED

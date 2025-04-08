@@ -61,4 +61,5 @@
     <string name="others">Others</string>
     <string name="retry" tools:ignore="PrivateResource">Retry</string>
     <string name="messages">Messages</string>
+    <string name="enter_message">Enter message</string>
 </resources>

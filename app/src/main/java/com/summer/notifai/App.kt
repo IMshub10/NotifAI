@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.airbnb.lottie.BuildConfig
 import com.summer.core.android.notification.AppNotificationManager
-import com.summer.core.android.permission.manager.IPermissionManagerImpl
+import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.android.phone.service.ContactObserver
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -17,12 +17,11 @@ import javax.inject.Inject
 @HiltAndroidApp
 class App : Application() {
 
-    private val permissionManager by lazy {
-        IPermissionManagerImpl(this)
-    }
-
     @Inject
     lateinit var appNotificationManager: AppNotificationManager
+
+    @Inject
+    lateinit var permissionManager: IPermissionManager
 
     override fun onCreate() {
         super.onCreate()

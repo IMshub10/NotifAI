@@ -14,22 +14,22 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
+import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.util.showShortToast
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragPermissionsBinding
-import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.notifai.ui.datamodel.PermissionItemModel
 import com.summer.core.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_permissions
 
-    private val permissionManager by lazy {
-        IPermissionManagerImpl(requireContext())
-    }
+    @Inject
+    lateinit var permissionManager: IPermissionManager
 
     // Request Default SMS App
     private val defaultSmsAppLauncher = registerForActivityResult(

@@ -9,21 +9,21 @@ import android.provider.Telephony
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.NavHostFragment
+import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.util.showShortToast
-import com.summer.core.android.permission.manager.IPermissionManagerImpl
 import com.summer.core.ui.BaseActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivitySmsInboxBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SmsContactListActivity : BaseActivity<ActivitySmsInboxBinding>() {
     override val layoutResId: Int
         get() = R.layout.activity_contact_list
 
-    private val permissionManager by lazy {
-        IPermissionManagerImpl(this)
-    }
+    @Inject
+    lateinit var permissionManager: IPermissionManager
 
     private val defaultSmsAppLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
