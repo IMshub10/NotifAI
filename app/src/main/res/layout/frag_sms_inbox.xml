@@ -10,9 +10,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_sms_messages"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/spacing_x_small"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/et_fragSmsInbox_message"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_received_sms_message" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -33,6 +35,39 @@
             tools:text="Saturday, 5th April 2025"
             tools:visibility="visible" />
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_fragSmsInbox_message"
+            style="@style/EditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:layout_marginBottom="@dimen/spacing_x_small"
+            android:background="@drawable/shape_color_surface_radius_medium"
+            android:backgroundTint="?colorChatBox"
+            android:hint="@string/enter_message"
+            android:maxLines="5"
+            android:paddingVertical="@dimen/spacing_small"
+            android:paddingStart="@dimen/spacing_small"
+            android:paddingEnd="@dimen/spacing_xx_large"
+            android:singleLine="false"
+            android:textColor="?label"
+            android:textColorHint="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/bt_fragSmsInbox_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_x_small"
+            android:background="@drawable/shape_color_surface_radius_medium"
+            android:backgroundTint="@color/primaryDark"
+            android:clickable="true"
+            android:contentDescription="@string/send"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_up_24x24"
+            app:layout_constraintBottom_toBottomOf="@id/et_fragSmsInbox_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

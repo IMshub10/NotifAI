@@ -55,6 +55,8 @@
         <item name="toolbarStyle">@style/ToolbarStyle</item>
 
         <item name="android:navigationIcon">@drawable/ic_navigation_back_light</item>
+
+        <item name="colorChatBox">@color/grey_darker</item>
     </style>
     <!--Bottom Navigation View===================================================================-->
     <style name="BottomDark" parent="Widget.Design.BottomNavigationView">
