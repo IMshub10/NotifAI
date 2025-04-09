@@ -46,6 +46,8 @@
 
                 <data android:scheme="sms" />
                 <data android:scheme="smsto" />
+                <data android:scheme="mms" />
+                <data android:scheme="mmsto" />
             </intent-filter>
         </activity>
 
@@ -58,7 +60,17 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
 
             </intent-filter>
-        </receiver>
+        </receiver> <!-- BroadcastReceiver that listens for incoming MMS messages -->
+        <receiver
+            android:name=".receiver.MMSBroadCastReceiver"
+            android:exported="false"
+            android:permission="android.permission.BROADCAST_WAP_PUSH">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
+
+                <data android:mimeType="application/vnd.wap.mms-message" />
+            </intent-filter>
+        </receiver> <!-- Activity that allows the user to send new SMS/MMS messages -->
         <activity
             android:name=".ui.contactlist.SmsContactListActivity"
             android:exported="false" />
@@ -83,8 +95,11 @@
                 <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="sms" />
                 <data android:scheme="smsto" />
+                <data android:scheme="mms" />
+                <data android:scheme="mmsto" />
             </intent-filter>
         </service>
 
