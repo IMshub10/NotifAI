@@ -15,13 +15,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Processes SMS messages in batches, classifies them using ML, and stores them in Room DB.
- * Optimized for performance and resource management.
+ * Batch processor that:
+ * 1. Always prioritizes newly received SMS (even during batch processing)
+ * 2. Classifies unprocessed SMS using ML
+ * 3. Persists results into Room DB via [SmsDao]
  *
- * @property smsContentProvider Provides access to the SMS content provider.
- * @property smsDao Data Access Object for SMS storage.
- * @property smsClassifierModel Machine learning model for SMS classification.
- * @property batchProcessingConcurrency Number of concurrent batches to process.
+ * Batches are processed concurrently for performance and fetched using ID-based pagination.
  */
 @Singleton
 class SmsBatchProcessor @Inject constructor(
@@ -29,54 +28,85 @@ class SmsBatchProcessor @Inject constructor(
     private val smsDao: SmsDao,
     private val smsClassifierModel: SmsClassifierModel,
     private val countryCodeProvider: CountryCodeProvider,
-    private val batchProcessingConcurrency: Int = 2
 ) {
 
     private val tag = "SmsBatchProcessor"
 
-    fun processSmsInBatches(batchSize: Int): Flow<FetchResult> = flow {
+    /**
+     * Triggers the full SMS classification loop.
+     *
+     * The loop prioritizes:
+     * 1. Newly arrived messages (based on _id > lastProcessedId)
+     * 2. Remaining older messages (in descending order of _id) using concurrent offset-based paging.
+     *
+     * It emits progress updates as [FetchResult.Loading], and terminates once all known messages are processed.
+     */
+    fun processSmsInBatches(batchSize: Int, batchProcessingConcurrency: Int): Flow<FetchResult> = flow {
         try {
-            val lastSms = smsDao.getLastInsertedSmsMessage()
-            val lastFetchedDate = lastSms?.date
-            val lastFetchedId = lastSms?.androidSmsId
-
-            val totalCount = smsContentProvider.getTotalSmsCount().coerceAtLeast(0)
-            val processedCount = smsDao.getTotalProcessedSmsCount().coerceAtLeast(0)
-            val validBatchSize = batchSize.coerceAtLeast(1)
-            val totalBatches = ((totalCount + validBatchSize - 1) / validBatchSize).coerceAtLeast(1)
-
-            var batchNumber = ((processedCount + validBatchSize - 1) / validBatchSize) + 1
-            var offset = processedCount
+            // Load current processing boundaries
+            var lastProcessedId = smsDao.getLastInsertedSmsMessageByAndroidSmsId()?.androidSmsId ?: -1
+            var firstProcessedId = smsDao.getFirstInsertedSmsMessageByAndroidSmsId()?.androidSmsId ?: -1
+            var processedCount = smsDao.getTotalProcessedSmsCount()
+            var totalSmsCount = smsContentProvider.getTotalSmsCount()
             var hasMoreData = true
 
             while (hasMoreData) {
-                emit(FetchResult.Loading(batchNumber, totalBatches))
-                val groupStartTime = System.currentTimeMillis()
+                // Emit current loading progress
+                emit(FetchResult.Loading(
+                    processedCount = processedCount,
+                    totalCount = totalSmsCount
+                ))
 
-                val classifiedResults = processMultipleBatchesAsync(
-                    batchSize,
-                    offset,
-                    lastFetchedDate,
-                    lastFetchedId,
-                    batchProcessingConcurrency
+                // Prioritize newly arrived messages above the last processed _id
+                val latestDeviceId = smsContentProvider.getLastAndroidSmsId() ?: -1
+                if (latestDeviceId > lastProcessedId && lastProcessedId != -1) {
+                    val newCursor = smsContentProvider.getSmsCursorBetweenIds(
+                        fromExclusive = lastProcessedId,
+                        toInclusive = latestDeviceId,
+                        limit = batchSize
+                    )
+                    val newMessages = newCursor?.use {
+                        SmsMapper.mapCursorToSmsList(it, smsDao, countryCodeProvider.getMyCountryCode())
+                    } ?: emptyList()
+
+                    // Recalculate SMS count in case new messages were inserted recently
+                    totalSmsCount = smsContentProvider.getTotalSmsCount()
+
+                    if (newMessages.isNotEmpty()) {
+                        val classifiedNew = classifySmsBatch(newMessages)
+                        insertClassifiedSms(classifiedNew)
+
+                        // Update pointer to newest processed _id
+                        lastProcessedId = classifiedNew.maxOfOrNull { it.androidSmsId ?: lastProcessedId } ?: lastProcessedId
+
+                        // Restart loop to check for even newer arrivals
+                        continue
+                    }
+                }
+
+                // Process remaining unclassified older messages using offset pagination
+                val classifiedResults = processMultipleBatchesAfterId(
+                    batchSize = batchSize,
+                    baseId = firstProcessedId,
+                    concurrency = batchProcessingConcurrency
                 )
 
                 val nonEmptyBatches = classifiedResults.filter { it.isNotEmpty() }
-
                 if (nonEmptyBatches.isEmpty()) {
+                    // No more old messages left to process
                     hasMoreData = false
                 } else {
-                    val totalFetched = nonEmptyBatches.sumOf { it.size }
-                    insertClassifiedSms(nonEmptyBatches.flatten())
-                    offset += totalFetched
-                    batchNumber += nonEmptyBatches.size
+                    val allMessages = nonEmptyBatches.flatten()
+                    insertClassifiedSms(allMessages)
 
-                    Log.d(
-                        tag,
-                        "${nonEmptyBatches.size} batches async processed in ${System.currentTimeMillis() - groupStartTime} ms"
-                    )
+                    processedCount += allMessages.size
 
-                    // Stop if we processed fewer batches than requested, likely the last ones
+                    // Update pointer to oldest processed _id
+                    firstProcessedId = allMessages.minOfOrNull { it.androidSmsId ?: firstProcessedId } ?: firstProcessedId
+
+                    Log.d(tag, "Inserted ${allMessages.size} SMS (beforeId = $firstProcessedId)")
+
+                    // If fewer than expected batches had results, likely we're nearing the end
                     if (nonEmptyBatches.size < batchProcessingConcurrency) {
                         hasMoreData = false
                     }
@@ -89,54 +119,49 @@ class SmsBatchProcessor @Inject constructor(
             FirebaseCrashlytics.getInstance().recordException(e)
             emit(FetchResult.Error(e))
         }
-    }.flowOn(Dispatchers.IO) // Use IO dispatcher for potentially blocking operations
+    }.flowOn(Dispatchers.IO)
 
-    private suspend fun processMultipleBatchesAsync(
+    /**
+     * Spawns [concurrency] coroutines to fetch and classify SMS messages in parallel,
+     * paging older messages below [baseId] using offset-based logic.
+     */
+    private suspend fun processMultipleBatchesAfterId(
         batchSize: Int,
-        baseOffset: Int,
-        lastFetchedDate: Long?,
-        lastFetchedId: Int?,
+        baseId: Int,
         concurrency: Int
     ): List<List<SmsEntity>> = coroutineScope {
         (0 until concurrency).map { index ->
-            async(Dispatchers.Default) { // Use Default for CPU-bound tasks
-                processBatchAsync(
-                    batchSize,
-                    baseOffset + index * batchSize,
-                    lastFetchedDate,
-                    lastFetchedId
-                )
+            async(Dispatchers.Default) {
+                processPreviousIdWithOffset(batchSize, baseId, index * batchSize)
             }
         }.awaitAll()
     }
 
-    private suspend fun processBatchAsync(
+    /**
+     * Fetches a paged batch of SMS with _id < [baseId] and applies classification.
+     * The offset simulates traditional pagination using MatrixCursor.
+     */
+    private suspend fun processPreviousIdWithOffset(
         batchSize: Int,
-        offset: Int,
-        lastFetchedDate: Long?,
-        lastFetchedId: Int?
+        baseId: Int,
+        offset: Int
     ): List<SmsEntity> {
-        val cursor =
-            smsContentProvider.getSmsCursor(batchSize, offset, lastFetchedDate, lastFetchedId)
+        val cursor = smsContentProvider.getSmsCursorPreviousIdWithOffset(baseId, batchSize, offset)
         return cursor?.use {
-            SmsMapper.mapCursorToSmsList(
-                it,
-                smsDao,
-                countryCodeProvider.getMyCountryCode()
-            ).let { smsBatch ->
-                if (smsBatch.isNotEmpty()) {
-                    classifySmsBatch(smsBatch)
-                } else {
-                    emptyList()
-                }
-            }
-        } ?: emptyList() // Handle case where cursor is null
+            SmsMapper.mapCursorToSmsList(it, smsDao, countryCodeProvider.getMyCountryCode())
+        }?.takeIf { it.isNotEmpty() }?.let {
+            classifySmsBatch(it)
+        } ?: emptyList()
     }
 
+    /**
+     * Classifies a batch of SMS messages using the [SmsClassifierModel].
+     * Falls back to the original SMS entity on failure.
+     */
     private suspend fun classifySmsBatch(smsBatch: List<SmsEntity>): List<SmsEntity> {
         return smsBatch.map { sms ->
             try {
-                val classification = withContext(Dispatchers.Default) { // Run classification on Default
+                val classification = withContext(Dispatchers.Default) {
                     smsClassifierModel.classifySms(sms.rawAddress, sms.body)
                 }
                 sms.copy(
@@ -145,20 +170,23 @@ class SmsBatchProcessor @Inject constructor(
                     confidenceScore = classification.confidenceScore
                 )
             } catch (e: Exception) {
-                Log.w(tag, "Error classifying SMS with address: ${sms.rawAddress}, body: ${sms.body}", e)
+                Log.w(tag, "Error classifying SMS from ${sms.rawAddress}", e)
                 FirebaseCrashlytics.getInstance().recordException(e)
-                sms // Return original SMS on classification failure
+                sms
             }
         }
     }
 
+    /**
+     * Inserts a list of classified SMS entities into the local Room database.
+     * Logs and reports errors but does not crash the loop.
+     */
     private suspend fun insertClassifiedSms(smsList: List<SmsEntity>) {
         try {
             smsDao.insertAllSmsMessages(smsList)
         } catch (e: Exception) {
-            Log.e(tag, "Error inserting classified SMS messages", e)
+            Log.e(tag, "DB insert failed", e)
             FirebaseCrashlytics.getInstance().recordException(e)
-            // Consider how to handle database insertion failures (e.g., retry, report)
         }
     }
 }

@@ -63,4 +63,5 @@
     <string name="messages">Messages</string>
     <string name="enter_message">Enter message</string>
     <string name="send">send</string>
+    <string name="continue_in_background">Continue in background</string>
 </resources>

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -34,6 +35,9 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_sms_processing
 
+    private val navigateToHomeTriggered = false
+
+    @Suppress("DEPRECATION")
     private val smsProcessingReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == SmsProcessingService.ACTION_SMS_PROCESSING_UPDATE) {
@@ -68,6 +72,13 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
 
     override fun onFragmentReady(instanceState: Bundle?) {
         observeViewModel()
+        listeners()
+    }
+
+    private fun listeners() {
+        mBinding.mbFragSmsProcessingContinue.setOnClickListener {
+            navigateToHome()
+        }
     }
 
     private fun observeViewModel() {
@@ -76,7 +87,7 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
                 is FetchResult.Loading -> {
                     mBinding.pgProgressIndicator.visibility = View.VISIBLE
                     val progress =
-                        (result.batchNumber.toFloat() / result.totalBatches * 100).toInt()
+                        ((result.processedCount.toFloat() / result.totalCount) * 100).toInt()
                     mBinding.pgProgressIndicator.progress = progress
                     mBinding.tvStatusIndicator.text =
                         getString(R.string.progress_percentage, progress)
@@ -87,9 +98,7 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
                     mBinding.tvStatusIndicator.text = getString(R.string.processing_complete)
                     mBinding.tvStatusIndicator.visibility = View.GONE
                     Handler(Looper.getMainLooper()).postDelayed({
-                        activity?.let {
-                            startActivityWithClearTop(it, SmsContactListActivity::class.java)
-                        }
+                        navigateToHome()
                     }, 400L)
                 }
 
@@ -140,7 +149,17 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
         }
     }
 
+    private fun navigateToHome() {
+        if (navigateToHomeTriggered) {
+            return
+        }
+        activity?.let {
+            startActivityWithClearTop(it, SmsContactListActivity::class.java)
+        }
+    }
+
     private fun startSmsProcessingService() {
+        mBinding.mbFragSmsProcessingContinue.isVisible = true
         if (!ServiceUtils.isServiceRunning(
                 requireContext(),
                 SmsProcessingService::class.java

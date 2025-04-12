@@ -52,8 +52,8 @@ class SmsProcessingService : Service() {
             repository.fetchSmsMessagesFromDevice().collect { result ->
                 when (result) {
                     is FetchResult.Loading -> {
-                        updateNotification("Processing batch ${result.batchNumber} of ${result.totalBatches}...")
-                        sendBroadcast(FetchResult.Loading(result.batchNumber, result.totalBatches))
+                        updateNotification("${result.processedCount}/${result.totalCount} processed")
+                        sendBroadcast(FetchResult.Loading(result.processedCount, result.totalCount))
                     }
 
                     is FetchResult.Success -> {

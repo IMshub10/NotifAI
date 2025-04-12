@@ -23,8 +23,8 @@ interface SmsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSmsMessage(sms: SmsEntity) : Long
 
-    @Query("SELECT * FROM sms_messages ORDER BY date DESC, android_sms_id DESC LIMIT 1")
-    suspend fun getLastInsertedSmsMessage(): SmsEntity?
+    @Query("SELECT * FROM sms_messages ORDER BY android_sms_id DESC LIMIT 1")
+    suspend fun getLastInsertedSmsMessageByAndroidSmsId(): SmsEntity?
 
     @Query("SELECT COUNT(*) FROM sms_messages")
     suspend fun getTotalProcessedSmsCount(): Int
@@ -101,5 +101,8 @@ interface SmsDao {
 
     @Query("UPDATE sms_messages SET android_sms_id = :androidSmsId WHERE id = :id")
     suspend fun updateAndroidSmsId(id: Long, androidSmsId: Int)
+
+    @Query("SELECT * FROM sms_messages ORDER BY android_sms_id ASC LIMIT 1")
+    suspend fun getFirstInsertedSmsMessageByAndroidSmsId(): SmsEntity?
 
 }

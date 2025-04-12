@@ -61,9 +61,24 @@
                 android:id="@+id/tv_statusIndicator"
                 style="@style/text_body_bold"
                 android:layout_width="match_parent"
+                android:layout_marginVertical="@dimen/spacing_x_medium"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 tools:text="25% done..." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_fragSmsProcessing_continue"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_x_medium"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/spacing_x_small"
+                android:text="@string/continue_in_background"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
