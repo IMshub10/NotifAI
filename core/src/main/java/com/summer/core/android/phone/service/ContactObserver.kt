@@ -27,13 +27,11 @@ import javax.inject.Singleton
 @Singleton
 class ContactObserver
 @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val permissionManager: IPermissionManager
 ) : ContentObserver(Handler(Looper.getMainLooper())) {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-    @Inject
-    lateinit var permissionManager: IPermissionManager
 
     override fun onChange(selfChange: Boolean, uri: Uri?) {
         super.onChange(selfChange, uri)

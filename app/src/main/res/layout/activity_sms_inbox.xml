@@ -15,7 +15,7 @@
             app:titleTextColor="?label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="0dp"
+            android:elevation="@dimen/spacing_atom"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back_24x24"
             app:title="HDFC Bank" />

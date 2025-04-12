@@ -14,6 +14,7 @@ import androidx.databinding.InverseBindingListener
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.summer.core.R
+import com.summer.core.ui.model.SmsClassificationType
 
 object DataBindingAdapters {
     @JvmStatic

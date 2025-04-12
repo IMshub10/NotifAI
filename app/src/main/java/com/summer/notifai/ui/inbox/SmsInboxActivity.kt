@@ -8,7 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.summer.core.android.notification.AppNotificationManager
 import com.summer.core.di.ChatSessionTracker
 import com.summer.core.ui.BaseActivity
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivitySmsInboxBinding
 import dagger.hilt.android.AndroidEntryPoint

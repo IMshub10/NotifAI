@@ -75,7 +75,7 @@ interface SmsDao {
     LEFT JOIN sms_classification_types AS classification
         ON sms.sms_classification_type_id = classification.id
     WHERE sms.sender_address_id = :senderAddressId
-    AND (:important = -1  OR classification.is_important = :important )
+    AND (:important = -1  OR classification.is_important = :important)
     ORDER BY sms.date DESC
 """
     )
@@ -89,5 +89,17 @@ interface SmsDao {
 
     @Query("UPDATE sms_messages set read = 1 where sender_address_id = :senderAddressId")
     suspend fun markSmsAsReadBySenderAddressId(senderAddressId: Long)
+
+    @Query("SELECT android_sms_id FROM sms_messages WHERE id = :id")
+    suspend fun getAndroidSmsIdById(id: Long): Int?
+
+    @Query("UPDATE sms_messages SET status = :status, updated_at_app = :updatedAt WHERE id = :id")
+    suspend fun updateSmsStatusById(id: Long, status: Int, updatedAt: Long)
+
+    @Query("SELECT * FROM sms_messages WHERE id = :id")
+    suspend fun getSmsEntityById(id: Long): SmsEntity?
+
+    @Query("UPDATE sms_messages SET android_sms_id = :androidSmsId WHERE id = :id")
+    suspend fun updateAndroidSmsId(id: Long, androidSmsId: Int)
 
 }

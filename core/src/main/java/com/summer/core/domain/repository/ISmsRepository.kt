@@ -3,9 +3,11 @@ package com.summer.core.domain.repository
 import android.content.Context
 import androidx.paging.PagingSource
 import com.summer.core.android.sms.data.model.SmsInfoModel
+import com.summer.core.android.sms.util.SmsStatus
+import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.domain.model.FetchResult
 import com.summer.core.data.local.model.SmsMessageModel
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 import kotlinx.coroutines.flow.Flow
 
 interface ISmsRepository {
@@ -21,5 +23,11 @@ interface ISmsRepository {
 
     suspend fun insertSms(context: Context, sms: SmsInfoModel, threadId: Long?): Long?
 
+    suspend fun insertSms(smsEntity: SmsEntity): Long
+
     suspend fun markSmsAsReadBySenderId(context: Context, senderAddressId: Long): List<Long>
+
+    suspend fun markSmsAsSentStatus(context: Context, smsId: Long, status: SmsStatus): Long?
+
+    suspend fun markSmsAsDeliveredStatus(context: Context, smsId: Long, status: SmsStatus): Boolean
 }

@@ -3,7 +3,7 @@ package com.summer.core.domain.usecase
 import androidx.paging.PagingSource
 import com.summer.core.data.local.model.SmsMessageModel
 import com.summer.core.domain.repository.ISmsRepository
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 import javax.inject.Inject
 
 class GetSmsMessagesBySenderIdUseCase @Inject constructor(

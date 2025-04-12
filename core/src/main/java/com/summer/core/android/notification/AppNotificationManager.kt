@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.di.ChatSessionTracker
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

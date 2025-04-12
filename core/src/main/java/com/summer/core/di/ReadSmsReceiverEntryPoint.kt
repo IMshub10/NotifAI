@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-interface SmsReceiverEntryPoint {
+interface ReadSmsReceiverEntryPoint {
     fun smsInserter(): SmsInserter
     fun appNotificationManager(): AppNotificationManager
     fun permissionManager(): IPermissionManager

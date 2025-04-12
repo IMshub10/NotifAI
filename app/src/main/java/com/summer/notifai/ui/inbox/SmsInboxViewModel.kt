@@ -1,6 +1,9 @@
 package com.summer.notifai.ui.inbox
 
 import android.content.Context
+import android.telephony.SmsManager
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
@@ -13,10 +16,11 @@ import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.summer.core.android.sms.constants.Constants.SMS_LIST_PAGE_SIZE
 import com.summer.core.data.local.model.ContactInfoInboxModel
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 import com.summer.core.domain.usecase.GetContactInfoInboxModelUseCase
 import com.summer.core.domain.usecase.GetSmsMessagesBySenderIdUseCase
 import com.summer.core.domain.usecase.MarkSmsAsReadForSenderUseCase
+import com.summer.core.domain.usecase.SendSmsUseCase
 import com.summer.core.util.DateUtils
 import com.summer.notifai.ui.datamodel.SmsInboxListItem
 import com.summer.notifai.ui.datamodel.SmsMessageHeaderModel
@@ -37,13 +41,23 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import androidx.lifecycle.map
+import com.summer.core.android.sms.constants.Constants
 
 @HiltViewModel
 class SmsInboxViewModel @Inject constructor(
     private val getSmsMessagesBySenderIdUseCase: GetSmsMessagesBySenderIdUseCase,
     private val getContactInfoInboxModelUseCase: GetContactInfoInboxModelUseCase,
-    private val markSmsAsReadForSenderUseCase: MarkSmsAsReadForSenderUseCase
+    private val markSmsAsReadForSenderUseCase: MarkSmsAsReadForSenderUseCase,
+    private val sendSmsUseCase: SendSmsUseCase
 ) : ViewModel() {
+
+    val messageText = MutableLiveData("")
+
+    val isSendEnabled: LiveData<Boolean> = messageText.map { message ->
+        val parts = SmsManager.getDefault().divideMessage(message ?: "")
+        !message.isNullOrBlank() && parts.size <= Constants.SMS_PART_LIMIT
+    }
 
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
     val contactInfoModel = _contactInfoModel
@@ -104,6 +118,25 @@ class SmsInboxViewModel @Inject constructor(
                     }
             }
             .cachedIn(viewModelScope)
+    }
+
+    fun sendSms(context: Context, body: String?) {
+        if (body.isNullOrBlank()) return
+        val contact = _contactInfoModel.value
+
+        if (contact == null || contact.phoneNumber.isNullOrEmpty()) {
+            Log.e("SmsInbox", "No phone number found for senderAddressId=$senderAddressId")
+            return
+        }
+
+        viewModelScope.launch {
+            sendSmsUseCase.invoke(
+                context,
+                contact.senderAddressId,
+                contact.phoneNumber.orEmpty(),
+                body
+            )
+        }
     }
 
     fun markSmsListAsRead(

@@ -1,18 +1,15 @@
 package com.summer.notifai.ui.contactlist
 
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.PagingData
 import com.summer.core.ui.BaseFragment
-import com.summer.core.ui.SmsImportanceType.Companion.toSmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType.Companion.toSmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragContactListBinding
-import com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel
 import com.summer.notifai.ui.inbox.SmsInboxActivity
 import com.summer.notifai.ui.smsinbox.contactlist.ContactListPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint

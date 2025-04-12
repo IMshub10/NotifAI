@@ -11,13 +11,15 @@ import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.data.mapper.SmsMapper
 import com.summer.core.android.sms.data.model.SmsInfoModel
 import com.summer.core.android.sms.processor.SmsBatchProcessor
+import com.summer.core.android.sms.util.SmsStatus
 import com.summer.core.domain.model.FetchResult
 import com.summer.core.domain.repository.ISmsRepository
 import com.summer.core.data.local.dao.SmsDao
+import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.data.local.model.SmsMessageModel
 import com.summer.core.data.local.preference.PreferenceKey
 import com.summer.core.data.local.preference.SharedPreferencesManager
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,6 +30,7 @@ class SmsRepository @Inject constructor(
     private val smsBatchProcessor: SmsBatchProcessor,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : ISmsRepository {
+
     override suspend fun fetchSmsMessagesFromDevice(): Flow<FetchResult> {
         return smsBatchProcessor.processSmsInBatches(BATCH_SIZE)
     }
@@ -57,7 +60,14 @@ class SmsRepository @Inject constructor(
         }
     }
 
-    override suspend fun  markSmsAsReadBySenderId(context: Context, senderAddressId: Long) : List<Long>{
+    override suspend fun insertSms(smsEntity: SmsEntity): Long {
+        return smsDao.insertSmsMessage(smsEntity)
+    }
+
+    override suspend fun markSmsAsReadBySenderId(
+        context: Context,
+        senderAddressId: Long
+    ): List<Long> {
         val smsIds = smsDao.getUnreadAndroidSmsIdsBySenderAddressId(senderAddressId)
         if (smsIds.isNotEmpty()) {
             try {
@@ -88,5 +98,85 @@ class SmsRepository @Inject constructor(
             }
         }
         return smsIds
+    }
+
+    override suspend fun markSmsAsSentStatus(
+        context: Context,
+        smsId: Long,
+        status: SmsStatus
+    ): Long? {
+        return try {
+            val smsEntity = smsDao.getSmsEntityById(smsId) ?: return null
+
+            // Already inserted → skip system insert
+            if (smsEntity.androidSmsId != null) {
+                // Still update status as SENT
+                smsDao.updateSmsStatusById(smsId, status.code, System.currentTimeMillis())
+                return smsEntity.androidSmsId.toLong()
+            }
+
+            val values = SmsMapper.smsEntityToContentValuesForSent(smsEntity)
+
+            val uri = context.contentResolver.insert(Telephony.Sms.Sent.CONTENT_URI, values)
+            val androidSmsId = uri?.lastPathSegment?.toLongOrNull()
+
+            if (androidSmsId != null) {
+                smsDao.updateAndroidSmsId(smsEntity.id, androidSmsId.toInt())
+                smsDao.updateSmsStatusById(smsEntity.id, status.code, System.currentTimeMillis())
+            }
+
+            androidSmsId
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("SmsRepository", "Failed to insert sent SMS into system provider", e)
+            null
+        }
+    }
+
+    override suspend fun markSmsAsDeliveredStatus(
+        context: Context,
+        smsId: Long,
+        status: SmsStatus
+    ): Boolean {
+        return try {
+            val androidSmsId = smsDao.getAndroidSmsIdById(smsId)
+
+            if (androidSmsId != null) {
+                // Case 1: Already inserted in system provider → just update status
+                val values = ContentValues().apply {
+                    put(Telephony.Sms.STATUS, status.code)
+                }
+
+                val updatedRows = context.contentResolver.update(
+                    Telephony.Sms.CONTENT_URI,
+                    values,
+                    "${Telephony.Sms._ID} = ?",
+                    arrayOf(androidSmsId.toString())
+                )
+
+                smsDao.updateSmsStatusById(smsId, status.code, System.currentTimeMillis())
+                return updatedRows > 0
+            } else {
+                // Case 2: Not inserted yet → insert, update androidSmsId + status
+
+                val smsEntity = smsDao.getSmsEntityById(smsId) ?: return false
+                val values = SmsMapper.smsEntityToContentValuesForSent(smsEntity)
+
+                val uri = context.contentResolver.insert(Telephony.Sms.Sent.CONTENT_URI, values)
+                val insertedAndroidSmsId = uri?.lastPathSegment?.toLongOrNull()
+
+                if (insertedAndroidSmsId != null) {
+                    smsDao.updateAndroidSmsId(smsEntity.id, insertedAndroidSmsId.toInt())
+                    smsDao.updateSmsStatusById(smsEntity.id, status.code, System.currentTimeMillis())
+                    return true
+                }
+            }
+
+            false
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("SmsRepository", "Failed to mark SMS as delivered (id=$smsId)", e)
+            false
+        }
     }
 }

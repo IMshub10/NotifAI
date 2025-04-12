@@ -58,19 +58,23 @@ ORDER BY s.date DESC
     @Query(
         """
     SELECT 
-    COALESCE(c.name, sa.sender_address) AS sender_name,
-    sa.id AS sender_address_id,
-    (
-        SELECT COUNT(*) 
-        FROM sms_messages sm
-        INNER JOIN sms_classification_types sct ON sm.sms_classification_type_id = sct.id
-        WHERE sm.sender_address_id = sa.id
-          AND sm.read = 0
-          AND (:important = -1 OR sct.is_important = :important )
-    ) AS unread_count
+        COALESCE(c.name, sa.sender_address) AS sender_name,
+        sa.id AS sender_address_id,
+        CASE 
+            WHEN sa.sender_type = 'CONTACT' THEN c.phone_number
+            ELSE NULL
+        END AS phone_number,
+        (
+            SELECT COUNT(*) 
+            FROM sms_messages sm
+            INNER JOIN sms_classification_types sct ON sm.sms_classification_type_id = sct.id
+            WHERE sm.sender_address_id = sa.id
+              AND sm.read = 0
+              AND (:important = -1 OR sct.is_important = :important)
+        ) AS unread_count
     FROM sender_addresses sa
-LEFT JOIN contacts c ON c.phone_number = sa.sender_address
-where sa.id = :senderAddressId
+    LEFT JOIN contacts c ON c.phone_number = sa.sender_address
+    WHERE sa.id = :senderAddressId
     """
     )
     fun getContactInfoBySenderAddressId(

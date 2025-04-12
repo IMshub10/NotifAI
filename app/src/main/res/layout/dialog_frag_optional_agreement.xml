@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_x_medium"
             android:text="@string/not_now"
-            android:textColor="?colorOnSecondary"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/dialogOptionalAgreement_positiveButton"
             app:layout_constraintTop_toBottomOf="@+id/dialogOptionalAgreement_description" />

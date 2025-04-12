@@ -53,7 +53,7 @@ object SmsMapper {
                     date = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_DATE)),
                     dateSent = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_DATE_SENT)),
                     type = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_TYPE)),
-                    threadId = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_THREAD_ID)),
+                    threadId = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_THREAD_ID)),
                     read = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_READ)),
                     status = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_STATUS)),
                     serviceCenter = it.getString(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_SERVICE_CENTER)),
@@ -95,7 +95,7 @@ object SmsMapper {
                     date = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_DATE)),
                     dateSent = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_DATE_SENT)),
                     type = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_TYPE)),
-                    threadId = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_THREAD_ID)),
+                    threadId = it.getLong(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_THREAD_ID)),
                     read = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_READ)),
                     status = it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_STATUS)),
                     serviceCenter = it.getString(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_SERVICE_CENTER)),
@@ -148,6 +148,7 @@ object SmsMapper {
             put(Telephony.Sms.DATE, System.currentTimeMillis())
             put(Telephony.Sms.DATE_SENT, sms.timestamp)
             put(Telephony.Sms.READ, 0)
+            put(Telephony.Sms.SEEN, 0)
             put(Telephony.Sms.TYPE, SmsMessageType.INBOX.code)
             put(Telephony.Sms.STATUS, -1)
             put(Telephony.Sms.LOCKED, 0)
@@ -158,6 +159,23 @@ object SmsMapper {
             threadId?.let {
                 put(Telephony.Sms.THREAD_ID, it)
             }
+        }
+    }
+
+    fun smsEntityToContentValuesForSent(sms: SmsEntity): ContentValues {
+        return ContentValues().apply {
+            put(Telephony.Sms.ADDRESS, sms.rawAddress)
+            put(Telephony.Sms.BODY, sms.body)
+            put(Telephony.Sms.DATE, sms.date)
+            put(Telephony.Sms.DATE_SENT, sms.dateSent ?: sms.date)
+            put(Telephony.Sms.READ, 1)
+            put(Telephony.Sms.SEEN, 1)
+            put(Telephony.Sms.TYPE, SmsMessageType.SENT.code) // value = 2
+            put(Telephony.Sms.STATUS, sms.status ?: -1)
+            put(Telephony.Sms.LOCKED, 0)
+            put(Telephony.Sms.SERVICE_CENTER, sms.serviceCenter)
+            sms.subscriptionId?.let { put(Telephony.Sms.SUBSCRIPTION_ID, it) }
+            sms.threadId?.let { put(Telephony.Sms.THREAD_ID, it) }
         }
     }
 }

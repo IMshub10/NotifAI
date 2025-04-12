@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.summer.core.android.sms.constants.Constants.DATE_FLOATER_SHOW_TIME
 import com.summer.core.ui.BaseFragment
+import com.summer.core.util.DateUtils
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsInboxBinding
 import com.summer.notifai.ui.contactlist.PagingLoadStateAdapter
 import com.summer.notifai.ui.datamodel.SmsInboxListItem
-import com.summer.core.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,10 +39,28 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
     private var isAtBottom = true
 
+    override fun onFragmentReady(instanceState: Bundle?) {
+        super.onFragmentReady(instanceState)
+        mBinding.viewModel = smsInboxViewModel
+        mBinding.lifecycleOwner = viewLifecycleOwner
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observePagingData()
+        listeners()
+    }
+
+    private fun listeners() {
+        mBinding.btFragSmsInboxSend.setOnClickListener {
+            val message = mBinding.etFragSmsInboxMessage.text.toString()
+            mBinding.etFragSmsInboxMessage.text?.clear()
+            smsInboxViewModel.sendSms(requireContext(), message)
+        }
+        smsInboxViewModel.isSendEnabled.observe(viewLifecycleOwner) {
+            mBinding.btFragSmsInboxSend.isEnabled = it
+        }
     }
 
     private fun setupRecyclerView() {

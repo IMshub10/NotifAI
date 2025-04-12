@@ -2,7 +2,7 @@ package com.summer.notifai.ui.datamodel.mapper
 
 import com.summer.core.android.sms.util.SmsMessageType
 import com.summer.core.data.local.model.SmsMessageModel
-import com.summer.core.ui.SmsClassificationType
+import com.summer.core.ui.model.SmsClassificationType
 import com.summer.core.util.DateUtils
 
 import com.summer.notifai.ui.datamodel.SmsClassificationDataModel

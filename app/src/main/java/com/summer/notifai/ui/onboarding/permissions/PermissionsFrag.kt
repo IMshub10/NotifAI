@@ -124,9 +124,10 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
     private fun listeners() {
         with(mBinding) {
             fragUserAgreementActionButton.setOnClickListener {
-                if (!permissionManager.isDefaultSms())
+                //TODO("Not sure if we should ask for default SMS app permission here")
+                /*if (!permissionManager.isDefaultSms())
                     promptToSetDefaultSmsApp()
-                else
+                else*/
                     requestRequiredPermissions()
             }
         }

@@ -1,7 +1,7 @@
 package com.summer.core.android.notification
 
 import android.app.PendingIntent
-import com.summer.core.ui.SmsImportanceType
+import com.summer.core.ui.model.SmsImportanceType
 
 interface NotificationIntentProvider {
     fun provideSummaryPendingIntent(): PendingIntent

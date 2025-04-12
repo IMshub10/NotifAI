@@ -19,8 +19,7 @@ class PermissionManagerImpl(private val context: Context) : IPermissionManager {
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.POST_NOTIFICATIONS,
                 Manifest.permission.FOREGROUND_SERVICE,
-                Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC,
-                Manifest.permission.SEND_SMS
+                Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC
             )
         } else {
             arrayOf(
@@ -29,8 +28,7 @@ class PermissionManagerImpl(private val context: Context) : IPermissionManager {
                 Manifest.permission.RECEIVE_MMS,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.POST_NOTIFICATIONS,
-                Manifest.permission.FOREGROUND_SERVICE,
-                Manifest.permission.SEND_SMS
+                Manifest.permission.FOREGROUND_SERVICE
             )
         }
     } else {
@@ -39,14 +37,14 @@ class PermissionManagerImpl(private val context: Context) : IPermissionManager {
             Manifest.permission.READ_SMS,
             Manifest.permission.RECEIVE_MMS,
             Manifest.permission.READ_CONTACTS,
-            Manifest.permission.FOREGROUND_SERVICE,
-            Manifest.permission.SEND_SMS
+            Manifest.permission.FOREGROUND_SERVICE
         )
     }
 
     val optionalPermissions = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.SEND_SMS
     )
 
     override fun hasRequiredPermissions(): Boolean {

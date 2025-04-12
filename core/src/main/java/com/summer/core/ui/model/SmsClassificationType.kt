@@ -1,4 +1,4 @@
-package com.summer.core.ui
+package com.summer.core.ui.model
 
 enum class SmsClassificationType(val compactName: String) {
     SCAM("SCAM"),

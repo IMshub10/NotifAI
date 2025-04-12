@@ -52,7 +52,16 @@
         </activity>
 
         <receiver
-            android:name=".receiver.SmsBroadcastReceiver"
+            android:name="com.summer.core.android.sms.receiver.DeliveredSmsReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="SMS_DELIVERED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.summer.core.android.sms.receiver.ReadSmsBroadcastReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
@@ -62,7 +71,7 @@
             </intent-filter>
         </receiver> <!-- BroadcastReceiver that listens for incoming MMS messages -->
         <receiver
-            android:name=".receiver.MMSBroadCastReceiver"
+            android:name="com.summer.core.android.sms.receiver.MMSBroadCastReceiver"
             android:exported="false"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
@@ -103,14 +112,6 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".service.MyCarrierMessagingService"
-            android:exported="true"
-            android:permission="android.permission.BIND_CARRIER_MESSAGING_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.carrier.CarrierMessagingService" />
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>

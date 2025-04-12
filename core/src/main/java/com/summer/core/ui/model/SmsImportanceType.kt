@@ -1,4 +1,4 @@
-package com.summer.core.ui
+package com.summer.core.ui.model
 
 enum class SmsImportanceType(val value: Int) {
     IMPORTANT(1),
