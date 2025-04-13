@@ -27,11 +27,11 @@
             android:layout_marginStart="@dimen/spacing_small"
             android:background="@drawable/shape_circle_color_surface"
             android:backgroundTint="?colorOnSecondary"
-            android:padding="@dimen/spacing_small"
-            android:src="@drawable/ic_sms_24x24"
+            android:padding="@dimen/spacing_x_small"
             app:layout_constraintBottom_toBottomOf="@+id/separator"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:senderTypeIcon="@{model.senderType}"
             app:tint="?colorOnPrimary" />
 
         <androidx.appcompat.widget.AppCompatTextView

@@ -1,6 +1,7 @@
 package com.summer.notifai.ui.datamodel
 
 import androidx.annotation.DrawableRes
+import com.summer.core.data.local.entities.SenderType
 
 data class ContactMessageInfoDataModel(
     @DrawableRes val icon: Int,
@@ -9,5 +10,6 @@ data class ContactMessageInfoDataModel(
     val rawAddress: String,
     val lastMessage: String,
     val lastMessageDate: String,
-    val unreadCount: String? = null
+    val unreadCount: String? = null,
+    val senderType: SenderType?
 )

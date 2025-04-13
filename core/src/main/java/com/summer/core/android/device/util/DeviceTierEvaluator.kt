@@ -33,9 +33,9 @@ class DeviceTierEvaluator @Inject constructor(
 
     fun getRecommendedBatchSettings(): Pair<Int, Int> {
         return when (deviceTier) {
-            DeviceTier.HIGH_END -> 5 to 10
-            DeviceTier.MID_RANGE -> 3 to 5
-            DeviceTier.LOW_END -> 2 to 2
+            DeviceTier.HIGH_END -> 3 to 8
+            DeviceTier.MID_RANGE -> 2 to 5
+            DeviceTier.LOW_END -> 1 to 2
         }
     }
 

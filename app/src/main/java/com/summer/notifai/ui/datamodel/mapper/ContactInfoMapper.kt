@@ -15,7 +15,8 @@ object ContactInfoMapper {
             rawAddress = rawAddress,
             lastMessage = lastMessage,
             lastMessageDate = DateUtils.formatDisplayDateTime(lastMessageDate),
-            unreadCount = unreadCount.takeIf { it != 0 }?.toString()
+            unreadCount = unreadCount.takeIf { it != 0 }?.toString(),
+            senderType = senderType
         )
     }
 }

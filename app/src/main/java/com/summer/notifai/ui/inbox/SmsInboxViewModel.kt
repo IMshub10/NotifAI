@@ -43,6 +43,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import androidx.lifecycle.map
 import com.summer.core.android.sms.constants.Constants
+import com.summer.core.data.local.entities.SenderType
 
 @HiltViewModel
 class SmsInboxViewModel @Inject constructor(
@@ -61,6 +62,10 @@ class SmsInboxViewModel @Inject constructor(
 
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
     val contactInfoModel = _contactInfoModel
+
+    val isSendSectionVisible: LiveData<Boolean> = contactInfoModel.map { model ->
+        model?.senderType == SenderType.CONTACT
+    }
 
     var senderAddressId = 0L
 

@@ -14,6 +14,7 @@ import androidx.databinding.InverseBindingListener
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.summer.core.R
+import com.summer.core.data.local.entities.SenderType
 import com.summer.core.ui.model.SmsClassificationType
 
 object DataBindingAdapters {
@@ -114,7 +115,9 @@ object DataBindingAdapters {
                 listener.onChange()
             }
         }
-    }@JvmStatic
+    }
+
+    @JvmStatic
     @BindingAdapter("setSmsMessageTextNBackgroundColor")
     fun AppCompatTextView.setSmsMessageTextNBackgroundColor(classificationType: SmsClassificationType?) {
         if (classificationType == null) return
@@ -136,5 +139,19 @@ object DataBindingAdapters {
 
         // Apply text color
         setTextColor(ContextCompat.getColor(context, textColorRes))
+    }
+
+    @JvmStatic
+    @BindingAdapter("senderTypeIcon")
+    fun AppCompatImageView.setSenderTypeIcon(senderType: SenderType?) {
+        setImageResource(getIconBySenderType(senderType))
+    }
+
+    fun getIconBySenderType(senderType: SenderType?): Int {
+        return when (senderType) {
+            SenderType.BUSINESS -> R.drawable.ic_business_24x24
+            SenderType.CONTACT -> R.drawable.ic_contact_24x24
+            else -> R.drawable.ic_contact_24x24
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.summer.core.data.local.model
 
 import androidx.room.ColumnInfo
+import com.summer.core.data.local.entities.SenderType
 
 data class ContactMessageInfoModel(
     @ColumnInfo("sender_name")
@@ -14,5 +15,7 @@ data class ContactMessageInfoModel(
     @ColumnInfo("last_message_date")
     val lastMessageDate: Long,
     @ColumnInfo("unread_count")
-    val unreadCount: Int
+    val unreadCount: Int,
+    @ColumnInfo("sender_type")
+    val senderType: SenderType?
 )

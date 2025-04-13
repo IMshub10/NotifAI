@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="viewModel"
             type="com.summer.notifai.ui.inbox.SmsInboxViewModel" />
@@ -55,9 +57,9 @@
             android:maxLines="5"
             android:paddingVertical="@dimen/spacing_small"
             android:paddingStart="@dimen/spacing_small"
-            android:text="@={viewModel.messageText}"
             android:paddingEnd="@dimen/spacing_xx_large"
             android:singleLine="false"
+            android:text="@={viewModel.messageText}"
             android:textColor="?label"
             android:textColorHint="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -76,6 +78,13 @@
             app:layout_constraintBottom_toBottomOf="@id/et_fragSmsInbox_message"
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@android:color/white" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_fragSmsInbox_sendSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.isSendSectionVisible ? View.VISIBLE : View.GONE}"
+            app:constraint_referenced_ids="et_fragSmsInbox_message,bt_fragSmsInbox_send" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

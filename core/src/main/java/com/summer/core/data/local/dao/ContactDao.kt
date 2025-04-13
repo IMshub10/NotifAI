@@ -30,6 +30,7 @@ interface ContactDao {
     s.body AS last_message,
     s.date AS last_message_date,
     sa.id AS sender_address_id,
+    sa.sender_type AS sender_type,
     (
         SELECT COUNT(*) 
         FROM sms_messages sm
@@ -60,6 +61,7 @@ ORDER BY s.date DESC
     SELECT 
         COALESCE(c.name, sa.sender_address) AS sender_name,
         sa.id AS sender_address_id,
+        sa.sender_type AS sender_type,
         CASE 
             WHEN sa.sender_type = 'CONTACT' THEN c.phone_number
             ELSE NULL
