@@ -188,4 +188,8 @@ class SmsRepository @Inject constructor(
             false
         }
     }
+
+    override suspend fun getOrInsertSenderId(senderAddress: String, defaultCountryCode: Int): Long {
+        return smsDao.getOrInsertSenderId(senderAddress, defaultCountryCode)
+    }
 }

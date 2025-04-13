@@ -11,7 +11,10 @@ import androidx.paging.cachedIn
 import androidx.paging.insertHeaderItem
 import androidx.paging.map
 import com.summer.core.android.sms.constants.Constants.CONTACT_LIST_PAGE_SIZE
+import com.summer.core.android.sms.constants.Constants.SEARCH_NEW_CONTACT_ID
+import com.summer.core.domain.repository.ISmsRepository
 import com.summer.core.domain.usecase.GetContactListWithFilterUseCase
+import com.summer.core.util.CountryCodeProvider
 import com.summer.notifai.ui.datamodel.NewContactDataModel
 import com.summer.notifai.ui.datamodel.mapper.NewContactMapper.toNewContactDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +31,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewContactListViewModel @Inject constructor(
-    private val getContactListWithFilterUseCase: GetContactListWithFilterUseCase
+    private val smsRepository: ISmsRepository,
+    private val getContactListWithFilterUseCase: GetContactListWithFilterUseCase,
+    private val countryCodeProvider: CountryCodeProvider,
 ) : ViewModel() {
 
     val contactFilter = MutableLiveData("")
@@ -48,7 +53,7 @@ class NewContactListViewModel @Inject constructor(
 
         val staticItem = if (isPhoneNumber) {
             NewContactDataModel(
-                id = -1L,
+                id = SEARCH_NEW_CONTACT_ID.toLong(),
                 contactName = "Send to this phone number",
                 phoneNumber = query,
                 icon = com.summer.core.R.drawable.ic_contact_24x24
@@ -68,5 +73,12 @@ class NewContactListViewModel @Inject constructor(
         } else {
             pagingSource
         }.cachedIn(viewModelScope)
+    }
+
+    suspend fun getOrInsertSenderId(selectedItem: NewContactDataModel): Long {
+        return smsRepository.getOrInsertSenderId(
+            selectedItem.phoneNumber,
+            countryCodeProvider.getMyCountryCode()
+        )
     }
 }

@@ -54,6 +54,7 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
         viewmodel.contactInfoModel.observe(this) {
             it?.let { contact ->
                 mBinding.mtActSmsInboxToolbar.title = contact.senderName
+                mBinding.mtActSmsInboxToolbar.subtitle = contact.phoneNumber
             }
         }
     }

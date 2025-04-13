@@ -36,7 +36,7 @@ interface SmsDao {
     fun insertSenderAddress(sender: SenderAddressEntity): Long
 
     @Transaction
-    fun getOrInsertSenderId(senderAddress: String, defaultCountryCode: Int): Long {
+    suspend fun getOrInsertSenderId(senderAddress: String, defaultCountryCode: Int): Long {
         val senderType = senderAddress.determineSenderType()
 
         val trimmedAddress = when (senderType) {

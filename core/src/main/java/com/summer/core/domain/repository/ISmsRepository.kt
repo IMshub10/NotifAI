@@ -30,4 +30,6 @@ interface ISmsRepository {
     suspend fun markSmsAsSentStatus(context: Context, smsId: Long, status: SmsStatus): Long?
 
     suspend fun markSmsAsDeliveredStatus(context: Context, smsId: Long, status: SmsStatus): Boolean
+
+    suspend fun getOrInsertSenderId(senderAddress: String, defaultCountryCode: Int): Long
 }

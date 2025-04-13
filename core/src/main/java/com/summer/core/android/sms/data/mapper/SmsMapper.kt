@@ -27,7 +27,7 @@ object SmsMapper {
         SMSColumnNames.COLUMN_SUBSCRIPTION_ID,
     )
 
-    fun mapCursorToSmsList(
+    suspend fun mapCursorToSmsList(
         cursor: Cursor?,
         smsDao: SmsDao,
         defaultCountryCode: Int
@@ -70,7 +70,7 @@ object SmsMapper {
         return smsList
     }
 
-    fun mapCursorToSms(
+    suspend fun mapCursorToSms(
         cursor: Cursor?,
         smsDao: SmsDao,
         defaultCountryCode: Int
@@ -111,7 +111,7 @@ object SmsMapper {
         return sms
     }
 
-    fun smsInfoModelToSmsEntity(
+    suspend fun smsInfoModelToSmsEntity(
         sms: SmsInfoModel,
         smsDao: SmsDao,
         defaultCountryCode: Int
