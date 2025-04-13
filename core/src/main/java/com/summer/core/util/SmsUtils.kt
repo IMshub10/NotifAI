@@ -18,7 +18,7 @@ fun String.normalizePhoneNumber(defaultCountryCode: Int): String {
     return when {
         matches(Regex("^\\+[0-9]{10,15}$")) -> this
 
-        matches(Regex("^91[0-9]{10}$")) -> "+$this"
+        matches(Regex("^${defaultCountryCode}[0-9]{10}$")) -> "+$this"
 
         matches(Regex("^0[0-9]{10}$")) -> "+$defaultCountryCode${substring(1)}"
 

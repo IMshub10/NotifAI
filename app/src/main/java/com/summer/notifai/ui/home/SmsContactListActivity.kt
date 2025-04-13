@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.contactlist
+package com.summer.notifai.ui.home
 
 import android.app.Activity
 import android.app.role.RoleManager

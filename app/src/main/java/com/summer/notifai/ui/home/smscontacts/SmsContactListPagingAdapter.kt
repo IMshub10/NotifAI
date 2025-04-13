@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.smsinbox.contactlist
+package com.summer.notifai.ui.home.smscontacts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.summer.notifai.databinding.ItemSmsContactBinding
 import com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel
 
-class ContactListPagingAdapter(
+class SmsContactListPagingAdapter(
     private val onItemClick: (ContactMessageInfoDataModel) -> Unit
-) : PagingDataAdapter<ContactMessageInfoDataModel, ContactListPagingAdapter.ContactViewHolder>(
+) : PagingDataAdapter<ContactMessageInfoDataModel, SmsContactListPagingAdapter.ContactViewHolder>(
     DiffCallback
 ) {
 

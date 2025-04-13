@@ -17,7 +17,7 @@ import com.summer.core.ui.BaseFragment
 import com.summer.core.util.DateUtils
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsInboxBinding
-import com.summer.notifai.ui.contactlist.PagingLoadStateAdapter
+import com.summer.notifai.ui.common.PagingLoadStateAdapter
 import com.summer.notifai.ui.datamodel.SmsInboxListItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

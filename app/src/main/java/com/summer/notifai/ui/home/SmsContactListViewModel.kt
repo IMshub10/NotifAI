@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.contactlist
+package com.summer.notifai.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

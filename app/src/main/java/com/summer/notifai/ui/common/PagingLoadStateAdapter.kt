@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.contactlist
+package com.summer.notifai.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

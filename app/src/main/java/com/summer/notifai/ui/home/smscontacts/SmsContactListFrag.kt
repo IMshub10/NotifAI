@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.contactlist
+package com.summer.notifai.ui.home.smscontacts
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
@@ -10,22 +10,23 @@ import com.summer.core.ui.BaseFragment
 import com.summer.core.ui.model.SmsImportanceType.Companion.toSmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragContactListBinding
+import com.summer.notifai.ui.common.PagingLoadStateAdapter
+import com.summer.notifai.ui.home.SmsContactListViewModel
 import com.summer.notifai.ui.inbox.SmsInboxActivity
-import com.summer.notifai.ui.smsinbox.contactlist.ContactListPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ContactListFrag : BaseFragment<FragContactListBinding>() {
+class SmsContactListFrag : BaseFragment<FragContactListBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_contact_list
 
     private val smsContactListViewModel: SmsContactListViewModel by activityViewModels()
 
-    private var _contactListPagingAdapter: ContactListPagingAdapter? = null
+    private var _smsContactListPagingAdapter: SmsContactListPagingAdapter? = null
     private val contactListPagingAdapter
-        get() = _contactListPagingAdapter!!
+        get() = _smsContactListPagingAdapter!!
 
     private var lastImportanceFilter: Boolean? = null
 
@@ -42,7 +43,7 @@ class ContactListFrag : BaseFragment<FragContactListBinding>() {
                     val isImportanceChanged = lastImportanceFilter != currentImportance
                     lastImportanceFilter = currentImportance
 
-                    if (isImportanceChanged || _contactListPagingAdapter == null) {
+                    if (isImportanceChanged || _smsContactListPagingAdapter == null) {
                         setupAdapter(currentImportance)
                     }
 
@@ -55,7 +56,7 @@ class ContactListFrag : BaseFragment<FragContactListBinding>() {
     }
 
     private fun setupAdapter(currentImportance: Boolean) {
-        _contactListPagingAdapter = ContactListPagingAdapter { model ->
+        _smsContactListPagingAdapter = SmsContactListPagingAdapter { model ->
             activity?.let {
                 startActivity(
                     SmsInboxActivity.onNewInstance(
@@ -84,7 +85,7 @@ class ContactListFrag : BaseFragment<FragContactListBinding>() {
     }
 
     override fun onDestroyView() {
-        _contactListPagingAdapter = null
+        _smsContactListPagingAdapter = null
         super.onDestroyView()
     }
 }

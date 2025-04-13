@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.ml.model.SmsClassifierModel
 import com.summer.core.util.startActivityWithClearTop
-import com.summer.notifai.ui.contactlist.SmsContactListActivity
+import com.summer.notifai.ui.home.SmsContactListActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityStartBinding
 import com.summer.notifai.ui.onboarding.OnBoardingActivity

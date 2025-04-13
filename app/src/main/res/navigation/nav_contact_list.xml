@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/contactListFrag"
-        android:name="com.summer.notifai.ui.contactlist.ContactListFrag"
+        android:name="com.summer.notifai.ui.home.smscontacts.SmsContactListFrag"
         android:label="ContactListFrag"
         tools:layout="@layout/frag_contact_list" />
 </navigation>

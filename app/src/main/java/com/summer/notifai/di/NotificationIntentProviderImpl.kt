@@ -6,7 +6,7 @@ import android.content.Intent
 import com.summer.core.android.notification.Constants.REQUEST_CODE_SUMMARY_NOTIFICATION
 import com.summer.core.android.notification.NotificationIntentProvider
 import com.summer.core.ui.model.SmsImportanceType
-import com.summer.notifai.ui.contactlist.SmsContactListActivity
+import com.summer.notifai.ui.home.SmsContactListActivity
 import com.summer.notifai.ui.inbox.SmsInboxActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
