@@ -1,9 +1,16 @@
 package com.summer.notifai.ui.inbox
 
+import android.app.Activity
+import android.app.role.RoleManager
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Telephony
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,9 +19,11 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.android.sms.constants.Constants.DATE_FLOATER_SHOW_TIME
 import com.summer.core.ui.BaseFragment
 import com.summer.core.util.DateUtils
+import com.summer.core.util.showShortToast
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsInboxBinding
 import com.summer.notifai.ui.common.PagingLoadStateAdapter
@@ -22,6 +31,7 @@ import com.summer.notifai.ui.datamodel.SmsInboxListItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
@@ -39,6 +49,20 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
     private var isAtBottom = true
 
+    @Inject
+    lateinit var permissionManager: IPermissionManager
+
+    private val defaultSmsAppLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult? ->
+        if (result?.resultCode == Activity.RESULT_OK) {
+            showShortToast("Permission set as default")
+        } else {
+            showShortToast("App must be set as default SMS app to function properly.")
+            fallbackToLegacyIntent()
+        }
+    }
+
     override fun onFragmentReady(instanceState: Bundle?) {
         super.onFragmentReady(instanceState)
         mBinding.viewModel = smsInboxViewModel
@@ -54,13 +78,36 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
     private fun listeners() {
         mBinding.btFragSmsInboxSend.setOnClickListener {
-            val message = mBinding.etFragSmsInboxMessage.text.toString()
-            mBinding.etFragSmsInboxMessage.text?.clear()
-            smsInboxViewModel.sendSms(requireContext(), message)
+            if (permissionManager.isDefaultSms()) {
+                val message = mBinding.etFragSmsInboxMessage.text.toString()
+                mBinding.etFragSmsInboxMessage.text?.clear()
+                smsInboxViewModel.sendSms(requireContext(), message)
+            } else {
+                promptToSetDefaultSmsApp()
+            }
         }
         smsInboxViewModel.isSendEnabled.observe(viewLifecycleOwner) {
             mBinding.btFragSmsInboxSend.isEnabled = it
         }
+    }
+
+    private fun promptToSetDefaultSmsApp() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleManager =
+                requireContext().getSystemService(RoleManager::class.java) as RoleManager
+            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
+            defaultSmsAppLauncher.launch(intent)
+        } else {
+            val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, requireContext().packageName)
+            startActivity(intent)
+        }
+    }
+
+    private fun fallbackToLegacyIntent() {
+        val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+        intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, requireContext().packageName)
+        startActivity(intent)
     }
 
     private fun setupRecyclerView() {
