@@ -18,33 +18,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorSurface"
-            android:elevation="@dimen/spacing_atom"
+            android:elevation="@dimen/spacing_small"
             android:paddingHorizontal="@dimen/spacing_small"
-            android:paddingVertical="8dp"
+            android:paddingVertical="@dimen/spacing_x_small"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_fragNewContactList_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/spacing_large"
+                android:layout_height="@dimen/spacing_large"
+                android:background="@drawable/ripple_color_grey"
                 android:contentDescription="@string/back"
+                android:padding="@dimen/spacing_tiny"
                 android:src="@drawable/ic_back_24x24"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5" />
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/sv_fragNewContactList_search"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_fragNewContactList_search"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:queryHint="Search contacts"
-                android:iconifiedByDefault="false"
-                android:background="@null"
                 android:layout_marginStart="@dimen/spacing_small"
-                app:layout_constraintStart_toEndOf="@id/iv_fragNewContactList_back"
+                android:hint="@string/search_here"
+                android:background="@android:color/transparent"
+                android:paddingVertical="@dimen/spacing_x_small"
+                android:paddingHorizontal="@dimen/spacing_small"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_fragNewContactList_back"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

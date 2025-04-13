@@ -66,4 +66,5 @@
     <string name="continue_in_background">Continue in background</string>
     <string name="back">Back</string>
     <string name="view_contacts">View Contacts</string>
+    <string name="search_here">Search here</string>
 </resources>
