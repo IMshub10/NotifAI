@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SmsContactListViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val getContactListByImportanceUseCase: GetContactListByImportanceUseCase
 ) : ViewModel() {
 

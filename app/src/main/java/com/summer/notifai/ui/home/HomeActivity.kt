@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SmsContactListActivity : BaseActivity<ActivitySmsInboxBinding>() {
+class HomeActivity : BaseActivity<ActivitySmsInboxBinding>() {
     override val layoutResId: Int
         get() = R.layout.activity_contact_list
 

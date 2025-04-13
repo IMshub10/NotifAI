@@ -6,7 +6,7 @@ import android.content.Intent
 import com.summer.core.android.notification.Constants.REQUEST_CODE_SUMMARY_NOTIFICATION
 import com.summer.core.android.notification.NotificationIntentProvider
 import com.summer.core.ui.model.SmsImportanceType
-import com.summer.notifai.ui.home.SmsContactListActivity
+import com.summer.notifai.ui.home.HomeActivity
 import com.summer.notifai.ui.inbox.SmsInboxActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class NotificationIntentProviderImpl @Inject constructor(
 ) : NotificationIntentProvider {
     override fun provideSummaryPendingIntent(): PendingIntent {
         //TODO()
-        val intent = Intent(context, SmsContactListActivity::class.java).apply {
+        val intent = Intent(context, HomeActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

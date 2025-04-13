@@ -19,7 +19,7 @@ import com.summer.core.android.sms.util.ServiceUtils
 import com.summer.core.domain.model.FetchResult
 import com.summer.core.android.phone.data.entity.ContactEntity
 import com.summer.core.util.startActivityWithClearTop
-import com.summer.notifai.ui.home.SmsContactListActivity
+import com.summer.notifai.ui.home.HomeActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsProcessingBinding
 import com.summer.notifai.ui.onboarding.OnboardingViewModel
@@ -154,7 +154,7 @@ class SmsProcessingFrag : BaseFragment<FragSmsProcessingBinding>() {
             return
         }
         activity?.let {
-            startActivityWithClearTop(it, SmsContactListActivity::class.java)
+            startActivityWithClearTop(it, HomeActivity::class.java)
         }
     }
 

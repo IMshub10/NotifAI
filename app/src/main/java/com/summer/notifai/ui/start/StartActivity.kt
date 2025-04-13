@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.ml.model.SmsClassifierModel
 import com.summer.core.util.startActivityWithClearTop
-import com.summer.notifai.ui.home.SmsContactListActivity
+import com.summer.notifai.ui.home.HomeActivity
 import com.summer.notifai.R
 import com.summer.notifai.databinding.ActivityStartBinding
 import com.summer.notifai.ui.onboarding.OnBoardingActivity
@@ -37,7 +37,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
                 val hasRequiredPermissions = permissionManager.hasRequiredPermissions()
                 when {
                     uiState.hasAgreedToUserAgreement && uiState.isSmsProcessingCompleted -> {
-                        startActivityWithClearTop(this, SmsContactListActivity::class.java)
+                        startActivityWithClearTop(this, HomeActivity::class.java)
                     }
 
                     !uiState.hasAgreedToUserAgreement -> {

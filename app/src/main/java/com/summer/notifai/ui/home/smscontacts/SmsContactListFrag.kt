@@ -11,7 +11,7 @@ import com.summer.core.ui.model.SmsImportanceType.Companion.toSmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragContactListBinding
 import com.summer.notifai.ui.common.PagingLoadStateAdapter
-import com.summer.notifai.ui.home.SmsContactListViewModel
+import com.summer.notifai.ui.home.HomeViewModel
 import com.summer.notifai.ui.inbox.SmsInboxActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -22,7 +22,7 @@ class SmsContactListFrag : BaseFragment<FragContactListBinding>() {
     override val layoutResId: Int
         get() = R.layout.frag_contact_list
 
-    private val smsContactListViewModel: SmsContactListViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     private var _smsContactListPagingAdapter: SmsContactListPagingAdapter? = null
     private val contactListPagingAdapter
@@ -32,14 +32,14 @@ class SmsContactListFrag : BaseFragment<FragContactListBinding>() {
 
     override fun onFragmentReady(instanceState: Bundle?) {
         super.onFragmentReady(instanceState)
-        mBinding.viewModel = smsContactListViewModel
+        mBinding.viewModel = homeViewModel
         observePagingData()
     }
 
     private fun observePagingData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                smsContactListViewModel.isImportant.asFlow().collectLatest { currentImportance ->
+                homeViewModel.isImportant.asFlow().collectLatest { currentImportance ->
                     val isImportanceChanged = lastImportanceFilter != currentImportance
                     lastImportanceFilter = currentImportance
 
@@ -47,7 +47,7 @@ class SmsContactListFrag : BaseFragment<FragContactListBinding>() {
                         setupAdapter(currentImportance)
                     }
 
-                    smsContactListViewModel.pagedContacts.collectLatest { pagingData ->
+                    homeViewModel.pagedContacts.collectLatest { pagingData ->
                         contactListPagingAdapter.submitData(pagingData)
                     }
                 }
