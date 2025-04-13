@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 interface IContactRepository {
     suspend fun getAllContacts(): List<ContactEntity>
 
+    fun getContactsWithFilter(query: String): PagingSource<Int, ContactEntity>
+
     suspend fun getContactById(contactId: Long): ContactEntity?
 
     suspend fun insertOrUpdateContact(contact: ContactEntity)

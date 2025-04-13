@@ -24,6 +24,10 @@ class ContactRepository @Inject constructor(
         contactDao.getAllContacts()
     }
 
+    override fun getContactsWithFilter(query: String): PagingSource<Int, ContactEntity> {
+        return contactDao.getContactsWithFilter(query)
+    }
+
     override suspend fun getContactById(contactId: Long): ContactEntity? =
         withContext(Dispatchers.IO) {
             contactDao.getContactById(contactId)

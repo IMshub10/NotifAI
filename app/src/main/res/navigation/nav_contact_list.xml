@@ -3,11 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_sms_inbox"
-    app:startDestination="@id/contactListFrag">
+    app:startDestination="@id/smsContactListFrag">
 
     <fragment
-        android:id="@+id/contactListFrag"
+        android:id="@+id/smsContactListFrag"
         android:name="com.summer.notifai.ui.home.smscontacts.SmsContactListFrag"
-        android:label="ContactListFrag"
-        tools:layout="@layout/frag_contact_list" />
+        android:label="SmsContactListFrag"
+        tools:layout="@layout/frag_sms_contact_list" >
+        <action
+            android:id="@+id/action_smsContactListFrag_to_newContactListFrag"
+            app:destination="@id/newContactListFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/newContactListFrag"
+        android:name="com.summer.notifai.ui.home.contactlist.NewContactListFrag"
+        android:label="NewContactListFrag"
+        tools:layout="@layout/frag_new_contact_list" />
 </navigation>

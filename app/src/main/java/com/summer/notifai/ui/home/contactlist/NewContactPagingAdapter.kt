@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.home.smscontacts
+package com.summer.notifai.ui.home.contactlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,12 +6,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.summer.notifai.databinding.ItemEmptyViewBinding
-import com.summer.notifai.databinding.ItemSmsContactBinding
-import com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel
+import com.summer.notifai.databinding.ItemNewContactBinding
+import com.summer.notifai.ui.datamodel.NewContactDataModel
 
-class SmsContactListPagingAdapter(
-    private val onItemClick: (ContactMessageInfoDataModel) -> Unit
-) : PagingDataAdapter<ContactMessageInfoDataModel, RecyclerView.ViewHolder>(DiffCallback) {
+class NewContactPagingAdapter(
+    private val onItemClick: (NewContactDataModel) -> Unit
+) : PagingDataAdapter<NewContactDataModel, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun getItemViewType(position: Int): Int {
         return if (getItem(position) == null) VIEW_TYPE_PLACEHOLDER else VIEW_TYPE_CONTACT
@@ -21,7 +21,7 @@ class SmsContactListPagingAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_CONTACT -> {
-                val binding = ItemSmsContactBinding.inflate(inflater, parent, false)
+                val binding = ItemNewContactBinding.inflate(inflater, parent, false)
                 ContactViewHolder(binding)
             }
 
@@ -35,37 +35,40 @@ class SmsContactListPagingAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ContactViewHolder -> getItem(position)?.let { holder.bind(it) }
-            is PlaceholderViewHolder -> Unit // no binding needed
+            is PlaceholderViewHolder -> Unit // no-op
         }
     }
 
     inner class ContactViewHolder(
-        private val binding: ItemSmsContactBinding
+        private val binding: ItemNewContactBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ContactMessageInfoDataModel) {
+
+        fun bind(item: NewContactDataModel) {
             binding.model = item
             binding.root.setOnClickListener { onItemClick(item) }
             binding.executePendingBindings()
         }
     }
 
-    inner class PlaceholderViewHolder(binding: ItemEmptyViewBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class PlaceholderViewHolder(
+        binding: ItemEmptyViewBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 
     companion object {
         private const val VIEW_TYPE_CONTACT = 0
         private const val VIEW_TYPE_PLACEHOLDER = 1
 
-        val DiffCallback = object : DiffUtil.ItemCallback<ContactMessageInfoDataModel>() {
+        val DiffCallback = object : DiffUtil.ItemCallback<NewContactDataModel>() {
             override fun areItemsTheSame(
-                oldItem: ContactMessageInfoDataModel,
-                newItem: ContactMessageInfoDataModel
-            ): Boolean = oldItem.rawAddress == newItem.rawAddress
+                oldItem: NewContactDataModel,
+                newItem: NewContactDataModel
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: ContactMessageInfoDataModel,
-                newItem: ContactMessageInfoDataModel
-            ): Boolean = oldItem == newItem
+                oldItem: NewContactDataModel,
+                newItem: NewContactDataModel
+            ): Boolean = oldItem.id == newItem.id
+                    && oldItem.phoneNumber == newItem.phoneNumber
         }
     }
 }

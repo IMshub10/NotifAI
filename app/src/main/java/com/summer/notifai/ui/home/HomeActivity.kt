@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Telephony
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.util.showShortToast
@@ -20,7 +21,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivitySmsInboxBinding>() {
     override val layoutResId: Int
-        get() = R.layout.activity_contact_list
+        get() = R.layout.activity_home
+
+    private var navController: NavController? = null
 
     @Inject
     lateinit var permissionManager: IPermissionManager
@@ -37,7 +40,7 @@ class HomeActivity : BaseActivity<ActivitySmsInboxBinding>() {
     }
 
     override fun onActivityReady(savedInstanceState: Bundle?) {
-        setupNavController(R.id.contactListFrag)
+        setupNavController(R.id.smsContactListFrag)
         if (!permissionManager.isDefaultSms()) {
             promptToSetDefaultSmsApp()
         }
@@ -52,12 +55,14 @@ class HomeActivity : BaseActivity<ActivitySmsInboxBinding>() {
     private fun setupNavController(startDestination: Int) {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fcv_contactList_navHost) as? NavHostFragment
-        val navController =
+        navController =
             navHostFragment?.navController ?: throw IllegalStateException("NavController is null")
 
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_contact_list)
-        navGraph.setStartDestination(startDestination)
-        navController.graph = navGraph
+        val navGraph = navController?.navInflater?.inflate(R.navigation.nav_contact_list)
+        navGraph?.setStartDestination(startDestination)
+        navGraph?.let {
+            navController?.graph = navGraph
+        }
     }
 
     /**
@@ -73,6 +78,14 @@ class HomeActivity : BaseActivity<ActivitySmsInboxBinding>() {
             val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, packageName)
             startActivity(intent)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (navController?.currentDestination?.id == R.id.newContactListFrag){
+            navController?.popBackStack()
+        }else{
+            super.onBackPressed()
         }
     }
 }

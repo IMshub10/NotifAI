@@ -21,12 +21,14 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
         OptionalAgreementDialogFrag(object : OptionalAgreementDialogFrag.ClickListener {
             override fun onAgree() {
                 onboardingViewModel.onOptionalDataSharingEnabled()
-                findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
+                if (findNavController().currentDestination?.id == R.id.userAgreementFrag)
+                    findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
             }
 
             override fun onDisagree() {
                 onboardingViewModel.onOptionalDataSharingDisabled()
-                findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
+                if (findNavController().currentDestination?.id == R.id.userAgreementFrag)
+                    findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
             }
         })
     }

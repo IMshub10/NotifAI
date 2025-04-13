@@ -32,11 +32,13 @@ class DeviceTierEvaluator @Inject constructor(
     }
 
     fun getRecommendedBatchSettings(): Pair<Int, Int> {
-        return when (deviceTier) {
+        return 4 to 12
+        //TODO
+        /*return when (deviceTier) {
             DeviceTier.HIGH_END -> 3 to 8
             DeviceTier.MID_RANGE -> 2 to 5
             DeviceTier.LOW_END -> 1 to 2
-        }
+        }*/
     }
 
     private fun getTotalRamInGB(): Int {

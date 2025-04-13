@@ -1,15 +1,17 @@
 package com.summer.notifai.ui.home.smscontacts
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.summer.core.ui.BaseFragment
 import com.summer.core.ui.model.SmsImportanceType.Companion.toSmsImportanceType
 import com.summer.notifai.R
-import com.summer.notifai.databinding.FragContactListBinding
+import com.summer.notifai.databinding.FragSmsContactListBinding
 import com.summer.notifai.ui.common.PagingLoadStateAdapter
 import com.summer.notifai.ui.home.HomeViewModel
 import com.summer.notifai.ui.inbox.SmsInboxActivity
@@ -18,9 +20,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SmsContactListFrag : BaseFragment<FragContactListBinding>() {
+class SmsContactListFrag : BaseFragment<FragSmsContactListBinding>() {
     override val layoutResId: Int
-        get() = R.layout.frag_contact_list
+        get() = R.layout.frag_sms_contact_list
 
     private val homeViewModel: HomeViewModel by activityViewModels()
 
@@ -33,7 +35,19 @@ class SmsContactListFrag : BaseFragment<FragContactListBinding>() {
     override fun onFragmentReady(instanceState: Bundle?) {
         super.onFragmentReady(instanceState)
         mBinding.viewModel = homeViewModel
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         observePagingData()
+        listeners()
+    }
+
+    private fun listeners() {
+        mBinding.fabFragSmsContactListViewContacts.setOnClickListener {
+            if (findNavController().currentDestination?.id == R.id.smsContactListFrag)
+                findNavController().navigate(R.id.action_smsContactListFrag_to_newContactListFrag)
+        }
     }
 
     private fun observePagingData() {

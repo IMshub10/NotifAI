@@ -30,4 +30,6 @@ object Constants {
      * Used for soft-limiting long messages (as OEMs like Samsung often do).
      */
     const val SMS_PART_LIMIT = 6
+
+    const val SEARCH_NEW_CONTACT_ID = -1000
 }

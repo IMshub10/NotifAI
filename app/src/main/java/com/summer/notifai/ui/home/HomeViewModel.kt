@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.summer.core.android.sms.constants.Constants.CONTACT_LIST_PAGE_SIZE
-import com.summer.core.domain.usecase.GetContactListByImportanceUseCase
+import com.summer.core.domain.usecase.GetSmsContactListByImportanceUseCase
 import com.summer.notifai.ui.datamodel.ContactMessageInfoDataModel
 import com.summer.notifai.ui.datamodel.mapper.ContactInfoMapper.toContactMessageInfoDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getContactListByImportanceUseCase: GetContactListByImportanceUseCase
+    private val getSmsContactListByImportanceUseCase: GetSmsContactListByImportanceUseCase
 ) : ViewModel() {
 
     // Filter toggle state
@@ -36,14 +36,14 @@ class HomeViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedContacts: StateFlow<PagingData<ContactMessageInfoDataModel>> = selectedImportance
-        .flatMapLatest { filter -> getPagedContacts(filter) }
+        .flatMapLatest { filter -> getPagedSmsContacts(filter) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
-    private fun getPagedContacts(isImportant: Boolean): Flow<PagingData<ContactMessageInfoDataModel>> {
+    private fun getPagedSmsContacts(isImportant: Boolean): Flow<PagingData<ContactMessageInfoDataModel>> {
         return Pager(
             config = PagingConfig(pageSize = CONTACT_LIST_PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = {
-                getContactListByImportanceUseCase.invoke(isImportant)
+                getSmsContactListByImportanceUseCase.invoke(isImportant)
             }
         ).flow
             .map { pagingData ->

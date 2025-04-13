@@ -48,7 +48,8 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
             val deniedPermissions = permissions.filterValues { !it }.keys
             if (deniedPermissions.isEmpty()) {
                 showShortToast("All necessary permissions granted!")
-                findNavController().navigate(R.id.action_permissionsFrag_to_smsProcessingFrag)
+                if (findNavController().currentDestination?.id == R.id.permissionsFrag)
+                    findNavController().navigate(R.id.action_permissionsFrag_to_smsProcessingFrag)
             } else {
                 showRationaleOrSettings(deniedPermissions)
             }
@@ -84,7 +85,8 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
         if (missingPermissions.isNotEmpty()) {
             permissionLauncher.launch(missingPermissions.toTypedArray())
         } else {
-            findNavController().navigate(R.id.action_permissionsFrag_to_smsProcessingFrag)
+            if (findNavController().currentDestination?.id == R.id.permissionsFrag)
+                findNavController().navigate(R.id.action_permissionsFrag_to_smsProcessingFrag)
             showShortToast("All permissions are already granted!")
         }
     }
@@ -128,7 +130,7 @@ class PermissionsFrag : BaseFragment<FragPermissionsBinding>() {
                 /*if (!permissionManager.isDefaultSms())
                     promptToSetDefaultSmsApp()
                 else*/
-                    requestRequiredPermissions()
+                requestRequiredPermissions()
             }
         }
     }

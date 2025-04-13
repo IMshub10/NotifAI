@@ -92,4 +92,12 @@ ORDER BY s.date DESC
     LIMIT 1
 """)
     suspend fun getSenderNameById(senderAddressId: Long): String
+
+    @Query("""
+        SELECT * FROM contacts
+        WHERE name LIKE '%' || :query || '%'
+        OR phone_number LIKE '%' || :query || '%'
+        ORDER BY lower(name)
+    """)
+    fun getContactsWithFilter(query: String): PagingSource<Int, ContactEntity>
 }

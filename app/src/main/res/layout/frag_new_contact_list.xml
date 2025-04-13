@@ -1,0 +1,64 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.summer.notifai.ui.home.contactlist.NewContactListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_fragNewContactList_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            android:elevation="@dimen/spacing_atom"
+            android:paddingHorizontal="@dimen/spacing_small"
+            android:paddingVertical="8dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_fragNewContactList_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/back"
+                android:src="@drawable/ic_back_24x24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/sv_fragNewContactList_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:queryHint="Search contacts"
+                android:iconifiedByDefault="false"
+                android:background="@null"
+                android:layout_marginStart="@dimen/spacing_small"
+                app:layout_constraintStart_toEndOf="@id/iv_fragNewContactList_back"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- RecyclerView with correct behavior -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_fragNewConthtactList_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_fragNewContactList_header"
+            tools:listitem="@layout/item_new_contact" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -5,7 +5,7 @@ import com.summer.core.data.local.model.ContactMessageInfoModel
 import com.summer.core.domain.repository.IContactRepository
 import javax.inject.Inject
 
-class GetContactListByImportanceUseCase @Inject constructor(
+class GetSmsContactListByImportanceUseCase @Inject constructor(
     private val contactRepository: IContactRepository
 ) {
     operator fun invoke(

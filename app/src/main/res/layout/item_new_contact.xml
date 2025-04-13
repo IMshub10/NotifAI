@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.summer.notifai.ui.datamodel.NewContactDataModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_color_grey"
+        android:clickable="true">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_itemNewContact_icon"
+            android:layout_width="@dimen/spacing_xx_large"
+            android:layout_height="@dimen/spacing_xx_large"
+            android:layout_marginVertical="@dimen/spacing_small"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:background="@drawable/shape_circle_color_surface"
+            android:backgroundTint="?colorOnSecondary"
+            android:padding="@dimen/spacing_x_small"
+            app:layout_constraintBottom_toBottomOf="@+id/separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_contact_24x24"
+            app:tint="?colorOnPrimary" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemNewContact_senderName"
+            style="@style/text_body_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@{model.contactName}"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_itemNewContact_senderAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemNewContact_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_itemNewContact_icon"
+            tools:text="Johnny Depp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemNewContact_senderAddress"
+            style="@style/text_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@{model.phoneNumber}"
+            android:textColor="?colorOnPrimary"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_itemNewContact_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemNewContact_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemNewContact_senderName"
+            tools:text="+91 9876543210" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:background="?colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_itemNewContact_senderAddress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
