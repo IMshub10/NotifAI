@@ -102,7 +102,7 @@ interface SmsDao {
     @Query("UPDATE sms_messages SET android_sms_id = :androidSmsId WHERE id = :id")
     suspend fun updateAndroidSmsId(id: Long, androidSmsId: Int)
 
-    @Query("SELECT * FROM sms_messages ORDER BY android_sms_id ASC LIMIT 1")
+    @Query("SELECT * FROM sms_messages WHERE android_sms_id IS NOT NULL ORDER BY android_sms_id ASC LIMIT 1")
     suspend fun getFirstInsertedSmsMessageByAndroidSmsId(): SmsEntity?
 
 }
