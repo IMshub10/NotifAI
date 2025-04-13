@@ -38,23 +38,24 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_fragNewContactList_search"
+                style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:hint="@string/search_here"
                 android:background="@android:color/transparent"
-                android:paddingVertical="@dimen/spacing_x_small"
-                android:paddingHorizontal="@dimen/spacing_small"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
+                android:hint="@string/search_here"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
+                android:paddingHorizontal="@dimen/spacing_small"
+                android:paddingVertical="@dimen/spacing_x_small"
                 android:singleLine="true"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="?attr/label"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_fragNewContactList_back"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- RecyclerView with correct behavior -->
