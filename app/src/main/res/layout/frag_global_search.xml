@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -5,7 +6,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_fragNewContactList_header"
             android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_fragNewContactList_back"
+                android:id="@+id/iv_fragGlobalSearch_back"
                 android:layout_width="@dimen/spacing_large"
                 android:layout_height="@dimen/spacing_large"
                 android:background="@drawable/ripple_color_grey"
@@ -30,7 +30,7 @@
                 app:layout_constraintVertical_bias="0.5" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/et_fragNewContactList_search"
+                android:id="@+id/et_fragGlobalSearch_search"
                 style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -47,13 +47,13 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_fragNewContactList_back"
+                app:layout_constraintStart_toEndOf="@id/iv_fragGlobalSearch_back"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- RecyclerView with correct behavior -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_fragNewContactList_list"
+            android:id="@+id/rv_fragGlobalSearch_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scrollbars="vertical"
@@ -61,7 +61,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_fragNewContactList_header"
-            tools:listitem="@layout/item_new_contact" />
-
+            tools:listitem="@layout/item_search_header" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -45,7 +45,7 @@ class NewContactListViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedContacts: StateFlow<PagingData<NewContactDataModel>> = selectedQuery
-        .flatMapLatest { query -> getPagedSmsContacts(query) }
+        .flatMapLatest { query -> getPagedSmsContacts(query.lowercase()) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
     private fun getPagedSmsContacts(query: String): Flow<PagingData<NewContactDataModel>> {

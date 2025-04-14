@@ -14,12 +14,12 @@ import com.summer.core.android.permission.manager.IPermissionManager
 import com.summer.core.util.showShortToast
 import com.summer.core.ui.BaseActivity
 import com.summer.notifai.R
-import com.summer.notifai.databinding.ActivitySmsInboxBinding
+import com.summer.notifai.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeActivity : BaseActivity<ActivitySmsInboxBinding>() {
+class HomeActivity : BaseActivity<ActivityHomeBinding>() {
     override val layoutResId: Int
         get() = R.layout.activity_home
 

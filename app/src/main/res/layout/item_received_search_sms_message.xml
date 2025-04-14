@@ -7,27 +7,57 @@
 
         <variable
             name="model"
-            type="com.summer.notifai.ui.datamodel.SmsMessageDataModel" />
+            type="com.summer.notifai.ui.datamodel.SearchSmsMessageDataModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_small"
-        android:layout_marginVertical="@dimen/spacing_tiny">
+        android:background="@drawable/ripple_color_grey"
+        android:clickable="true"
+        android:paddingHorizontal="@dimen/spacing_small"
+        android:paddingVertical="@dimen/spacing_tiny">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_itemSmsMessage_icon"
+            android:layout_width="@dimen/spacing_xx_large"
+            android:layout_height="@dimen/spacing_xx_large"
+            android:background="@drawable/shape_circle_color_surface"
+            android:backgroundTint="?colorOnSecondary"
+            android:padding="@dimen/spacing_x_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_contact_24x24"
+            app:tint="?colorOnPrimary" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_itemSmsMessage_senderName"
+            style="@style/text_body_bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_small"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@{model.senderAddress}"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemSmsMessage_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_itemSmsMessage_icon"
+            tools:text="Johnny Depp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_itemSmsMessage_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_tiny"
             android:background="@drawable/shape_color_surface_radius_x_medium"
             android:backgroundTint="?boxBackground"
             android:padding="@dimen/spacing_x_small"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="@+id/guideline"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="@+id/tv_itemSmsMessage_senderName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemSmsMessage_senderName">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_itemSmsMessage_message"
@@ -36,11 +66,10 @@
                 android:layout_height="wrap_content"
                 android:autoLink="all"
                 android:linksClickable="true"
-                android:text="@{model.message}"
                 android:textColorLink="@color/blue_link"
                 android:textSize="14sp"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Lorem ipsum" />
+                tools:text="Lorem ipsumLorem ipsumLorem ipsumLorem ipsum" />
 
             <include
                 android:id="@+id/tv_itemSmsMessage_classification"

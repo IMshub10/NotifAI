@@ -1,13 +1,17 @@
 package com.summer.core.data.repository
 
 import androidx.paging.PagingSource
+import com.summer.core.R
 import com.summer.core.data.local.dao.ContactDao
 import com.summer.core.android.phone.data.entity.ContactEntity
+import com.summer.core.android.sms.constants.Constants.SEARCH_SECTION_MAX_COUNT
 import com.summer.core.domain.repository.IContactRepository
 import com.summer.core.data.local.model.ContactInfoInboxModel
 import com.summer.core.data.local.model.ContactMessageInfoModel
 import com.summer.core.data.local.preference.PreferenceKey
 import com.summer.core.data.local.preference.SharedPreferencesManager
+import com.summer.core.domain.model.SearchSectionHeader
+import com.summer.core.domain.model.SearchSectionResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -60,6 +64,24 @@ class ContactRepository @Inject constructor(
         return contactDao.getContactInfoBySenderAddressId(
             senderAddressId = senderAddressId,
             important = important
+        )
+    }
+
+    override suspend fun searchConversations(query: String): SearchSectionResult<ContactMessageInfoModel> {
+        val count = contactDao.getConversationsMatchCount(query)
+        val items = if (count > 0) contactDao.searchConversations(query, SEARCH_SECTION_MAX_COUNT) else emptyList()
+        return SearchSectionResult(
+            header = SearchSectionHeader(R.string.search_section_conversations, count),
+            items = items
+        )
+    }
+
+    override suspend fun searchContacts(query: String): SearchSectionResult<ContactEntity> {
+        val count = contactDao.getContactsCount(query)
+        val items = if (count > 0) contactDao.searchContacts(query, SEARCH_SECTION_MAX_COUNT) else emptyList()
+        return SearchSectionResult(
+            header = SearchSectionHeader(R.string.search_section_contacts, count),
+            items = items
         )
     }
 }

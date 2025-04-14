@@ -55,6 +55,7 @@
                         android:layout_height="32dp"
                         android:layout_marginTop="@dimen/spacing_small"
                         android:layout_marginEnd="@dimen/spacing_x_medium"
+                        android:background="@drawable/ripple_color_grey"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_search_24x24" />

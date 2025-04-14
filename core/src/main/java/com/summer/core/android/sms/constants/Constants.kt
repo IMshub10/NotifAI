@@ -31,5 +31,10 @@ object Constants {
      */
     const val SMS_PART_LIMIT = 6
 
+    /**
+     * Static ID for searched phone number
+     */
     const val SEARCH_NEW_CONTACT_ID = -1000
+
+    const val SEARCH_SECTION_MAX_COUNT = 3
 }

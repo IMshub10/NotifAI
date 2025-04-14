@@ -2,9 +2,13 @@ package com.summer.core.data.local.model
 
 import androidx.room.ColumnInfo
 
-data class SmsMessageModel(
+data class SearchSmsMessageQueryModel(
     @ColumnInfo(name = "id")
     val id: Long,
+    @ColumnInfo(name = "sender_address_id")
+    val senderAddressId: Long,
+    @ColumnInfo(name = "sender_address")
+    val senderAddress: String,
     @ColumnInfo(name = "body")
     val body: String?,
     @ColumnInfo(name = "date")
@@ -14,9 +18,5 @@ data class SmsMessageModel(
     @ColumnInfo(name = "sms_message_type")
     val smsMessageType: String?,
     @ColumnInfo(name = "compact_type")
-    val compactType: String?,
-    @ColumnInfo(name = "importance_score")
-    val importanceScore: Int?,
-    @ColumnInfo(name = "confidence_score")
-    val confidenceScore: Float?
+    val compactType: String?
 )

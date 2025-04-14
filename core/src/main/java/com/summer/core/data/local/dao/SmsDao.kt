@@ -10,6 +10,7 @@ import com.summer.core.data.local.entities.SenderAddressEntity
 import com.summer.core.data.local.entities.SenderType
 import com.summer.core.data.local.entities.SmsClassificationTypeEntity
 import com.summer.core.data.local.entities.SmsEntity
+import com.summer.core.data.local.model.SearchSmsMessageQueryModel
 import com.summer.core.data.local.model.SmsMessageModel
 import com.summer.core.util.determineSenderType
 import com.summer.core.util.normalizePhoneNumber
@@ -21,7 +22,7 @@ interface SmsDao {
     suspend fun insertAllSmsMessages(smsList: List<SmsEntity>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSmsMessage(sms: SmsEntity) : Long
+    suspend fun insertSmsMessage(sms: SmsEntity): Long
 
     @Query("SELECT * FROM sms_messages ORDER BY android_sms_id DESC LIMIT 1")
     suspend fun getLastInsertedSmsMessageByAndroidSmsId(): SmsEntity?
@@ -83,6 +84,44 @@ interface SmsDao {
         senderAddressId: Long,
         important: Int
     ): PagingSource<Int, SmsMessageModel>
+
+    @Query(
+        """
+    SELECT 
+        sms.id AS id,
+        sms.sender_address_id AS sender_address_id,
+        COALESCE(c.name, sender.sender_address) AS sender_address,
+        sms.body AS body,
+        sms.date AS date,
+        sms.type AS type,
+        classification.sms_type AS sms_message_type,
+        classification.compact_sms_type AS compact_type
+    FROM sms_messages AS sms
+    LEFT JOIN sms_classification_types AS classification
+        ON sms.sms_classification_type_id = classification.id
+    INNER JOIN sender_addresses AS sender
+        ON sms.sender_address_id = sender.id
+    LEFT JOIN contacts c
+        ON sender.sender_type = 'CONTACT'
+        AND c.phone_number = sender.sender_address
+    WHERE lower(sms.body) LIKE '%' || :query || '%'
+    ORDER BY sms.date DESC
+    LIMIT :limit
+    """
+    )
+    suspend fun searchMessages(
+        query: String,
+        limit: Int
+    ): List<SearchSmsMessageQueryModel>
+
+    @Query(
+        """
+    SELECT COUNT(*) FROM sms_messages AS sms
+    INNER JOIN sender_addresses AS sender ON sms.sender_address_id = sender.id
+    WHERE lower(sms.body) LIKE '%' || :query || '%'
+    """
+    )
+    suspend fun getMessagesMatchCount(query: String): Int
 
     @Query("SELECT android_sms_id FROM sms_messages WHERE sender_address_id = :senderAddressId and read = 0")
     suspend fun getUnreadAndroidSmsIdsBySenderAddressId(senderAddressId: Long): List<Long>

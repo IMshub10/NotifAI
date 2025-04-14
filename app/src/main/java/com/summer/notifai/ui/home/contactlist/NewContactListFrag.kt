@@ -34,7 +34,6 @@ class NewContactListFrag : BaseFragment<FragNewContactListBinding>() {
 
     override fun onFragmentReady(instanceState: Bundle?) {
         super.onFragmentReady(instanceState)
-        mBinding.viewModel = viewModel
         initSearchView()
     }
 
@@ -83,13 +82,13 @@ class NewContactListFrag : BaseFragment<FragNewContactListBinding>() {
             }
         }
 
-        mBinding.rvFragNewConthtactListList.adapter =
+        mBinding.rvFragNewContactListList.adapter =
             contactListPagingAdapter.withLoadStateHeaderAndFooter(
                 header = PagingLoadStateAdapter { contactListPagingAdapter.retry() },
                 footer = PagingLoadStateAdapter { contactListPagingAdapter.retry() }
             )
 
-        mBinding.rvFragNewConthtactListList.itemAnimator?.apply {
+        mBinding.rvFragNewContactListList.itemAnimator?.apply {
             addDuration = 120
             removeDuration = 120
             changeDuration = 100

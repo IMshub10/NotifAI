@@ -6,7 +6,9 @@ import android.provider.Telephony
 import android.util.Log
 import androidx.paging.PagingSource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.summer.core.R
 import com.summer.core.android.device.util.DeviceTierEvaluator
+import com.summer.core.android.sms.constants.Constants.SEARCH_SECTION_MAX_COUNT
 import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.data.mapper.SmsMapper
 import com.summer.core.android.sms.data.model.SmsInfoModel
@@ -14,10 +16,13 @@ import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.android.sms.util.SmsStatus
 import com.summer.core.data.local.dao.SmsDao
 import com.summer.core.data.local.entities.SmsEntity
+import com.summer.core.data.local.model.SearchSmsMessageQueryModel
 import com.summer.core.data.local.model.SmsMessageModel
 import com.summer.core.data.local.preference.PreferenceKey
 import com.summer.core.data.local.preference.SharedPreferencesManager
 import com.summer.core.domain.model.FetchResult
+import com.summer.core.domain.model.SearchSectionHeader
+import com.summer.core.domain.model.SearchSectionResult
 import com.summer.core.domain.repository.ISmsRepository
 import com.summer.core.ui.model.SmsImportanceType
 import kotlinx.coroutines.flow.Flow
@@ -191,5 +196,14 @@ class SmsRepository @Inject constructor(
 
     override suspend fun getOrInsertSenderId(senderAddress: String, defaultCountryCode: Int): Long {
         return smsDao.getOrInsertSenderId(senderAddress, defaultCountryCode)
+    }
+
+    override suspend fun searchMessages(query: String): SearchSectionResult<SearchSmsMessageQueryModel> {
+        val count = smsDao.getMessagesMatchCount(query)
+        val items = if (count > 0) smsDao.searchMessages(query, limit = SEARCH_SECTION_MAX_COUNT) else emptyList()
+        return SearchSectionResult(
+            header = SearchSectionHeader(R.string.search_section_messages, count),
+            items = items
+        )
     }
 }

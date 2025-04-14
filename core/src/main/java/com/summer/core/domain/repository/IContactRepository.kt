@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import com.summer.core.android.phone.data.entity.ContactEntity
 import com.summer.core.data.local.model.ContactInfoInboxModel
 import com.summer.core.data.local.model.ContactMessageInfoModel
+import com.summer.core.domain.model.SearchSectionResult
 import kotlinx.coroutines.flow.Flow
 
 interface IContactRepository {
@@ -25,4 +26,9 @@ interface IContactRepository {
         senderAddressId: Long,
         important: Int
     ): Flow<ContactInfoInboxModel?>
+
+    suspend fun searchConversations(query: String): SearchSectionResult<ContactMessageInfoModel>
+
+    suspend fun searchContacts(query: String): SearchSectionResult<ContactEntity>
+
 }
