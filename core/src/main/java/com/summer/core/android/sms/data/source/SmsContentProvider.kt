@@ -57,50 +57,25 @@ class SmsContentProvider @Inject constructor(
     }
 
     /**
-     * Returns a batch of SMS messages between two IDs (exclusive-inclusive), sorted DESC by _id.
-     * Applies limit and simulates cursor trimming if needed.
-     */
-    override suspend fun getSmsCursorBetweenIds(
-        fromExclusive: Int,
-        toInclusive: Int,
-        limit: Int
-    ): Cursor? {
-        val cursor = contentResolver.query(
-            smsUri,
-            null,
-            "${SMSColumnNames.COLUMN_ID} > ? AND ${SMSColumnNames.COLUMN_ID} <= ?",
-            arrayOf(fromExclusive.toString(), toInclusive.toString()),
-            "${SMSColumnNames.COLUMN_ID} DESC"
-        )
-
-        return cursor?.let {
-            if (it.count > limit) {
-                val limitedCursor = getLimitedCursor(it, offset = 0, limit = limit)
-                it.close()
-                return limitedCursor
-            }
-            it
-        }
-    }
-
-    /**
-     * Returns a paged batch of SMS messages older than the given ID, using DESC order.
+     * Returns a paged batch of SMS messages newer/older than the given ID, using ASC/DESC order.
      * Simulates paging using offset and limit.
      */
-    override suspend fun getSmsCursorPreviousIdWithOffset(
-        previousId: Int,
+    override suspend fun getSmsCursorWithOffset(
+        offsetId: Int,
         limit: Int,
-        offset: Int
+        offset: Int,
+        isOrderAscending: Boolean
     ): Cursor? {
-        val selection = if (previousId != -1) "${SMSColumnNames.COLUMN_ID} < ?" else null
-        val selectionArgs = if (previousId != -1) arrayOf(previousId.toString()) else null
+        val selection =
+            if (offsetId != -1) "${SMSColumnNames.COLUMN_ID} ${if (isOrderAscending) ">" else "<"} ?" else null
+        val selectionArgs = if (offsetId != -1) arrayOf(offsetId.toString()) else null
 
         return contentResolver.query(
             smsUri,
             null,
             selection,
             selectionArgs,
-            "${SMSColumnNames.COLUMN_ID} DESC"
+            "${SMSColumnNames.COLUMN_ID} ${if (isOrderAscending) "ASC" else "DESC"}"
         )?.let { cursor ->
             if (cursor.count <= offset) {
                 cursor.close()
@@ -117,11 +92,13 @@ class SmsContentProvider @Inject constructor(
      */
     private fun getLimitedCursor(cursor: Cursor, offset: Int, limit: Int): Cursor {
         val limitedCursor = android.database.MatrixCursor(cursor.columnNames)
-        var currentRow = 0
-        while (cursor.moveToNext()) {
-            if (currentRow > offset + limit) break
-            if (currentRow++ < offset) continue
 
+        if (!cursor.moveToPosition(offset)) {
+            return limitedCursor // return empty cursor if offset is out of bounds
+        }
+
+        var rowsAdded = 0
+        do {
             val row = Array(cursor.columnCount) { idx ->
                 when (cursor.getType(idx)) {
                     Cursor.FIELD_TYPE_INTEGER -> cursor.getLong(idx)
@@ -132,7 +109,9 @@ class SmsContentProvider @Inject constructor(
                 }
             }
             limitedCursor.addRow(row)
-        }
+            rowsAdded++
+        } while (cursor.moveToNext() && rowsAdded < limit)
+
         return limitedCursor
     }
 

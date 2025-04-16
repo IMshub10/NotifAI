@@ -7,9 +7,12 @@ interface ISmsContentProvider {
 
     suspend fun getLastAndroidSmsId(): Int?
 
-    suspend fun getSmsCursorBetweenIds(fromExclusive: Int, toInclusive: Int, limit: Int): Cursor?
-
-    suspend fun getSmsCursorPreviousIdWithOffset(previousId: Int, limit: Int, offset: Int): Cursor?
+    suspend fun getSmsCursorWithOffset(
+        offsetId: Int,
+        limit: Int,
+        offset: Int,
+        isOrderAscending: Boolean
+    ): Cursor?
 
     suspend fun getFirstAndroidSmsId(): Int?
 }

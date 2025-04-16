@@ -60,10 +60,11 @@ class SmsBatchProcessor @Inject constructor(
                 // Prioritize newly arrived messages above the last processed _id
                 val latestDeviceId = smsContentProvider.getLastAndroidSmsId() ?: -1
                 if (latestDeviceId > lastProcessedId && lastProcessedId != -1) {
-                    val newCursor = smsContentProvider.getSmsCursorBetweenIds(
-                        fromExclusive = lastProcessedId,
-                        toInclusive = latestDeviceId,
-                        limit = batchSize
+                    val newCursor = smsContentProvider.getSmsCursorWithOffset(
+                        offsetId = lastProcessedId,
+                        limit = batchSize,
+                        offset = 0,
+                        isOrderAscending = true
                     )
                     val newMessages = newCursor?.use {
                         SmsMapper.mapCursorToSmsList(it, smsDao, countryCodeProvider.getMyCountryCode())
@@ -75,6 +76,8 @@ class SmsBatchProcessor @Inject constructor(
                     if (newMessages.isNotEmpty()) {
                         val classifiedNew = classifySmsBatch(newMessages)
                         insertClassifiedSms(classifiedNew)
+
+                        Log.d(tag, "Inserted ${newMessages.size} SMS (afterId = $firstProcessedId)")
 
                         // Update pointer to newest processed _id
                         lastProcessedId = classifiedNew.maxOfOrNull { it.androidSmsId ?: lastProcessedId } ?: lastProcessedId
@@ -146,7 +149,12 @@ class SmsBatchProcessor @Inject constructor(
         baseId: Int,
         offset: Int
     ): List<SmsEntity> {
-        val cursor = smsContentProvider.getSmsCursorPreviousIdWithOffset(baseId, batchSize, offset)
+        val cursor = smsContentProvider.getSmsCursorWithOffset(
+            offsetId = baseId,
+            limit = batchSize,
+            offset = offset,
+            isOrderAscending = false
+        )
         return cursor?.use {
             SmsMapper.mapCursorToSmsList(it, smsDao, countryCodeProvider.getMyCountryCode())
         }?.takeIf { it.isNotEmpty() }?.let {
