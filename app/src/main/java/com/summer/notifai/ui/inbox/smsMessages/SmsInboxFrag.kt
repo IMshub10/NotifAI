@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.inbox
+package com.summer.notifai.ui.inbox.smsMessages
 
 import android.app.Activity
 import android.app.role.RoleManager
@@ -28,6 +28,7 @@ import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsInboxBinding
 import com.summer.notifai.ui.common.PagingLoadStateAdapter
 import com.summer.notifai.ui.datamodel.SmsInboxListItem
+import com.summer.notifai.ui.inbox.SmsInboxViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

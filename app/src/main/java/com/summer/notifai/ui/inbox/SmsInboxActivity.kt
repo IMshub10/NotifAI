@@ -61,14 +61,17 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
 
     private fun initData() {
         val senderAddressId = intent.getLongExtra(KEY_SENDER_ADDRESS_ID, 0L)
+        val importanceType = SmsImportanceType.fromValue(
+            intent.getIntExtra(
+                KEY_IMPORTANT, SmsImportanceType.ALL.value
+            )
+        ) ?: SmsImportanceType.ALL
+        val targetSmsId = intent.getLongExtra(KEY_TARGET_SMS_ID, 0).takeIf { it != 0L }
         viewmodel.setContactInfoModel(
             senderAddressId = senderAddressId,
-            smsImportanceType = SmsImportanceType.fromValue(
-                intent.getIntExtra(
-                    KEY_IMPORTANT, -1
-                )
-            ) ?: SmsImportanceType.ALL
+            smsImportanceType = importanceType
         )
+        viewmodel.setTargetSmsId(targetSmsId)
     }
 
     private fun setupNavController(startDestination: Int) {
@@ -84,16 +87,19 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
 
     companion object {
         private const val KEY_SENDER_ADDRESS_ID = "sender_address_id"
+        private const val KEY_TARGET_SMS_ID = "target_sms_id"
         private const val KEY_IMPORTANT = "important"
 
         fun onNewInstance(
             context: Context,
             senderAddressId: Long,
-            smsImportanceType: SmsImportanceType
+            smsImportanceType: SmsImportanceType,
+            targetSmsId: Long? = null
         ): Intent {
             return Intent(context, SmsInboxActivity::class.java).apply {
                 putExtra(KEY_SENDER_ADDRESS_ID, senderAddressId)
                 putExtra(KEY_IMPORTANT, smsImportanceType.value)
+                putExtra(KEY_TARGET_SMS_ID, targetSmsId)
             }
         }
     }

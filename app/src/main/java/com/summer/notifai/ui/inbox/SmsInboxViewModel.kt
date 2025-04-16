@@ -44,6 +44,9 @@ import javax.inject.Inject
 import androidx.lifecycle.map
 import com.summer.core.android.sms.constants.Constants
 import com.summer.core.data.local.entities.SenderType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 
 @HiltViewModel
 class SmsInboxViewModel @Inject constructor(
@@ -63,6 +66,8 @@ class SmsInboxViewModel @Inject constructor(
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
     val contactInfoModel = _contactInfoModel
 
+    private val _targetSmsId = MutableStateFlow<Long?>(null)
+
     val isSendSectionVisible: LiveData<Boolean> = contactInfoModel.map { model ->
         model?.senderType == SenderType.CONTACT
     }
@@ -71,13 +76,18 @@ class SmsInboxViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedSmsData: StateFlow<PagingData<SmsInboxListItem>> =
-        _contactInfoModel.asFlow()
+        combine(
+            _contactInfoModel.asFlow().filterNotNull().distinctUntilChanged(),
+            _targetSmsId
+        ) { model, smsId ->
+            Triple(model.senderAddressId, model.smsImportanceType ?: SmsImportanceType.ALL, smsId)
+        }
             .filterNotNull()
             .distinctUntilChanged()
             .flatMapLatest { model ->
                 getPagedSmsBySenderAddressId(
-                    model.senderAddressId,
-                    model.smsImportanceType ?: SmsImportanceType.ALL
+                    model.first,
+                    model.second
                 )
             }
             .stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
@@ -91,6 +101,10 @@ class SmsInboxViewModel @Inject constructor(
                     this.smsImportanceType = smsImportanceType
                 }
             }.launchIn(viewModelScope)
+    }
+
+    fun setTargetSmsId(id: Long?) {
+        _targetSmsId.value = id
     }
 
     private fun getPagedSmsBySenderAddressId(

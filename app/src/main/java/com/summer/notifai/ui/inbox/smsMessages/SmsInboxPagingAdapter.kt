@@ -1,4 +1,4 @@
-package com.summer.notifai.ui.inbox
+package com.summer.notifai.ui.inbox.smsMessages
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

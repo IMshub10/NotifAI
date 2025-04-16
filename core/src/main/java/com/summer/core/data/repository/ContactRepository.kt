@@ -11,6 +11,7 @@ import com.summer.core.data.local.model.ContactMessageInfoModel
 import com.summer.core.data.local.preference.PreferenceKey
 import com.summer.core.data.local.preference.SharedPreferencesManager
 import com.summer.core.domain.model.SearchSectionHeader
+import com.summer.core.domain.model.SearchSectionId
 import com.summer.core.domain.model.SearchSectionResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -69,18 +70,32 @@ class ContactRepository @Inject constructor(
 
     override suspend fun searchConversations(query: String): SearchSectionResult<ContactMessageInfoModel> {
         val count = contactDao.getConversationsMatchCount(query)
-        val items = if (count > 0) contactDao.searchConversations(query, SEARCH_SECTION_MAX_COUNT) else emptyList()
+        val items = if (count > 0) contactDao.searchConversations(
+            query,
+            SEARCH_SECTION_MAX_COUNT
+        ) else emptyList()
         return SearchSectionResult(
-            header = SearchSectionHeader(R.string.search_section_conversations, count),
+            header = SearchSectionHeader(
+                id = SearchSectionId.CONVERSATIONS,
+                titleResId = R.string.search_section_conversations,
+                count = count
+            ),
             items = items
         )
     }
 
     override suspend fun searchContacts(query: String): SearchSectionResult<ContactEntity> {
         val count = contactDao.getContactsCount(query)
-        val items = if (count > 0) contactDao.searchContacts(query, SEARCH_SECTION_MAX_COUNT) else emptyList()
+        val items = if (count > 0) contactDao.searchContacts(
+            query,
+            SEARCH_SECTION_MAX_COUNT
+        ) else emptyList()
         return SearchSectionResult(
-            header = SearchSectionHeader(R.string.search_section_contacts, count),
+            header = SearchSectionHeader(
+                id = SearchSectionId.CONTACTS,
+                titleResId = R.string.search_section_contacts,
+                count = count
+            ),
             items = items
         )
     }

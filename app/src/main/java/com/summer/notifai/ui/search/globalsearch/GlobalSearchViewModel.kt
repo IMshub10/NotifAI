@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.summer.core.domain.repository.ISmsRepository
+import com.summer.core.util.CountryCodeProvider
 import com.summer.notifai.ui.datamodel.GlobalSearchListItem
+import com.summer.notifai.ui.datamodel.NewContactDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -14,7 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GlobalSearchViewModel @Inject constructor(
-    private val globalSearchCoordinator: GlobalSearchCoordinator
+    private val globalSearchCoordinator: GlobalSearchCoordinator,
+    private val smsRepository: ISmsRepository,
+    private val countryCodeProvider: CountryCodeProvider,
 ) : ViewModel() {
 
     val searchFilter = MutableLiveData("")
@@ -43,5 +48,12 @@ class GlobalSearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun getOrInsertSenderId(selectedItem: NewContactDataModel): Long {
+        return smsRepository.getOrInsertSenderId(
+            selectedItem.phoneNumber,
+            countryCodeProvider.getMyCountryCode()
+        )
     }
 }

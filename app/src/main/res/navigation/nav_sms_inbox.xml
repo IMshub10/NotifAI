@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/smsInboxFrag"
-        android:name="com.summer.notifai.ui.inbox.SmsInboxFrag"
+        android:name="com.summer.notifai.ui.inbox.smsMessages.SmsInboxFrag"
         android:label="SmsInboxFrag"
         tools:layout="@layout/frag_sms_inbox" />
 </navigation>

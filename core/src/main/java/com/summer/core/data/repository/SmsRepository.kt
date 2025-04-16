@@ -22,6 +22,7 @@ import com.summer.core.data.local.preference.PreferenceKey
 import com.summer.core.data.local.preference.SharedPreferencesManager
 import com.summer.core.domain.model.FetchResult
 import com.summer.core.domain.model.SearchSectionHeader
+import com.summer.core.domain.model.SearchSectionId
 import com.summer.core.domain.model.SearchSectionResult
 import com.summer.core.domain.repository.ISmsRepository
 import com.summer.core.ui.model.SmsImportanceType
@@ -200,9 +201,16 @@ class SmsRepository @Inject constructor(
 
     override suspend fun searchMessages(query: String): SearchSectionResult<SearchSmsMessageQueryModel> {
         val count = smsDao.getMessagesMatchCount(query)
-        val items = if (count > 0) smsDao.searchMessages(query, limit = SEARCH_SECTION_MAX_COUNT) else emptyList()
+        val items = if (count > 0) smsDao.searchMessages(
+            query,
+            limit = SEARCH_SECTION_MAX_COUNT
+        ) else emptyList()
         return SearchSectionResult(
-            header = SearchSectionHeader(R.string.search_section_messages, count),
+            header = SearchSectionHeader(
+                id = SearchSectionId.MESSAGES,
+                titleResId = R.string.search_section_messages,
+                count = count
+            ),
             items = items
         )
     }

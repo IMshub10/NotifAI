@@ -2,11 +2,9 @@ package com.summer.notifai.ui.search.globalsearch
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
@@ -23,7 +21,9 @@ import com.summer.notifai.databinding.ItemSmsContactBinding
 import com.summer.notifai.ui.datamodel.GlobalSearchListItem
 import java.util.regex.Pattern
 
-class GlobalSearchAdapter : ListAdapter<GlobalSearchListItem, RecyclerView.ViewHolder>(
+class GlobalSearchAdapter(
+    private val itemClickListener: GlobalSearchItemClickListener
+) : ListAdapter<GlobalSearchListItem, RecyclerView.ViewHolder>(
     GlobalSearchDiffCallback()
 ) {
     companion object {
@@ -139,12 +139,15 @@ class GlobalSearchAdapter : ListAdapter<GlobalSearchListItem, RecyclerView.ViewH
         }
     }
 
-    class HeaderViewHolder(private val binding: ItemSearchHeaderBinding) :
+    inner class HeaderViewHolder(private val binding: ItemSearchHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(item: GlobalSearchListItem.SectionHeader) {
             binding.tvItemSearchHeaderTitle.text =
                 "${binding.tvItemSearchHeaderTitle.context.getText(item.titleResId)} (${item.count})"
+            binding.root.setOnClickListener {
+                itemClickListener.onHeaderClicked(item)
+            }
             binding.executePendingBindings()
         }
     }
@@ -156,6 +159,9 @@ class GlobalSearchAdapter : ListAdapter<GlobalSearchListItem, RecyclerView.ViewH
             binding.model = item.data
             binding.tvItemSmsMessageMessage.text =
                 item.data.message.highlightQuery(binding.tvItemSmsMessageMessage.context)
+            binding.root.setOnClickListener {
+                itemClickListener.onSmsClicked(item)
+            }
             binding.executePendingBindings()
         }
     }
@@ -167,6 +173,9 @@ class GlobalSearchAdapter : ListAdapter<GlobalSearchListItem, RecyclerView.ViewH
             binding.model = item.data
             binding.tvItemSmsMessageMessage.text =
                 item.data.message.highlightQuery(binding.tvItemSmsMessageMessage.context)
+            binding.root.setOnClickListener {
+                itemClickListener.onSmsClicked(item)
+            }
             binding.executePendingBindings()
         }
     }
@@ -177,6 +186,9 @@ class GlobalSearchAdapter : ListAdapter<GlobalSearchListItem, RecyclerView.ViewH
             binding.model = item.data
             binding.tvItemSmsContactSenderName.text =
                 item.data.senderName.highlightQuery(binding.tvItemSmsContactSenderName.context)
+            binding.root.setOnClickListener {
+                itemClickListener.onConversationClicked(item)
+            }
             binding.executePendingBindings()
         }
     }
@@ -189,7 +201,17 @@ class GlobalSearchAdapter : ListAdapter<GlobalSearchListItem, RecyclerView.ViewH
                 item.data.contactName.highlightQuery(binding.tvItemNewContactSenderName.context)
             binding.tvItemNewContactSenderAddress.text =
                 item.data.phoneNumber.highlightQuery(binding.tvItemNewContactSenderAddress.context)
+            binding.root.setOnClickListener {
+                itemClickListener.onContactClicked(item)
+            }
             binding.executePendingBindings()
         }
+    }
+
+    interface GlobalSearchItemClickListener {
+        fun onSmsClicked(item: GlobalSearchListItem.SmsItem)
+        fun onConversationClicked(item: GlobalSearchListItem.ConversationItem)
+        fun onContactClicked(item: GlobalSearchListItem.ContactItem)
+        fun onHeaderClicked(item: GlobalSearchListItem.SectionHeader)
     }
 }

@@ -4,11 +4,19 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.summer.core.ui.BaseFragment
+import com.summer.core.ui.model.SmsImportanceType
 import com.summer.notifai.R
 import com.summer.notifai.databinding.FragGlobalSearchBinding
+import com.summer.notifai.ui.datamodel.GlobalSearchListItem
+import com.summer.notifai.ui.inbox.SmsInboxActivity
+import com.summer.notifai.ui.search.globalsearch.GlobalSearchAdapter.GlobalSearchItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
@@ -20,6 +28,11 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
     private var _searchAdapter: GlobalSearchAdapter? = null
     private val searchAdapter get() = _searchAdapter!!
 
+    private var _itemClickListener: GlobalSearchItemClickListener? = null
+    private val itemClickListener get() = _itemClickListener!!
+
+    private var contactClicked = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSearchAdapter()
@@ -29,7 +42,56 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
     }
 
     private fun setupSearchAdapter() {
-        _searchAdapter = GlobalSearchAdapter()
+        _itemClickListener = object : GlobalSearchItemClickListener {
+            override fun onSmsClicked(item: GlobalSearchListItem.SmsItem) {
+                activity?.let {
+                    startActivity(
+                        SmsInboxActivity.onNewInstance(
+                            context = it,
+                            senderAddressId = item.data.senderAddressId,
+                            smsImportanceType = SmsImportanceType.ALL,
+                            targetSmsId = item.data.id
+                        )
+                    )
+                }
+            }
+
+            override fun onConversationClicked(item: GlobalSearchListItem.ConversationItem) {
+                activity?.let {
+                    startActivity(
+                        SmsInboxActivity.onNewInstance(
+                            context = it,
+                            senderAddressId = item.data.senderAddressId,
+                            smsImportanceType = SmsImportanceType.ALL
+                        )
+                    )
+                }
+            }
+
+            override fun onContactClicked(item: GlobalSearchListItem.ContactItem) {
+                contactClicked = true
+                lifecycleScope.launch(Dispatchers.Default) {
+                    val id = viewModel.getOrInsertSenderId(item.data)
+                    withContext(Dispatchers.Main) {
+                        activity?.let {
+                            startActivity(
+                                SmsInboxActivity.onNewInstance(
+                                    context = it,
+                                    senderAddressId = id,
+                                    smsImportanceType = SmsImportanceType.IMPORTANT
+                                )
+                            )
+                        }
+                        contactClicked = false
+                    }
+                }
+            }
+
+            override fun onHeaderClicked(item: GlobalSearchListItem.SectionHeader) {
+                //TODO()
+            }
+        }
+        _searchAdapter = GlobalSearchAdapter(itemClickListener)
         mBinding.rvFragGlobalSearchList.adapter = searchAdapter
         mBinding.rvFragGlobalSearchList.itemAnimator?.apply {
             addDuration = 120
@@ -64,6 +126,7 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
 
     override fun onDestroyView() {
         _searchAdapter = null
+        _itemClickListener = null
         super.onDestroyView()
     }
 }

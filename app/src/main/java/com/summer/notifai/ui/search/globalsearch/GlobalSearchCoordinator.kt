@@ -53,8 +53,9 @@ class GlobalSearchCoordinator @Inject constructor(
                 if (items.isEmpty()) emptyList()
                 else listOf(
                     GlobalSearchListItem.SectionHeader(
-                        header.titleResId,
-                        header.count
+                        id = header.id,
+                        titleResId = header.titleResId,
+                        count = header.count
                     )
                 ) + items
             }
