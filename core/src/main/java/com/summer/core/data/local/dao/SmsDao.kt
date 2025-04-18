@@ -118,6 +118,31 @@ interface SmsDao {
 
     @Query(
         """
+    SELECT 
+        sms.id AS id,
+        sms.sender_address_id AS sender_address_id,
+        COALESCE(c.name, sender.sender_address) AS sender_address,
+        sms.body AS body,
+        sms.date AS date,
+        sms.type AS type,
+        classification.sms_type AS sms_message_type,
+        classification.compact_sms_type AS compact_type
+    FROM sms_messages AS sms
+    LEFT JOIN sms_classification_types AS classification
+        ON sms.sms_classification_type_id = classification.id
+    INNER JOIN sender_addresses AS sender
+        ON sms.sender_address_id = sender.id
+    LEFT JOIN contacts c
+        ON sender.sender_type = 'CONTACT'
+        AND c.phone_number = sender.sender_address
+    WHERE lower(sms.body) LIKE '%' || :query || '%'
+    ORDER BY sms.date DESC
+    """
+    )
+    fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel>
+
+    @Query(
+        """
     SELECT COUNT(*) FROM sms_messages AS sms
     INNER JOIN sender_addresses AS sender ON sms.sender_address_id = sender.id
     WHERE lower(sms.body) LIKE '%' || :query || '%'

@@ -29,6 +29,10 @@ interface IContactRepository {
 
     suspend fun searchConversations(query: String): SearchSectionResult<ContactMessageInfoModel>
 
+    fun getSearchConversationsPagingSource(query: String): PagingSource<Int, ContactMessageInfoModel>
+
     suspend fun searchContacts(query: String): SearchSectionResult<ContactEntity>
+
+    fun getSearchContactsPagingSource(query: String): PagingSource<Int, ContactEntity>
 
 }

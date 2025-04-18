@@ -214,4 +214,8 @@ class SmsRepository @Inject constructor(
             items = items
         )
     }
+
+    override fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel> {
+        return smsDao.getSearchMessagesPagingSource(query)
+    }
 }

@@ -8,6 +8,24 @@
     <fragment
         android:id="@+id/globalSearchFrag"
         android:name="com.summer.notifai.ui.search.globalsearch.GlobalSearchFrag"
-        tools:layout="@layout/frag_global_search"
-        android:label="GlobalSearchFrag" />
+        android:label="GlobalSearchFrag"
+        tools:layout="@layout/frag_global_search">
+        <action
+            android:id="@+id/action_globalSearchFrag_to_searchListFrag"
+            app:destination="@id/searchListFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchListFrag"
+        android:name="com.summer.notifai.ui.search.searchlist.SearchListFrag"
+        android:label="SearchListFrag"
+        tools:layout="@layout/frag_search_list">
+
+        <argument
+            android:name="query"
+            app:argType="string" />
+
+        <argument
+            android:name="searchType"
+            app:argType="string" />
+    </fragment>
 </navigation>

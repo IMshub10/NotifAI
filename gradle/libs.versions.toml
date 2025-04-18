@@ -60,6 +60,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 [plugins]
+androidx-navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version = "2.7.5" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }

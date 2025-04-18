@@ -83,6 +83,10 @@ class ContactRepository @Inject constructor(
         )
     }
 
+    override fun getSearchConversationsPagingSource(query: String): PagingSource<Int, ContactMessageInfoModel> {
+        return contactDao.getSearchConversationsPagingSource(query)
+    }
+
     override suspend fun searchContacts(query: String): SearchSectionResult<ContactEntity> {
         val count = contactDao.getContactsCount(query)
         val items = if (count > 0) contactDao.searchContacts(
@@ -97,5 +101,9 @@ class ContactRepository @Inject constructor(
             ),
             items = items
         )
+    }
+
+    override fun getSearchContactsPagingSource(query: String): PagingSource<Int, ContactEntity> {
+        return contactDao.getSearchContactsPagingSource(query)
     }
 }

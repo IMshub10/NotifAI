@@ -88,7 +88,13 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
             }
 
             override fun onHeaderClicked(item: GlobalSearchListItem.SectionHeader) {
-                //TODO()
+                val action =
+                    GlobalSearchFragDirections.actionGlobalSearchFragToSearchListFrag(
+                        query = viewModel.searchFilter.value.orEmpty(),
+                        searchType = item.id.toString()
+                    )
+
+                findNavController().navigate(action)
             }
         }
         _searchAdapter = GlobalSearchAdapter(itemClickListener)

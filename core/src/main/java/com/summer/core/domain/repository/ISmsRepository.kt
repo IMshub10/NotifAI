@@ -36,4 +36,6 @@ interface ISmsRepository {
     suspend fun getOrInsertSenderId(senderAddress: String, defaultCountryCode: Int): Long
 
     suspend fun searchMessages(query: String): SearchSectionResult<SearchSmsMessageQueryModel>
+
+    fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel>
 }

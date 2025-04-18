@@ -90,6 +90,37 @@ LIMIT :limit
 
     @Query(
         """
+    SELECT 
+        COALESCE(c.name, sa.sender_address) AS sender_name,
+        s.raw_address AS raw_address,
+        s.body AS last_message,
+        s.date AS last_message_date,
+        sa.id AS sender_address_id,
+        sa.sender_type AS sender_type,
+        (
+            SELECT COUNT(*)
+            FROM sms_messages sm
+            WHERE sm.sender_address_id = sa.id
+              AND sm.read = 0
+        ) AS unread_count
+    FROM sender_addresses sa
+    INNER JOIN sms_messages s ON s.id = (
+        SELECT sm.id
+        FROM sms_messages sm
+        WHERE sm.sender_address_id = sa.id
+        ORDER BY sm.date DESC
+        LIMIT 1
+    )
+    LEFT JOIN contacts c ON c.phone_number = sa.sender_address
+    WHERE lower(COALESCE(c.name, sa.sender_address)) LIKE '%' || :query || '%'
+    GROUP BY s.id
+    ORDER BY s.date DESC
+    """
+    )
+    fun getSearchConversationsPagingSource(query: String): PagingSource<Int, ContactMessageInfoModel>
+
+    @Query(
+        """
     SELECT COUNT(*) FROM sender_addresses sa
     LEFT JOIN contacts c ON c.phone_number = sa.sender_address
     WHERE lower(COALESCE(c.name, sa.sender_address)) LIKE '%' || :query || '%'
@@ -150,6 +181,16 @@ LIMIT :limit
         query: String,
         limit: Int
     ): List<ContactEntity>
+
+    @Query(
+        """
+    SELECT * FROM contacts
+    WHERE lower(name) LIKE '%' || :query || '%'
+       OR lower(phone_number) LIKE '%' || :query || '%'
+    ORDER BY lower(name)
+    """
+    )
+    fun getSearchContactsPagingSource(query: String): PagingSource<Int, ContactEntity>
 
     @Query(
         """

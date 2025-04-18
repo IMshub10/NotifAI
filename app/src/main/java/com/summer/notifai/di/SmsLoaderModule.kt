@@ -1,7 +1,6 @@
 package com.summer.notifai.di
 
 import com.summer.core.data.local.dao.SmsDao
-import com.summer.core.ui.model.SmsImportanceType
 import com.summer.notifai.ui.inbox.smsMessages.SmsMessageLoader
 import dagger.Module
 import dagger.Provides

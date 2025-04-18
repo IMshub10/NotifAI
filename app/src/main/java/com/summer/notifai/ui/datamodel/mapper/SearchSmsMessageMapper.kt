@@ -15,11 +15,12 @@ object SearchSmsMessageMapper {
             senderAddress = senderAddress,
             message = body.orEmpty(),
             dateInEpoch = date,
-            date = DateUtils.formatTimeOnly(date),
+            date = DateUtils.formatDisplayDateTime(date),
             isIncoming = SmsMessageType.isIncoming(type),
             smsClassificationDataModel = SmsClassificationDataModel(
                 smsType = smsMessageType.orEmpty(),
-                type = SmsClassificationType.fromCompactName(compactType.orEmpty()) ?: SmsClassificationType.IMPORTANT
+                type = SmsClassificationType.fromCompactName(compactType.orEmpty())
+                    ?: SmsClassificationType.IMPORTANT
             )
         )
     }
