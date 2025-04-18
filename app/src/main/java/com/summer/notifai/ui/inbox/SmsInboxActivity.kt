@@ -69,9 +69,9 @@ class SmsInboxActivity : BaseActivity<ActivitySmsInboxBinding>() {
         val targetSmsId = intent.getLongExtra(KEY_TARGET_SMS_ID, 0).takeIf { it != 0L }
         viewmodel.setContactInfoModel(
             senderAddressId = senderAddressId,
-            smsImportanceType = importanceType
+            smsImportanceType = importanceType,
+            targetSmsId = targetSmsId
         )
-        viewmodel.setTargetSmsId(targetSmsId)
     }
 
     private fun setupNavController(startDestination: Int) {

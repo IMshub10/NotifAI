@@ -12,9 +12,11 @@ import com.summer.core.data.local.entities.SmsClassificationTypeEntity
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.data.local.model.SearchSmsMessageQueryModel
 import com.summer.core.data.local.model.SmsMessageModel
+import com.summer.core.data.local.model.SmsPagingKey
 import com.summer.core.util.determineSenderType
 import com.summer.core.util.normalizePhoneNumber
 import com.summer.core.util.trimSenderId
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SmsDao {
@@ -144,4 +146,70 @@ interface SmsDao {
     @Query("SELECT * FROM sms_messages WHERE android_sms_id IS NOT NULL ORDER BY android_sms_id ASC LIMIT 1")
     suspend fun getFirstInsertedSmsMessageByAndroidSmsId(): SmsEntity?
 
+    @Query("""
+        SELECT id, date FROM sms_messages
+        WHERE id = :smsId
+        LIMIT 1
+    """)
+    suspend fun getDateAndId(smsId: Long): SmsPagingKey?
+
+    @Query("""
+        SELECT 
+            sms.id AS id,
+            sms.body AS body,
+            sms.date AS date,
+            sms.type AS type,
+            classification.sms_type AS sms_message_type,
+            classification.compact_sms_type AS compact_type,
+            sms.importance_score AS importance_score,
+            sms.confidence_score AS confidence_score
+        FROM sms_messages AS sms
+        LEFT JOIN sms_classification_types AS classification
+            ON sms.sms_classification_type_id = classification.id
+        WHERE sms.sender_address_id = :senderAddressId
+        AND (:important = -1  OR classification.is_important = :important)
+          AND (sms.date < :date OR (sms.date = :date AND sms.id <= :id))
+        ORDER BY sms.date DESC, sms.id DESC
+        LIMIT :limit
+    """)
+    suspend fun getMessagesBefore(
+        senderAddressId: Long,
+        date: Long,
+        important: Int,
+        id: Long,
+        limit: Int
+    ): List<SmsMessageModel>
+
+    @Query("""
+        SELECT 
+            sms.id AS id,
+            sms.body AS body,
+            sms.date AS date,
+            sms.type AS type,
+            classification.sms_type AS sms_message_type,
+            classification.compact_sms_type AS compact_type,
+            sms.importance_score AS importance_score,
+            sms.confidence_score AS confidence_score
+        FROM sms_messages AS sms
+        LEFT JOIN sms_classification_types AS classification
+            ON sms.sms_classification_type_id = classification.id
+        WHERE sms.sender_address_id = :senderAddressId
+            AND (:important = -1  OR classification.is_important = :important)
+          AND (sms.date > :date OR (sms.date = :date AND sms.id > :id))
+        ORDER BY sms.date ASC, sms.id ASC
+        LIMIT :limit
+    """)
+    suspend fun getMessagesAfter(
+        senderAddressId: Long,
+        date: Long,
+        important: Int,
+        id: Long,
+        limit: Int
+    ): List<SmsMessageModel>
+
+    @Query("SELECT MAX(date) FROM sms_messages WHERE sender_address_id = :senderId")
+    fun observeMaxDateBySenderId(senderId: Long): Flow<Long?>
+
+    @Query("SELECT MIN(date) FROM sms_messages WHERE sender_address_id = :senderId")
+    fun observeMinDateBySenderId(senderId: Long): Flow<Long?>
 }

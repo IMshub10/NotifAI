@@ -12,11 +12,11 @@ data class ContactInfoInboxModel(
     val senderAddressId: Long,
     @ColumnInfo("phone_number")
     val phoneNumber: String?,
-    @ColumnInfo("unread_count")
-    val unreadCount: Int,
     @ColumnInfo("sender_type")
     val senderType: SenderType?
 ) {
+
+    //TODO(Check if it is required)
     @Ignore
     var smsImportanceType: SmsImportanceType? = null
 }

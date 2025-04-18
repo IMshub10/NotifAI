@@ -60,11 +60,10 @@ class ContactRepository @Inject constructor(
 
     override fun getContactInfoBySenderAddressId(
         senderAddressId: Long,
-        important: Int
+        important: Int //TODO(remove if not required)
     ): Flow<ContactInfoInboxModel?> {
         return contactDao.getContactInfoBySenderAddressId(
-            senderAddressId = senderAddressId,
-            important = important
+            senderAddressId = senderAddressId
         )
     }
 

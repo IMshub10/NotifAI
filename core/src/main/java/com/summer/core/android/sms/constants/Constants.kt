@@ -18,7 +18,7 @@ object Constants {
     /**
      * Number of SMS messages to load per page in the SMS inbox screen.
      */
-    const val SMS_LIST_PAGE_SIZE = 20
+    const val SMS_LIST_PAGE_SIZE = 40
 
     /**
      * Duration (in milliseconds) to show the floating date header while scrolling messages.
