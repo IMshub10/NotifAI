@@ -164,7 +164,7 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
     }
 
     private fun showFloatingDateLabel(label: String) {
-        mBinding.tvFragSmsInboxFloatingDate.text = label
+        mBinding.tvFragSmsInboxFloatingDate.text = label.trim()
         mBinding.tvFragSmsInboxFloatingDate.visibility = View.VISIBLE
 
         scrollHideRunnable?.let { scrollHandler.removeCallbacks(it) }

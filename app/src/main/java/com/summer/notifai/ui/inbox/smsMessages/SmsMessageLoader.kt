@@ -19,7 +19,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-//TODO(Optimization)
 /**
  * Loader for paginated SMS messages tied to a specific sender.
  *
@@ -60,6 +59,10 @@ class SmsMessageLoader(
 
     private val messageMutex = Mutex()
 
+    //Cache
+    private val existingMessages = LinkedHashSet<SmsInboxListItem.Message>()
+    private val existingMessageIds = HashSet<Long>() // optional if you're using a HashSet
+
     /**
      * (Internal) Loads initial set of messages around the given [targetSmsId].
      * Fetches `pageSize` before and after the target message.
@@ -89,14 +92,22 @@ class SmsMessageLoader(
         val combined = (before + after)
             .distinctBy { it.id }
             .sortedWith(compareByDescending<SmsMessageModel> { it.date }.thenByDescending { it.id })
-
+        existingMessageIds.addAll(combined.map { it.id })
         earliestMessage = combined.lastOrNull()
         latestMessage = combined.firstOrNull()
 
-        _messages.value = buildListWithHeaders(
-            combined.map { SmsInboxListItem.Message(it.toSmsMessageDataModel()) },
+
+        val mappedMessages = combined.map { SmsInboxListItem.Message(it.toSmsMessageDataModel()) }
+        val processedMessages = buildListWithHeaders(
+            mappedMessages,
             appendToTop = false
         )
+        existingMessageIds.addAll(combined.map { it.id })
+        existingMessages.addAll(mappedMessages)
+
+        withContext(Dispatchers.Main) {
+            _messages.value = processedMessages
+        }
     }
 
     /**
@@ -154,15 +165,16 @@ class SmsMessageLoader(
                     }
 
                     earliestMessage = older.last()
-                    val existing = _messages.value.filterIsInstance<SmsInboxListItem.Message>()
-                    val existingIds = existing.mapTo(mutableSetOf()) { it.data.id }
-                    val newUnique = older.filter { it.id !in existingIds }
+                    val newUnique = older.filter { it.id !in existingMessageIds }
                         .map { SmsInboxListItem.Message(it.toSmsMessageDataModel()) }
 
                     if (newUnique.isNotEmpty()) {
-                        val updated = existing + newUnique
+                        existingMessages.addAll(newUnique)
+                        existingMessageIds.addAll(newUnique.map { it.data.id })
+                        val updated =
+                            buildListWithHeaders(existingMessages.toList(), appendToTop = false)
                         withContext(Dispatchers.Main) {
-                            _messages.value = buildListWithHeaders(updated, appendToTop = false)
+                            _messages.value = updated
                         }
                     }
                 } finally {
@@ -200,15 +212,16 @@ class SmsMessageLoader(
                     }
 
                     latestMessage = newer.first()
-                    val existing = _messages.value.filterIsInstance<SmsInboxListItem.Message>()
-                    val existingIds = existing.mapTo(mutableSetOf()) { it.data.id }
-                    val newUnique = newer.filter { it.id !in existingIds }
+                    val newUnique = newer.filter { it.id !in existingMessageIds }
                         .map { SmsInboxListItem.Message(it.toSmsMessageDataModel()) }
 
                     if (newUnique.isNotEmpty()) {
-                        val updated = newUnique + existing
+                        existingMessages.addAll(newUnique)
+                        existingMessageIds.addAll(newUnique.map { it.data.id })
+                        val updated =
+                            buildListWithHeaders(existingMessages.toList(), appendToTop = true)
                         withContext(Dispatchers.Main) {
-                            _messages.value = buildListWithHeaders(updated, appendToTop = true)
+                            _messages.value = updated
                         }
                     }
                 } finally {
@@ -223,6 +236,8 @@ class SmsMessageLoader(
      */
     private fun clearMessages() {
         _messages.value = emptyList()
+        existingMessages.clear()
+        existingMessageIds.clear()
         earliestMessage = null
         latestMessage = null
         hasMoreOlder = true
@@ -301,8 +316,10 @@ class SmsMessageLoader(
                 val lastVisible = layoutManager.findLastVisibleItemPosition()
                 val totalCount = layoutManager.itemCount
 
-                if (firstVisible <= 5) loadNewerMessages()
-                if (lastVisible >= totalCount - 5) loadOlderMessages()
+                val threshold = pageSize / 4
+
+                if (firstVisible <= (threshold)) loadNewerMessages()
+                if (lastVisible >= totalCount - (threshold)) loadOlderMessages()
             }
         })
     }

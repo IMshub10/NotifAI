@@ -7,4 +7,17 @@ data class SmsMessageDataModel(
     val date: String,
     val isIncoming: Boolean,
     val smsClassificationDataModel: SmsClassificationDataModel
-)
+){
+    override fun equals(other: Any?): Boolean {
+        return if (other is SmsMessageDataModel){
+            other.id == id
+        }else{
+            false
+        }
+
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+}
