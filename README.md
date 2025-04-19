@@ -7,7 +7,7 @@
 ## 🚀 Features
 
 - 📩 Default SMS app with full SMS message handling
-- 🧠 Offline ML model (DistilBERT) for classification
+- 🧠 Offline ML model (MobileBERT) for classification
 - 🏷️ Categories: OTP, Transactional, Promotional, Personal, Scam, and more
 - 🔔 Smart notifications based on category importance
 - 🧪 Rule-based overrides and user-customizable categories
