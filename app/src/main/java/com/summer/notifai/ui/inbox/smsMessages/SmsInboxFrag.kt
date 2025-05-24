@@ -126,6 +126,10 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
                 },
                 {})
         }
+        mBinding.btFragSmsInboxReport.setOnClickListener {
+            smsInboxViewModel.clearMessageSelection()
+            // TODO(API integration to send to remote server, after showing a dialog containing privacy condition.)
+        }
     }
 
     private fun showYesNoDialog(
