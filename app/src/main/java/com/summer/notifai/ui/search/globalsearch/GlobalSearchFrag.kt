@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.summer.core.ui.BaseFragment
 import com.summer.core.ui.model.SmsImportanceType
@@ -93,8 +94,11 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
                         query = viewModel.searchFilter.value.orEmpty(),
                         searchType = item.id.toString()
                     )
-
-                findNavController().navigate(action)
+                (requireActivity()
+                    .supportFragmentManager
+                    .findFragmentById(R.id.fcv_actSearch_navHost) as NavHostFragment?)
+                    ?.navController
+                    ?.navigate(action)
             }
         }
         _searchAdapter = GlobalSearchAdapter(itemClickListener)
@@ -117,7 +121,7 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
     private fun listeners() {
         mBinding.ivFragGlobalSearchBack.setOnClickListener {
             if (findNavController().currentDestination?.id == R.id.globalSearchFrag)
-                findNavController().popBackStack()
+                requireActivity().finish()
         }
         mBinding.etFragGlobalSearchSearch.addTextChangedListener {
             viewModel.searchFilter.value = it.toString()

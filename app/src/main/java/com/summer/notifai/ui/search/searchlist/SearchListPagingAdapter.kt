@@ -60,7 +60,7 @@ class SearchListPagingAdapter(
             is GlobalSearchListItem.SmsItem -> if (item.data.isIncoming) VIEW_TYPE_SMS_RECEIVED else VIEW_TYPE_SMS_SENT
             is GlobalSearchListItem.ConversationItem -> VIEW_TYPE_CONVERSATION
             is GlobalSearchListItem.ContactItem -> VIEW_TYPE_CONTACT
-            else -> throw IllegalStateException("Unknown item type at position $position")
+            else -> throw IllegalStateException("Unknown item type: ${item?.javaClass?.name} at position $position")
         }
     }
 

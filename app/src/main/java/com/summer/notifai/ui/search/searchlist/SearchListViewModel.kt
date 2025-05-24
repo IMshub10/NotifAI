@@ -114,7 +114,6 @@ class SearchListViewModel @Inject constructor(
                         pagerFlow
                     }
                 }
-                .cachedIn(viewModelScope) // cache outside to avoid losing on re-emission
                 .collectLatest { _pagingData.value = it }
         }
     }
