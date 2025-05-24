@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 class SmsInboxAdapter(
     private val highlightedIdFlow: StateFlow<Long?>,
     private val onItemClick: (SmsInboxListItem.Message) -> Unit,
+    private val onLongItemClick: (SmsInboxListItem.Message) -> Unit,
 ) : ListAdapter<SmsInboxListItem, RecyclerView.ViewHolder>(DiffCallback) {
 
     companion object {
@@ -95,9 +96,18 @@ class SmsInboxAdapter(
             binding.model = item.data
             val highlight = highlightedIdFlow.value == item.data.id
             binding.root.setBackgroundResource(
-                if (highlight) R.color.primary else R.drawable.ripple_color_grey
+                if (highlight) R.color.primary else 0
             )
             binding.root.setOnClickListener { onItemClick(item) }
+            binding.root.setOnLongClickListener {
+                onLongItemClick(item)
+                return@setOnLongClickListener true
+            }
+            binding.tvItemSmsMessageMessage.setOnClickListener { onItemClick(item) }
+            binding.tvItemSmsMessageMessage.setOnLongClickListener {
+                onLongItemClick(item)
+                return@setOnLongClickListener true
+            }
             binding.executePendingBindings()
         }
     }
@@ -109,9 +119,18 @@ class SmsInboxAdapter(
             binding.model = item.data
             val highlight = highlightedIdFlow.value == item.data.id
             binding.root.setBackgroundResource(
-                if (highlight) R.color.green_dark else R.drawable.ripple_color_grey
+                if (highlight) R.color.primary else 0
             )
             binding.root.setOnClickListener { onItemClick(item) }
+            binding.root.setOnLongClickListener {
+                onLongItemClick(item)
+                return@setOnLongClickListener true
+            }
+            binding.tvItemSmsMessageMessage.setOnClickListener { onItemClick(item) }
+            binding.tvItemSmsMessageMessage.setOnLongClickListener {
+                onLongItemClick(item)
+                return@setOnLongClickListener true
+            }
             binding.executePendingBindings()
         }
     }

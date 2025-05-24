@@ -13,5 +13,7 @@
     <attr name="colorGreen" format="color" />
     <attr name="toolbarBackground" format="color" />
     <attr name="colorPrimaryLight" format="color" />
-    <attr name="colorChatBox" format="color"/>
+    <attr name="colorChatBox" format="color" />
+    <attr name="colorSmsSelected" format="color"/>
+    <attr name="colorSelectedMessageOverlay" format="color"/>
 </resources>

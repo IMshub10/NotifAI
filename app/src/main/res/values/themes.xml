@@ -51,6 +51,8 @@
         <item name="android:navigationIcon">@drawable/ic_navigation_back_dark</item>
 
         <item name="colorChatBox">@color/grey_lighter</item>
+        <item name="colorSmsSelected">@color/colorSelectedMessageLight</item>
+        <item name="colorSelectedMessageOverlay">@color/colorSelectedMessageOverlayLight</item>
     </style>
     <!--Animation================================================================================-->
     <style name="WindowTransition" parent="android:Animation.Activity">

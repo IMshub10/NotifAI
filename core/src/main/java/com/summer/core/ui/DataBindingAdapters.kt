@@ -18,6 +18,16 @@ import com.summer.core.data.local.entities.SenderType
 import com.summer.core.ui.model.SmsClassificationType
 
 object DataBindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter("selectedMessageCount")
+    fun AppCompatTextView.setSelectedMessageCount(count: Int) {
+        isVisible = count > 0
+        if (count > 0) {
+            text = String.format(context.getString(R.string.d_selected), count)
+        }
+    }
+
     @JvmStatic
     @BindingAdapter("htmlText")
     fun AppCompatTextView.setHtmlText(html: String?) {

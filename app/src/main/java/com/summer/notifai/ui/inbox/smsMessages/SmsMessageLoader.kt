@@ -39,6 +39,9 @@ class SmsMessageLoader(
 
     private val _messages = MutableStateFlow<List<SmsInboxListItem>>(emptyList())
 
+    private val _selectedMessageIds = MutableStateFlow<Set<Long>>(emptySet())
+    val selectedMessageIds: StateFlow<Set<Long>> get() = _selectedMessageIds
+
     /** Publicly exposed state of messages with mapped UI models. */
     val messages: StateFlow<List<SmsInboxListItem>> get() = _messages
 
@@ -322,6 +325,55 @@ class SmsMessageLoader(
                 if (lastVisible >= totalCount - (threshold)) loadOlderMessages()
             }
         })
+    }
+
+    /**
+     * Toggles the selection state of a message with the given [messageId].
+     * If the message is currently selected, it will be deselected, and vice versa.
+     *
+     * Automatically updates the [selectedMessageIds] state and notifies the message model to trigger UI updates.
+     *
+     * @param messageId The ID of the message to toggle selection for.
+     */
+    fun toggleMessageSelection(messageId: Long) {
+        val current = _selectedMessageIds.value.toMutableSet()
+        val isSelected = if (current.contains(messageId)) {
+            current.remove(messageId)
+            false
+        } else {
+            current.add(messageId)
+            true
+        }
+        _selectedMessageIds.value = current
+        updateSingleMessageSelection(messageId, isSelected)
+    }
+
+    /**
+     * Clears all currently selected messages.
+     * Resets all message models' `isSelected` flags to false and notifies changes to trigger UI refresh.
+     */
+    fun clearAllSelections() {
+        _selectedMessageIds.value = emptySet()
+        existingMessages.forEach {
+            it.data.isSelected = false
+            it.data.notifyChange()
+        }
+    }
+
+    /**
+     * Updates the `isSelected` state of a specific message by ID and triggers `notifyChange()` to refresh the UI.
+     *
+     * This is used internally after a toggle or clear operation to perform a targeted update.
+     *
+     * @param messageId The ID of the message to update.
+     * @param isSelected Whether the message should be marked as selected.
+     */
+    private fun updateSingleMessageSelection(messageId: Long, isSelected: Boolean) {
+        val found = existingMessages.find { it.data.id == messageId }
+        if (found != null) {
+            found.data.isSelected = isSelected
+            found.data.notifyChange()
+        }
     }
 
     /**

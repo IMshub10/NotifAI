@@ -10,9 +10,9 @@
 
     <color name="blue_link">#36a6ff</color>
 
-    <color name="primary">#075E54</color>        <!-- WhatsApp dark teal -->
+    <color name="primary">#FF557C9B</color>        <!-- dark teal -->
     <color name="primaryLight">#B2DFDB</color>   <!-- Soft teal background -->
-    <color name="primaryDark">#004D40</color>    <!-- Deeper teal for contrast -->
+    <color name="primaryDark">#FF314C77</color>    <!-- Deeper teal for contrast -->
 
     <color name="blue_grey_dark">#455a64</color>
     <color name="blue_grey_light">#b0bec5</color>
@@ -26,6 +26,7 @@
     <color name="red_dark">#ff453a</color>
     <color name="red_light">#ff3b30</color>
     <color name="error">#F27474</color>
+    <color name="error_light">#FFEDED</color>
 
     <color name="grey_darkest">#2c2c2e</color>
     <color name="grey_darker">#3a3a3c</color>
@@ -48,10 +49,15 @@
     <color name="background_light">#FFF4FCFF</color>
     <color name="background_dark">#2c2c2e</color>
 
-    <color name="circle_background_light">#CCE8FF</color> <!-- soft sky blue -->
-    <color name="circle_background_dark">#3D80F9</color> <!-- vibrant but not harsh blue -->
+    <color name="circle_background_light">#FFCCE8FF</color> <!-- soft sky blue -->
+    <color name="circle_background_dark">#FF3D80F9</color> <!-- vibrant but not harsh blue -->
 
-    <color name="charcoal">#333333</color>
+    <color name="charcoal">#FF333333</color>
+
+    <color name="colorSelectedMessageLight">#FF557C9B</color>
+    <color name="colorSelectedMessageDark">#FF314C77</color>
+    <color name="colorSelectedMessageOverlayLight">#26557C9B</color> <!-- ~15% opacity -->
+    <color name="colorSelectedMessageOverlayDark">#26314C77</color> <!-- ~15% opacity -->
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#48484a</color>
 </resources>

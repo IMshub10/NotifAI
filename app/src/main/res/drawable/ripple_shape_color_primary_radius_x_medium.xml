@@ -12,7 +12,7 @@
     <!-- Button background (changes based on enabled state) -->
     <item android:id="@android:id/background">
         <shape android:shape="oval">
-            <solid android:color="@color/button_selector_background_primary_dark" />
+            <solid android:color="?colorSmsSelected" />
         </shape>
     </item>
 </ripple>

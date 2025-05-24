@@ -2,6 +2,7 @@ package com.summer.notifai.ui.inbox.smsMessages
 
 import android.app.Activity
 import android.app.role.RoleManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -97,6 +98,13 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
                 promptToSetDefaultSmsApp()
             }
         }
+        mBinding.ivFragSmsInboxClose.setOnClickListener {
+            smsInboxViewModel.clearMessageSelection()
+        }
+        mBinding.btFragSmsInboxCopy.setOnClickListener {
+            copySelectedMessagesToClipboard(requireContext())
+            smsInboxViewModel.clearMessageSelection()
+        }
     }
 
     private fun promptToSetDefaultSmsApp() {
@@ -126,7 +134,15 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
         mBinding.rvSmsMessages.layoutManager = layoutManager
 
-        _smsInboxAdapter = SmsInboxAdapter(smsInboxViewModel.highlightedMessageId) {}
+        _smsInboxAdapter = SmsInboxAdapter(
+            smsInboxViewModel.highlightedMessageId, {
+                if (smsInboxViewModel.selectedMessages.value.isNotEmpty()) {
+                    smsInboxViewModel.toggleMessageSelection(it.data.id)
+                }
+            }, {
+                smsInboxViewModel.toggleMessageSelection(it.data.id)
+            }
+        )
         mBinding.rvSmsMessages.adapter = smsInboxAdapter
 
         mBinding.rvSmsMessages.alpha = 0f
@@ -158,7 +174,8 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                smsInboxViewModel.isRecyclerViewScrolling.value = recyclerView.scrollState != RecyclerView.SCROLL_STATE_IDLE
+                smsInboxViewModel.isRecyclerViewScrolling.value =
+                    recyclerView.scrollState != RecyclerView.SCROLL_STATE_IDLE
             }
         })
     }
@@ -231,6 +248,17 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
                 }
             }
         }
+    }
+
+    fun copySelectedMessagesToClipboard(context: Context) {
+        val messages = smsInboxViewModel.selectedMessages.value
+            .sortedBy { it.dateInEpoch } // Optional: keep chronological order
+            .joinToString(separator = "\n\n") { it.message } // Double line spacing
+
+        val clipboard =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+        val clip = android.content.ClipData.newPlainText("Selected Sms Messages", messages)
+        clipboard.setPrimaryClip(clip)
     }
 
     override fun onDestroyView() {

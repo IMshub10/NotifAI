@@ -11,7 +11,6 @@ import androidx.core.view.setPadding
 import com.summer.core.ui.BaseDialogFragment
 import com.summer.notifai.R
 import com.summer.notifai.databinding.DialogFragOptionalAgreementBinding
-import dagger.hilt.android.AndroidEntryPoint
 
 class OptionalAgreementDialogFrag(private val clickListener: ClickListener) :
     BaseDialogFragment<DialogFragOptionalAgreementBinding>() {

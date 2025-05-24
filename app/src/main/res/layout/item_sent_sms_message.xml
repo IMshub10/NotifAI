@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_x_medium"
-        android:layout_marginVertical="@dimen/spacing_tiny">
+        android:layout_marginVertical="@dimen/spacing_tiny"
+        app:isIncoming="@{false}"
+        app:selectedBackgroundTint="@{model.isSelected}">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_itemSmsMessage_date"
@@ -40,12 +42,14 @@
             android:layout_height="wrap_content"
             android:autoLink="all"
             android:background="@drawable/shape_color_surface_radius_x_medium"
-            android:backgroundTint="#075E54"
+            android:backgroundTint="@color/primary"
             android:linksClickable="true"
+            android:longClickable="false"
             android:padding="@dimen/spacing_x_small"
             android:text="@{model.message}"
             android:textColor="@color/white"
             android:textColorLink="@color/blue_link"
+            android:textIsSelectable="false"
             android:textSize="14sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"

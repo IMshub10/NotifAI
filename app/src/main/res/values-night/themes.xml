@@ -57,6 +57,8 @@
         <item name="android:navigationIcon">@drawable/ic_navigation_back_light</item>
 
         <item name="colorChatBox">@color/grey_darker</item>
+        <item name="colorSmsSelected">@color/colorSelectedMessageDark</item>
+        <item name="colorSelectedMessageOverlay">@color/colorSelectedMessageOverlayDark</item>
     </style>
     <!--Bottom Navigation View===================================================================-->
     <style name="BottomDark" parent="Widget.Design.BottomNavigationView">

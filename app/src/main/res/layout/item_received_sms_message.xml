@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_small"
-        android:layout_marginVertical="@dimen/spacing_tiny">
+        android:layout_marginVertical="@dimen/spacing_tiny"
+        app:isIncoming="@{true}"
+        app:selectedBackgroundTint="@{model.isSelected}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_itemSmsMessage_container"
@@ -36,8 +38,10 @@
                 android:layout_height="wrap_content"
                 android:autoLink="all"
                 android:linksClickable="true"
+                android:longClickable="false"
                 android:text="@{model.message}"
                 android:textColorLink="@color/blue_link"
+                android:textIsSelectable="false"
                 android:textSize="14sp"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Lorem ipsum" />

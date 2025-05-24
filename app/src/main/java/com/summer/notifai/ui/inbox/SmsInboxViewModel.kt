@@ -6,6 +6,7 @@ import android.os.Looper
 import android.telephony.SmsManager
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -19,15 +20,22 @@ import com.summer.core.domain.usecase.GetContactInfoInboxModelUseCase
 import com.summer.core.domain.usecase.MarkSmsAsReadForSenderUseCase
 import com.summer.core.domain.usecase.SendSmsUseCase
 import com.summer.core.ui.model.SmsImportanceType
+import com.summer.notifai.ui.datamodel.SmsInboxListItem
+import com.summer.notifai.ui.datamodel.SmsMessageDataModel
 import com.summer.notifai.ui.inbox.smsMessages.SmsMessageLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -62,15 +70,41 @@ class SmsInboxViewModel @Inject constructor(
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
     val contactInfoModel: LiveData<ContactInfoInboxModel?> = _contactInfoModel
 
-    val isSendSectionVisible: LiveData<Boolean> = contactInfoModel.map { model ->
-        model?.senderType == SenderType.CONTACT
+    private val _messageLoader = MutableStateFlow<SmsMessageLoader?>(null)
+    val messageLoader: StateFlow<SmsMessageLoader?> get() = _messageLoader.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val selectedMessages: StateFlow<List<SmsMessageDataModel>> =
+        combine(
+            _messageLoader,
+            _messageLoader.flatMapLatest { it?.selectedMessageIds ?: MutableStateFlow(emptySet()) },
+            _messageLoader.flatMapLatest { it?.messages ?: MutableStateFlow(emptyList()) }
+        ) { _, selectedIds, items ->
+            items.filterIsInstance<SmsInboxListItem.Message>()
+                .map { it.data }
+                .filter { selectedIds.contains(it.id) }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    val messageSelectedCount: LiveData<Int> = selectedMessages
+        .map { it.size }
+        .asLiveData()
+
+    val isSelectedSectionVisible: LiveData<Boolean> = selectedMessages
+        .map { it.isNotEmpty() }
+        .asLiveData()
+
+    val isSendSectionVisible = MediatorLiveData<Boolean>().apply {
+        fun update() {
+            val contactVisible = contactInfoModel.value?.senderType == SenderType.CONTACT
+            val hasSelection = selectedMessages.value.isNotEmpty()
+            value = contactVisible && !hasSelection
+        }
+        addSource(contactInfoModel) { update() }
+        addSource(selectedMessages.asLiveData()) { update() }
     }
 
     private val _highlightedMessageId = MutableStateFlow<Long?>(null)
     val highlightedMessageId: StateFlow<Long?> = _highlightedMessageId
-
-    private val _messageLoader = MutableStateFlow<SmsMessageLoader?>(null)
-    val messageLoader: StateFlow<SmsMessageLoader?> get() = _messageLoader.asStateFlow()
 
     fun flashMessage(id: Long, resetCallback: () -> Unit) {
         _highlightedMessageId.value = id
@@ -106,6 +140,14 @@ class SmsInboxViewModel @Inject constructor(
         )
         _messageLoader.value = loader
         viewModelScope.launch { loader.reinitialize(smsImportanceType, targetSmsId) }
+    }
+
+    fun toggleMessageSelection(messageId: Long) {
+        _messageLoader.value?.toggleMessageSelection(messageId)
+    }
+
+    fun clearMessageSelection() {
+        _messageLoader.value?.clearAllSelections()
     }
 
     fun sendSms(context: Context, body: String?) {

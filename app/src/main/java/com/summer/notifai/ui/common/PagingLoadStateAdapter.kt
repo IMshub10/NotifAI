@@ -11,9 +11,13 @@ class PagingLoadStateAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<PagingLoadStateAdapter.LoadStateViewHolder>() {
 
+    private var inflater: LayoutInflater? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemLoadStateBinding.inflate(inflater, parent, false)
+        if (inflater == null) {
+            inflater = LayoutInflater.from(parent.context)
+        }
+        val binding = ItemLoadStateBinding.inflate(inflater!!, parent, false)
         return LoadStateViewHolder(binding, retry)
     }
 
