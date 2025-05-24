@@ -16,6 +16,7 @@ import com.summer.core.android.sms.constants.Constants
 import com.summer.core.android.sms.constants.Constants.SMS_LIST_PAGE_SIZE
 import com.summer.core.data.local.entities.SenderType
 import com.summer.core.data.local.model.ContactInfoInboxModel
+import com.summer.core.domain.usecase.DeleteSmsByIdsUseCase
 import com.summer.core.domain.usecase.GetContactInfoInboxModelUseCase
 import com.summer.core.domain.usecase.MarkSmsAsReadForSenderUseCase
 import com.summer.core.domain.usecase.SendSmsUseCase
@@ -45,6 +46,7 @@ class SmsInboxViewModel @Inject constructor(
     private val sendSmsUseCase: SendSmsUseCase,
     private val getContactInfoInboxModelUseCase: GetContactInfoInboxModelUseCase,
     private val markSmsAsReadForSenderUseCase: MarkSmsAsReadForSenderUseCase,
+    private val deleteSmsByIdsUseCase: DeleteSmsByIdsUseCase,
     private val smsMessageLoaderFactory: SmsMessageLoader.Factory
 ) : ViewModel() {
 
@@ -63,9 +65,10 @@ class SmsInboxViewModel @Inject constructor(
     val isAtBottom = MutableStateFlow(true)
     val isRecyclerViewScrolling = MutableStateFlow(false)
 
-    val isScrollDownButtonVisible = combine(isAtBottom, isRecyclerViewScrolling) { atBottom, scrolling ->
-        scrolling && !atBottom
-    }.asLiveData()
+    val isScrollDownButtonVisible =
+        combine(isAtBottom, isRecyclerViewScrolling) { atBottom, scrolling ->
+            scrolling && !atBottom
+        }.asLiveData()
 
     private val _contactInfoModel = MutableLiveData<ContactInfoInboxModel?>(null)
     val contactInfoModel: LiveData<ContactInfoInboxModel?> = _contactInfoModel
@@ -179,6 +182,24 @@ class SmsInboxViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 callback(smsIds)
             }
+        }
+    }
+
+    fun deleteSelectedMessages(context: Context, onCallback: () -> Unit) {
+        viewModelScope.launch {
+            val toBeDeletedMessages = selectedMessages.value
+            val smsIds = mutableListOf<Long>()
+            val androidSmsIds = mutableListOf<Long>()
+
+            toBeDeletedMessages.forEach {
+                smsIds.add(it.id)
+                it.androidSmsId?.let { androidSmsId ->
+                    androidSmsIds.add(androidSmsId)
+                }
+            }
+            deleteSmsByIdsUseCase.invoke(context, smsIds, androidSmsIds)
+            _messageLoader.value?.reinitialize(smsImportanceType, targetSmsId)
+            onCallback()
         }
     }
 }

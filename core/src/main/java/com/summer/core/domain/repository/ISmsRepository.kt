@@ -38,4 +38,10 @@ interface ISmsRepository {
     suspend fun searchMessages(query: String): SearchSectionResult<SearchSmsMessageQueryModel>
 
     fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel>
+
+    suspend fun deleteSmsListFromDeviceAndLocal(
+        context: Context,
+        smsIds: List<Long>,
+        androidSmsIds: List<Long>
+    ): Int
 }

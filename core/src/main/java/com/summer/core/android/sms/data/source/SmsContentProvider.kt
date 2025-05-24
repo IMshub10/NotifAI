@@ -129,4 +129,21 @@ class SmsContentProvider @Inject constructor(
             if (it.moveToFirst()) it.getInt(it.getColumnIndexOrThrow(SMSColumnNames.COLUMN_ID)) else null
         }
     }
+
+    /**
+     * Deletes a list of SMS messages from the Android SMS content provider using their `_id`s.
+     *
+     * @param androidSmsIds List of Android SMS _id values.
+     * @return Number of successfully deleted rows.
+     */
+    override suspend fun deleteSmsByAndroidIds(androidSmsIds: List<Int>): Int {
+        if (androidSmsIds.isEmpty()) return 0
+
+        val selection = "${Telephony.Sms._ID} IN (${androidSmsIds.joinToString(",")})"
+        return contentResolver.delete(
+            Telephony.Sms.CONTENT_URI,
+            selection,
+            null
+        )
+    }
 }

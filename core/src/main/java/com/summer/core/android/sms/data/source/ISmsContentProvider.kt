@@ -15,4 +15,6 @@ interface ISmsContentProvider {
     ): Cursor?
 
     suspend fun getFirstAndroidSmsId(): Int?
+
+    suspend fun deleteSmsByAndroidIds(androidSmsIds: List<Int>): Int
 }

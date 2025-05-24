@@ -12,6 +12,7 @@ object SmsMessageMapper {
     fun SmsMessageModel.toSmsMessageDataModel(): SmsMessageDataModel {
         return SmsMessageDataModel(
             id = id,
+            androidSmsId = androidSmsId,
             message = body.orEmpty(),
             dateInEpoch = date,
             date = DateUtils.formatTimeOnly(date),

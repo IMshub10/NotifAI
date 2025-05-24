@@ -171,16 +171,20 @@ interface SmsDao {
     @Query("SELECT * FROM sms_messages WHERE android_sms_id IS NOT NULL ORDER BY android_sms_id ASC LIMIT 1")
     suspend fun getFirstInsertedSmsMessageByAndroidSmsId(): SmsEntity?
 
-    @Query("""
+    @Query(
+        """
         SELECT id, date FROM sms_messages
         WHERE id = :smsId
         LIMIT 1
-    """)
+    """
+    )
     suspend fun getDateAndId(smsId: Long): SmsPagingKey?
 
-    @Query("""
+    @Query(
+        """
         SELECT 
             sms.id AS id,
+            sms.android_sms_id AS android_sms_id,
             sms.body AS body,
             sms.date AS date,
             sms.type AS type,
@@ -196,7 +200,8 @@ interface SmsDao {
           AND (sms.date < :date OR (sms.date = :date AND sms.id <= :id))
         ORDER BY sms.date DESC, sms.id DESC
         LIMIT :limit
-    """)
+    """
+    )
     suspend fun getMessagesBefore(
         senderAddressId: Long,
         date: Long,
@@ -205,9 +210,11 @@ interface SmsDao {
         limit: Int
     ): List<SmsMessageModel>
 
-    @Query("""
+    @Query(
+        """
         SELECT 
             sms.id AS id,
+            sms.android_sms_id AS android_sms_id,
             sms.body AS body,
             sms.date AS date,
             sms.type AS type,
@@ -223,7 +230,8 @@ interface SmsDao {
           AND (sms.date > :date OR (sms.date = :date AND sms.id > :id))
         ORDER BY sms.date ASC, sms.id ASC
         LIMIT :limit
-    """)
+    """
+    )
     suspend fun getMessagesAfter(
         senderAddressId: Long,
         date: Long,
@@ -237,4 +245,8 @@ interface SmsDao {
 
     @Query("SELECT MIN(date) FROM sms_messages WHERE sender_address_id = :senderId")
     fun observeMinDateBySenderId(senderId: Long): Flow<Long?>
+
+    @Query("DELETE FROM sms_messages WHERE id IN (:ids)")
+    suspend fun deleteSmsMessagesByIds(ids: List<Long>)
+
 }

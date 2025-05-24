@@ -67,4 +67,9 @@
     <string name="back">Back</string>
     <string name="view_contacts">View Contacts</string>
     <string name="search_here">Search here</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete">Delete</string>
+    <string name="once_deleted_messages_can_t_be_restored">Once deleted messages can\'t be restored</string>
+    <string name="syncing">Syncing</string>
 </resources>

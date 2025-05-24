@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo
 data class SmsMessageModel(
     @ColumnInfo(name = "id")
     val id: Long,
+    @ColumnInfo(name = "android_sms_id")
+    val androidSmsId: Long?,
     @ColumnInfo(name = "body")
     val body: String?,
     @ColumnInfo(name = "date")

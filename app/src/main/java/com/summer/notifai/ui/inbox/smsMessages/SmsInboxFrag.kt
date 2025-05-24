@@ -1,6 +1,7 @@
 package com.summer.notifai.ui.inbox.smsMessages
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.app.role.RoleManager
 import android.content.Context
 import android.content.Intent
@@ -48,6 +49,13 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
 
     private val scrollHandler = Handler(Looper.getMainLooper())
     private var scrollHideRunnable: Runnable? = null
+
+    private val progressDialog by lazy {
+        ProgressDialog(requireContext()).apply {
+            setCancelable(false)
+            setTitle(getString(R.string.syncing))
+        }
+    }
 
     @Inject
     lateinit var permissionManager: IPermissionManager
@@ -105,6 +113,40 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
             copySelectedMessagesToClipboard(requireContext())
             smsInboxViewModel.clearMessageSelection()
         }
+        mBinding.btFragSmsInboxDelete.setOnClickListener {
+            showYesNoDialog(
+                requireContext(),
+                getString(R.string.delete),
+                getString(R.string.once_deleted_messages_can_t_be_restored),
+                {
+                    progressDialog.show()
+                    smsInboxViewModel.deleteSelectedMessages(requireContext()) {
+                        progressDialog.dismiss()
+                    }
+                },
+                {})
+        }
+    }
+
+    private fun showYesNoDialog(
+        context: Context,
+        title: String,
+        message: String,
+        onYes: () -> Unit,
+        onNo: () -> Unit = {}
+    ) {
+        androidx.appcompat.app.AlertDialog.Builder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+                dialog.dismiss()
+                onYes()
+            }
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                dialog.dismiss()
+                onNo()
+            }
+            .show()
     }
 
     private fun promptToSetDefaultSmsApp() {

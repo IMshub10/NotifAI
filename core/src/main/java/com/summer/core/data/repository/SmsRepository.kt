@@ -12,6 +12,8 @@ import com.summer.core.android.sms.constants.Constants.SEARCH_SECTION_MAX_COUNT
 import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.data.mapper.SmsMapper
 import com.summer.core.android.sms.data.model.SmsInfoModel
+import com.summer.core.android.sms.data.source.ISmsContentProvider
+import com.summer.core.android.sms.data.source.SmsContentProvider
 import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.android.sms.util.SmsStatus
 import com.summer.core.data.local.dao.SmsDao
@@ -35,7 +37,8 @@ class SmsRepository @Inject constructor(
     private val smsDao: SmsDao,
     private val smsBatchProcessor: SmsBatchProcessor,
     private val sharedPreferencesManager: SharedPreferencesManager,
-    private val deviceTierEvaluator: DeviceTierEvaluator
+    private val deviceTierEvaluator: DeviceTierEvaluator,
+    private val smsContentProvider: ISmsContentProvider
 ) : ISmsRepository {
 
     override suspend fun fetchSmsMessagesFromDevice(): Flow<FetchResult> {
@@ -217,5 +220,35 @@ class SmsRepository @Inject constructor(
 
     override fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel> {
         return smsDao.getSearchMessagesPagingSource(query)
+    }
+
+    override suspend fun deleteSmsListFromDeviceAndLocal(
+        context: Context,
+        smsIds: List<Long>,
+        androidSmsIds: List<Long>
+    ): Int {
+        if (smsIds.isEmpty()) return 0
+
+        var deletedFromProvider = 0
+
+        // Delete from Content Provider (system SMS)
+        if (androidSmsIds.isNotEmpty()) {
+            try {
+                val whereClause = "${Telephony.Sms._ID} IN (${androidSmsIds.joinToString(",")})"
+                deletedFromProvider = context.contentResolver.delete(
+                    Telephony.Sms.CONTENT_URI,
+                    whereClause,
+                    null
+                )
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+                Log.e("SmsRepository", "Failed to delete from content provider", e)
+            }
+        }
+
+        // Delete from Room database
+        smsDao.deleteSmsMessagesByIds(smsIds)
+
+        return deletedFromProvider
     }
 }
