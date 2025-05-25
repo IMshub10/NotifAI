@@ -136,10 +136,14 @@ interface SmsDao {
         ON sender.sender_type = 'CONTACT'
         AND c.phone_number = sender.sender_address
     WHERE lower(sms.body) LIKE '%' || :query || '%'
+      AND (:senderAddressId = 0 OR sms.sender_address_id = :senderAddressId)
     ORDER BY sms.date DESC
     """
     )
-    fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel>
+    fun getSearchMessagesPagingSource(
+        query: String,
+        senderAddressId: Long
+    ): PagingSource<Int, SearchSmsMessageQueryModel>
 
     @Query(
         """

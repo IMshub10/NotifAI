@@ -52,7 +52,7 @@ class SmsContactListFrag : BaseFragment<FragSmsContactListBinding>() {
         }
         mBinding.ivFragContactListSearch.setOnClickListener {
             if (findNavController().currentDestination?.id == R.id.smsContactListFrag)
-                startActivity(Intent(requireContext(), SearchActivity::class.java))
+                startActivity(SearchActivity.onNewInstance(requireContext()))
         }
     }
 

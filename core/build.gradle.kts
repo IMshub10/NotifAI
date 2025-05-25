@@ -76,6 +76,6 @@ dependencies {
     // Paging 3 core (you probably already have this)
     api(libs.androidx.paging.runtime)
 
-    debugImplementation(libs.leakcanary.android)
+    //debugImplementation(libs.leakcanary.android)
 
 }

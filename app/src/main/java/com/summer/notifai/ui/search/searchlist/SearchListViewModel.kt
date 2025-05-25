@@ -49,6 +49,8 @@ class SearchListViewModel @Inject constructor(
 
     private val _searchFilter = MutableStateFlow("")
 
+    private var senderAddressId = 0L
+
     @OptIn(FlowPreview::class)
     private val selectedQuery: StateFlow<String> = _searchFilter
         .debounce(300)
@@ -62,6 +64,11 @@ class SearchListViewModel @Inject constructor(
 
     init {
         observeSearch()
+    }
+
+    fun initializeSearchInput(senderAddressId: Long, searchFilter: String) {
+        this.senderAddressId = senderAddressId
+        _searchFilter.value = searchFilter.trim()
     }
 
     fun setSearchFilter(searchFilter: String) {
@@ -86,7 +93,12 @@ class SearchListViewModel @Inject constructor(
                             SearchSectionId.MESSAGES -> {
                                 Pager(
                                     config = PagingConfig(pageSize = SMS_LIST_PAGE_SIZE),
-                                    pagingSourceFactory = { searchMessagesUseCase(query.lowercase()) }
+                                    pagingSourceFactory = {
+                                        searchMessagesUseCase(
+                                            query.lowercase(),
+                                            senderAddressId
+                                        )
+                                    }
                                 ).flow.map {
                                     it.map { item -> GlobalSearchListItem.SmsItem(item.toSearchSmsMessageDataModel()) }
                                 }

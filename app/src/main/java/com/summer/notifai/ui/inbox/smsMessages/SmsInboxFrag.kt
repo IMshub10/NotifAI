@@ -33,6 +33,7 @@ import com.summer.notifai.R
 import com.summer.notifai.databinding.FragSmsInboxBinding
 import com.summer.notifai.ui.datamodel.SmsInboxListItem
 import com.summer.notifai.ui.inbox.SmsInboxViewModel
+import com.summer.notifai.ui.search.SearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -98,13 +99,21 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_search -> {
-                        //TODO
+                        startActivity(
+                            SearchActivity.onNewInstance(
+                                context = requireContext(),
+                                isGlobalSearch = false,
+                                senderAddressId = smsInboxViewModel.senderAddressId
+                            )
+                        )
                         true
                     }
+
                     R.id.action_block -> {
 
                         true
                     }
+
                     else -> false
                 }
             }

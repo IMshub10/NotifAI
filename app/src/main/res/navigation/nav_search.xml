@@ -22,10 +22,17 @@
 
         <argument
             android:name="query"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="" />
 
         <argument
             android:name="searchType"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="1" />
+
+        <argument
+            android:name="senderAddressId"
+            app:argType="string"
+            android:defaultValue="0" />
     </fragment>
 </navigation>

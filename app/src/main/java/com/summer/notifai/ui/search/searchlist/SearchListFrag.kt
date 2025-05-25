@@ -37,8 +37,14 @@ class SearchListFrag : BaseFragment<FragSearchListBinding>() {
     private val args: SearchListFragArgs by navArgs()
 
     private val searchQuery: String by lazy { args.query }
+
     private val searchType: SearchSectionId by lazy {
-        SearchSectionId.valueOf(args.searchType)
+        args.searchType.toIntOrNull()?.let { SearchSectionId.fromId(it) }
+            ?: SearchSectionId.MESSAGES
+    }
+
+    private val senderAddressId: Long by lazy {
+        args.senderAddressId.toLongOrNull() ?: 0L
     }
 
     private lateinit var backPressedCallback: OnBackPressedCallback
@@ -47,7 +53,7 @@ class SearchListFrag : BaseFragment<FragSearchListBinding>() {
 
     override fun onFragmentReady(instanceState: Bundle?) {
         viewModel.setSearchType(searchType)
-        viewModel.setSearchFilter(searchQuery)
+        viewModel.initializeSearchInput(senderAddressId, searchQuery)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +70,10 @@ class SearchListFrag : BaseFragment<FragSearchListBinding>() {
         }
         backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().popBackStack()
+                if (senderAddressId == 0L)
+                    requireActivity().finish()
+                else
+                    findNavController().popBackStack()
             }
         }
         mBinding.ivFragSearchListBack.setOnClickListener {

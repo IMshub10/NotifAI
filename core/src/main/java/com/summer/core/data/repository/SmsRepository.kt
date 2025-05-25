@@ -218,8 +218,11 @@ class SmsRepository @Inject constructor(
         )
     }
 
-    override fun getSearchMessagesPagingSource(query: String): PagingSource<Int, SearchSmsMessageQueryModel> {
-        return smsDao.getSearchMessagesPagingSource(query)
+    override fun getSearchMessagesPagingSource(
+        query: String,
+        senderAddressId: Long
+    ): PagingSource<Int, SearchSmsMessageQueryModel> {
+        return smsDao.getSearchMessagesPagingSource(query, senderAddressId)
     }
 
     override suspend fun deleteSmsListFromDeviceAndLocal(

@@ -92,7 +92,8 @@ class GlobalSearchFrag : BaseFragment<FragGlobalSearchBinding>() {
                 val action =
                     GlobalSearchFragDirections.actionGlobalSearchFragToSearchListFrag(
                         query = viewModel.searchFilter.value.orEmpty(),
-                        searchType = item.id.toString()
+                        searchType = item.id.id.toString(),
+                        senderAddressId = "0"
                     )
                 (requireActivity()
                     .supportFragmentManager

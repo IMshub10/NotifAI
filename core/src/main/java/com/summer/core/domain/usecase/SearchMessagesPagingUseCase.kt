@@ -6,7 +6,10 @@ import com.summer.core.domain.repository.ISmsRepository
 import javax.inject.Inject
 
 class SearchMessagesPagingUseCase @Inject constructor(private val repository: ISmsRepository) {
-     operator fun invoke(query: String): PagingSource<Int, SearchSmsMessageQueryModel> {
-        return repository.getSearchMessagesPagingSource(query)
+    operator fun invoke(
+        query: String,
+        senderAddressId: Long
+    ): PagingSource<Int, SearchSmsMessageQueryModel> {
+        return repository.getSearchMessagesPagingSource(query, senderAddressId)
     }
 }

@@ -31,7 +31,7 @@ data class SmsEntity(
     @ColumnInfo(name = "android_sms_id")  // Unique SMS ID from the system
     val androidSmsId: Int?,
 
-    @ColumnInfo(name = "sender_address_id")  // Row updated-at, in epoch
+    @ColumnInfo(name = "sender_address_id")  // sender's id
     val senderAddressId: Long,
 
     @ColumnInfo(name = "raw_address")  // Sender/Receiver Number
