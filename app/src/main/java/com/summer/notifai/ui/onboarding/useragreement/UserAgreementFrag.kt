@@ -31,6 +31,7 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
         with(mBinding) {
             fragUserAgreementActionButton.setOnClickListener {
                 if (fragUserAgreementActionButton.text == getString(R.string.agree_to_use)) {
+                    onboardingViewModel.onOptionalDataSharingDisabled()
                     if (findNavController().currentDestination?.id == R.id.userAgreementFrag)
                         findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
                 } else {

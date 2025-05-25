@@ -44,15 +44,15 @@ class SmsInserter @Inject constructor(
     suspend fun processIncomingSms(context: Context, intent: Intent): SmsEntity? {
         val smsEnt = SmsUtils.extractSmsFromIntent(intent)
         val defaultCountryCode = countryCodeProvider.getMyCountryCode()
-        val dontShareSmsData =
-            preferencesManager.getDataBoolean(PreferenceKey.DONT_SHARE_SMS_DATA, false)
+        val saveDataInPublicDb =
+            preferencesManager.getDataBoolean(PreferenceKey.SAVE_DATA_IN_PUBLIC_DB, true)
 
         var smsEntity: SmsEntity? = null
 
         smsEnt?.let { sms ->
             val threadId = sms.address?.let { SmsUtils.getOrCreateThreadId(context, it) }
 
-            val insertedId = if (!dontShareSmsData) {
+            val insertedId = if (saveDataInPublicDb) {
                 repository.insertSms(context, sms, threadId)
             } else {
                 null

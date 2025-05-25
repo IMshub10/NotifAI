@@ -88,4 +88,6 @@
     <string name="manage_important_sms_classification">Manage Sms Classification importance</string>
     <string name="choose_which_types_of_sms_should_appear_in_the_important_or_other_tabs">Choose which types of SMS should appear in the Important or Other tabs.</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="store_messages_in_system_sms_inbox">Store messages in system SMS inbox</string>
+    <string name="when_enabled_messages_will_also_be_saved_to_android_s_sms_storage_when_disabled_messages_remain_private_within_notifai">When enabled, messages will also be saved to Android\'s SMS storage. When disabled, messages remain private within NotifAI.</string>
 </resources>

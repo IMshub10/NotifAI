@@ -13,7 +13,6 @@ import com.summer.core.android.sms.constants.SMSColumnNames
 import com.summer.core.android.sms.data.mapper.SmsMapper
 import com.summer.core.android.sms.data.model.SmsInfoModel
 import com.summer.core.android.sms.data.source.ISmsContentProvider
-import com.summer.core.android.sms.data.source.SmsContentProvider
 import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.android.sms.util.SmsStatus
 import com.summer.core.data.local.dao.SmsDao
@@ -38,8 +37,7 @@ class SmsRepository @Inject constructor(
     private val smsDao: SmsDao,
     private val smsBatchProcessor: SmsBatchProcessor,
     private val sharedPreferencesManager: SharedPreferencesManager,
-    private val deviceTierEvaluator: DeviceTierEvaluator,
-    private val smsContentProvider: ISmsContentProvider
+    private val deviceTierEvaluator: DeviceTierEvaluator
 ) : ISmsRepository {
 
     override suspend fun fetchSmsMessagesFromDevice(): Flow<FetchResult> {
@@ -84,19 +82,25 @@ class SmsRepository @Inject constructor(
         senderAddressId: Long
     ): List<Long> {
         val smsIds = smsDao.getUnreadAndroidSmsIdsBySenderAddressId(senderAddressId)
-        if (smsIds.isNotEmpty()) {
-            try {
+
+        // Always update in Room (internal DB)
+        smsDao.markSmsAsReadBySenderAddressId(senderAddressId)
+
+        if (smsIds.isEmpty()) return emptyList()
+
+        try {
+            val shouldUpdateSystem = sharedPreferencesManager.getDataBoolean(
+                PreferenceKey.SAVE_DATA_IN_PUBLIC_DB,
+                true
+            )
+
+            if (shouldUpdateSystem) {
                 val values = ContentValues().apply {
                     put(Telephony.Sms.READ, 1)
                 }
 
-                // Create WHERE clause: "_id IN (?, ?, ?, ...)"
-                val whereClause = buildString {
-                    append("${SMSColumnNames.COLUMN_ID} IN (")
-                    append(smsIds.joinToString(",") { "?" })
-                    append(")")
-                }
-
+                val placeholders = smsIds.joinToString(",") { "?" }
+                val whereClause = "${SMSColumnNames.COLUMN_ID} IN ($placeholders)"
                 val whereArgs = smsIds.map { it.toString() }.toTypedArray()
 
                 context.contentResolver.update(
@@ -105,13 +109,13 @@ class SmsRepository @Inject constructor(
                     whereClause,
                     whereArgs
                 )
-                //mark in room as read
-                smsDao.markSmsAsReadBySenderAddressId(senderAddressId)
-            } catch (e: Exception) {
-                FirebaseCrashlytics.getInstance().recordException(e)
-                Log.e("SmsUtils", "Failed to mark SMS list as read", e)
             }
+
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Log.e("SmsRepository", "Failed to mark SMS as read in system provider", e)
         }
+
         return smsIds
     }
 
@@ -125,22 +129,31 @@ class SmsRepository @Inject constructor(
 
             // Already inserted → skip system insert
             if (smsEntity.androidSmsId != null) {
-                // Still update status as SENT
                 smsDao.updateSmsStatusById(smsId, status.code, System.currentTimeMillis())
                 return smsEntity.androidSmsId.toLong()
             }
 
-            val values = SmsMapper.smsEntityToContentValuesForSent(smsEntity)
+            //  Check user setting before inserting into system SMS provider
+            val shouldInsertInSystem = sharedPreferencesManager.getDataBoolean(
+                PreferenceKey.SAVE_DATA_IN_PUBLIC_DB,
+                true
+            )
 
-            val uri = context.contentResolver.insert(Telephony.Sms.Sent.CONTENT_URI, values)
-            val androidSmsId = uri?.lastPathSegment?.toLongOrNull()
+            var androidSmsId: Long? = null
 
-            if (androidSmsId != null) {
-                smsDao.updateAndroidSmsId(smsEntity.id, androidSmsId.toInt())
-                smsDao.updateSmsStatusById(smsEntity.id, status.code, System.currentTimeMillis())
+            if (shouldInsertInSystem) {
+                val values = SmsMapper.smsEntityToContentValuesForSent(smsEntity)
+                val uri = context.contentResolver.insert(Telephony.Sms.Sent.CONTENT_URI, values)
+                androidSmsId = uri?.lastPathSegment?.toLongOrNull()
+
+                if (androidSmsId != null) {
+                    smsDao.updateAndroidSmsId(smsEntity.id, androidSmsId.toInt())
+                }
             }
 
+            smsDao.updateSmsStatusById(smsEntity.id, status.code, System.currentTimeMillis())
             androidSmsId
+
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
             Log.e("SmsRepository", "Failed to insert sent SMS into system provider", e)
@@ -154,10 +167,24 @@ class SmsRepository @Inject constructor(
         status: SmsStatus
     ): Boolean {
         return try {
-            val androidSmsId = smsDao.getAndroidSmsIdById(smsId)
+            val smsEntity = smsDao.getSmsEntityById(smsId) ?: return false
+
+            // Always update Room
+            smsDao.updateSmsStatusById(smsId, status.code, System.currentTimeMillis())
+
+            val shouldInsertInSystem = sharedPreferencesManager.getDataBoolean(
+                PreferenceKey.SAVE_DATA_IN_PUBLIC_DB,
+                true // default is to insert in public DB unless toggled off
+            )
+
+            val androidSmsId = smsEntity.androidSmsId
+
+            if (!shouldInsertInSystem) {
+                return true // User prefers local-only storage; Room is already updated
+            }
 
             if (androidSmsId != null) {
-                // Case 1: Already inserted in system provider → just update status
+                // Already in system SMS DB → update status only
                 val values = ContentValues().apply {
                     put(Telephony.Sms.STATUS, status.code)
                 }
@@ -168,25 +195,15 @@ class SmsRepository @Inject constructor(
                     "${Telephony.Sms._ID} = ?",
                     arrayOf(androidSmsId.toString())
                 )
-
-                smsDao.updateSmsStatusById(smsId, status.code, System.currentTimeMillis())
                 return updatedRows > 0
             } else {
-                // Case 2: Not inserted yet → insert, update androidSmsId + status
-
-                val smsEntity = smsDao.getSmsEntityById(smsId) ?: return false
+                // Not in system yet → insert + map ID
                 val values = SmsMapper.smsEntityToContentValuesForSent(smsEntity)
-
                 val uri = context.contentResolver.insert(Telephony.Sms.Sent.CONTENT_URI, values)
-                val insertedAndroidSmsId = uri?.lastPathSegment?.toLongOrNull()
+                val insertedId = uri?.lastPathSegment?.toLongOrNull()
 
-                if (insertedAndroidSmsId != null) {
-                    smsDao.updateAndroidSmsId(smsEntity.id, insertedAndroidSmsId.toInt())
-                    smsDao.updateSmsStatusById(
-                        smsEntity.id,
-                        status.code,
-                        System.currentTimeMillis()
-                    )
+                if (insertedId != null) {
+                    smsDao.updateAndroidSmsId(smsEntity.id, insertedId.toInt())
                     return true
                 }
             }

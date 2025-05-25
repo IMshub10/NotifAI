@@ -86,6 +86,54 @@
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@+id/tv_fragSettings_itemBlockList" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ll_fragSettings_itemStoreInAndroidSystem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:padding="@dimen/spacing_small"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_fragSettings_itemSmsCategories">
+
+                    <!-- Title -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_fragSettings_title_storeInSystem"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/store_messages_in_system_sms_inbox"
+                        android:textColor="?label"
+                        android:textSize="16sp"
+                        style="@style/text_body_bold"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_fragSettings_desc_storeInSystem"
+                        app:layout_constraintEnd_toStartOf="@id/switch_fragSettings_storeInSystem"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_goneMarginBottom="@dimen/spacing_small" />
+
+                    <!-- Description -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_fragSettings_desc_storeInSystem"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        style="@style/text_body"
+                        android:text="@string/when_enabled_messages_will_also_be_saved_to_android_s_sms_storage_when_disabled_messages_remain_private_within_notifai"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/switch_fragSettings_storeInSystem"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_fragSettings_title_storeInSystem" />
+
+                    <!-- Switch -->
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_fragSettings_storeInSystem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_small"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_fragSettings_title_storeInSystem"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_fragSettings_title_storeInSystem" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_fragSettings_itemPrivacy"
                     style="@style/text_header"
@@ -99,7 +147,7 @@
                     android:text="@string/privacy_policy"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_fragSettings_itemSmsCategories" />
+                    app:layout_constraintTop_toBottomOf="@+id/ll_fragSettings_itemStoreInAndroidSystem" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

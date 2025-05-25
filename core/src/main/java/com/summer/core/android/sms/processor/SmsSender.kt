@@ -22,8 +22,6 @@ object SmsSender {
      * @param body The SMS message body.
      */
     fun sendSms(context: Context, id: Long, address: String, body: String) {
-        val timestamp = System.currentTimeMillis()
-
         val parts = getMessageParts(body)
         val sentIntent = createSentIntent(context, id, address)
         val deliveredIntent = createDeliveredIntent(context, id, address)
