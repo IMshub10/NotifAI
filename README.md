@@ -19,7 +19,7 @@
 
 - LiveData & Kotlin Flow
 - Room Database
-- Paging (manual + Paging library)
+- Paging (Maual + Paging library)
 - Navigation Component
 - RecyclerView + ViewBinding
 - ViewModel + Repository Architecture
