@@ -47,6 +47,26 @@
 
 ---
 
+🧠 Message Importance Scoring
+
+Each SMS message is automatically assigned an importance score (1–5) based on its classification. This score is used to prioritize notifications and help users filter messages effectively.
+| Score | Category         | Examples                                                              |
+|-------|------------------|-----------------------------------------------------------------------|
+| **5** | 🔴 Critical       | OTPs, Banking Transactions, Emergency Alerts                         |
+| **4** | 🟠 Important      | Bill/Due Reminders, Reward Usage, Invoices                           |
+| **3** | 🟡 General Updates| Delivery Updates, Service Notifications, Telecom, Tax Notifications  |
+| **2** | 🟢 Less Important | Offers, Promotions, Social Awareness                                 |
+| **1** | ⚪ Least Important| Spam, Scam, Advertising                                              |
+
+These scores drive:
+	•	Notification importance levels
+	•	Auto-filtering in conversations
+	•	Category-wise message breakdowns
+
+Users can override scores via rules if needed.
+
+---
+
 ## 🔐 Privacy & Security
 
 - Messages are never uploaded or synced without **explicit user permission**
