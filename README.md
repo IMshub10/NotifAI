@@ -12,6 +12,7 @@
 - 🔔 Smart notifications based on category importance
 - 🧪 Rule-based overrides and user-customizable categories
 - 🛡️ Scam detection with manual reporting option
+- 🔐 Privacy-first toggle: Choose whether messages are stored in Android’s public SMS database or kept privately within the app
 
 ---
 
