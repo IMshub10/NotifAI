@@ -28,6 +28,10 @@ class SettingsFrag : BaseFragment<FragSettingsBinding>() {
             if (findNavController().currentDestination?.id == R.id.settingsFrag)
                 findNavController().navigate(SettingsFragDirections.actionSettingsFragToBlockListFrag())
         }
+        mBinding.tvFragSettingsItemSmsCategories.setOnClickListener {
+            if (findNavController().currentDestination?.id == R.id.settingsFrag)
+                findNavController().navigate(SettingsFragDirections.actionSettingsFragToSmsTypeSettingsFrag())
+        }
     }
 
     override fun onDestroyView() {

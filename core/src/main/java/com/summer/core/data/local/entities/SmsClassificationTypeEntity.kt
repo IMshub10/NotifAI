@@ -1,12 +1,14 @@
 package com.summer.core.data.local.entities
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.summer.core.data.local.entities.SmsClassificationTypeEntity.Companion.TABLE_NAME
 
+@Keep
 @Entity(tableName = TABLE_NAME)
-data class SmsClassificationTypeEntity(
+data class  SmsClassificationTypeEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,

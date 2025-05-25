@@ -72,7 +72,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_fragSettings_item"
+                    android:id="@+id/tv_fragSettings_itemSmsCategories"
                     style="@style/text_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

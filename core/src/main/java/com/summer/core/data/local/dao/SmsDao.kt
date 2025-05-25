@@ -256,4 +256,9 @@ interface SmsDao {
     @Query("DELETE FROM sms_messages WHERE id IN (:ids)")
     suspend fun deleteSmsMessagesByIds(ids: List<Long>)
 
+    @Query("SELECT * FROM sms_classification_types ORDER BY id ASC")
+    suspend fun getAllSmsClassificationTypes(): List<SmsClassificationTypeEntity>
+
+    @Query("UPDATE sms_classification_types SET is_important = :isImportant WHERE id = :id")
+    suspend fun updateSmsTypeImportance(id: Int, isImportant: Boolean)
 }

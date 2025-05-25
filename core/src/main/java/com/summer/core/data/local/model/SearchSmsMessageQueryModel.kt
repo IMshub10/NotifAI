@@ -1,7 +1,9 @@
 package com.summer.core.data.local.model
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 
+@Keep
 data class SearchSmsMessageQueryModel(
     @ColumnInfo(name = "id")
     val id: Long,

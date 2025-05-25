@@ -17,6 +17,7 @@ import com.summer.core.android.sms.data.source.SmsContentProvider
 import com.summer.core.android.sms.processor.SmsBatchProcessor
 import com.summer.core.android.sms.util.SmsStatus
 import com.summer.core.data.local.dao.SmsDao
+import com.summer.core.data.local.entities.SmsClassificationTypeEntity
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.data.local.model.SearchSmsMessageQueryModel
 import com.summer.core.data.local.model.SmsMessageModel
@@ -253,5 +254,13 @@ class SmsRepository @Inject constructor(
         smsDao.deleteSmsMessagesByIds(smsIds)
 
         return deletedFromProvider
+    }
+
+    override suspend fun getAllSmsClassificationTypes(): List<SmsClassificationTypeEntity> {
+        return smsDao.getAllSmsClassificationTypes()
+    }
+
+    override suspend fun updateSmsTypeImportance(id: Int, isImportant: Boolean) {
+        smsDao.updateSmsTypeImportance(id, isImportant)
     }
 }

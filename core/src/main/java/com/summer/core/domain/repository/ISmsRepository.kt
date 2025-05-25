@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.paging.PagingSource
 import com.summer.core.android.sms.data.model.SmsInfoModel
 import com.summer.core.android.sms.util.SmsStatus
+import com.summer.core.data.local.entities.SmsClassificationTypeEntity
 import com.summer.core.data.local.entities.SmsEntity
 import com.summer.core.data.local.model.SearchSmsMessageQueryModel
 import com.summer.core.domain.model.FetchResult
@@ -47,4 +48,8 @@ interface ISmsRepository {
         smsIds: List<Long>,
         androidSmsIds: List<Long>
     ): Int
+
+    suspend fun getAllSmsClassificationTypes(): List<SmsClassificationTypeEntity>
+
+    suspend fun updateSmsTypeImportance(id: Int, isImportant: Boolean)
 }

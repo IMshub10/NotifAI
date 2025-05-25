@@ -1,11 +1,13 @@
 package com.summer.core.data.local.entities
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.summer.core.data.local.entities.SenderAddressEntity.Companion.TABLE_NAME
 
+@Keep
 @Entity(
     tableName = TABLE_NAME,
     indices = [Index(value = ["sender_address"], unique = true)],

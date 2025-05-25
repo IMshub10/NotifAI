@@ -14,6 +14,10 @@
         <action
             android:id="@+id/action_settingsFrag_to_blockListFrag"
             app:destination="@id/blockListFrag" />
+
+        <action
+            android:id="@+id/action_settingsFrag_to_smsTypeSettingsFrag"
+            app:destination="@id/smsTypeSettingsFrag" />
     </fragment>
 
     <fragment
@@ -21,4 +25,12 @@
         android:name="com.summer.notifai.ui.settings.blocklist.BlockListFrag"
         android:label="Blocked Senders"
         tools:layout="@layout/frag_block_list" />
+
+    <fragment
+        android:id="@+id/smsTypeSettingsFrag"
+        android:name="com.summer.notifai.ui.settings.categories.ClassifySmsTypeFrag"
+        android:label="Important SMS Types"
+        tools:layout="@layout/frag_classify_sms_type"/>
+
+
 </navigation>

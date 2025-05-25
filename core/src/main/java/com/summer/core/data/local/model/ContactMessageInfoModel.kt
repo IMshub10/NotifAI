@@ -1,8 +1,10 @@
 package com.summer.core.data.local.model
 
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import com.summer.core.data.local.entities.SenderType
 
+@Keep
 data class ContactMessageInfoModel(
     @ColumnInfo("sender_name")
     val senderName: String,
