@@ -261,4 +261,7 @@ interface SmsDao {
 
     @Query("UPDATE sms_classification_types SET is_important = :isImportant WHERE id = :id")
     suspend fun updateSmsTypeImportance(id: Int, isImportant: Boolean)
+
+    @Query("SELECT is_blocked FROM sender_addresses WHERE id = :senderAddressId LIMIT 1")
+    suspend fun isSenderBlocked(senderAddressId: Long): Boolean
 }

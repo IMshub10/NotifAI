@@ -52,4 +52,6 @@ interface ISmsRepository {
     suspend fun getAllSmsClassificationTypes(): List<SmsClassificationTypeEntity>
 
     suspend fun updateSmsTypeImportance(id: Int, isImportant: Boolean)
+
+    suspend fun isSenderBlocked(senderAddressId: Long): Boolean
 }

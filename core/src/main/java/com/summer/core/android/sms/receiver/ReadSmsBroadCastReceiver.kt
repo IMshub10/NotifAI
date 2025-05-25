@@ -28,11 +28,18 @@ class ReadSmsBroadcastReceiver : BroadcastReceiver() {
             val smsInserter = entryPoint.smsInserter()
             val permissionManager: IPermissionManager = entryPoint.permissionManager()
             val appNotificationManager = entryPoint.appNotificationManager()
+            val isSenderBlockedUseCase = entryPoint.isSenderBlockedUseCase()
 
             CoroutineScope(Dispatchers.IO).launch {
                 val sms = smsInserter.processIncomingSms(appContext, intent)
-                if (permissionManager.hasSendNotifications() && sms != null) {
-                    appNotificationManager.showNotificationForSms(sms = sms)
+
+                if (sms != null && permissionManager.hasSendNotifications()) {
+                    val isBlocked = isSenderBlockedUseCase(sms.senderAddressId)
+                    if (!isBlocked) {
+                        appNotificationManager.showNotificationForSms(sms = sms)
+                    } else {
+                        Log.d("SMSBroadCastReceiver", "Notification blocked: sender is blocked")
+                    }
                 }
             }
         }

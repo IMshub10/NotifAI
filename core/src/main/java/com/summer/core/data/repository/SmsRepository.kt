@@ -263,4 +263,8 @@ class SmsRepository @Inject constructor(
     override suspend fun updateSmsTypeImportance(id: Int, isImportant: Boolean) {
         smsDao.updateSmsTypeImportance(id, isImportant)
     }
+
+    override suspend fun isSenderBlocked(senderAddressId: Long): Boolean {
+        return smsDao.isSenderBlocked(senderAddressId)
+    }
 }

@@ -18,9 +18,9 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
 
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 
-    private var _optionsFrag: OptionalAgreementDialogFrag? = null
+    /*private var _optionsFrag: OptionalAgreementDialogFrag? = null
     private val optionsFrag: OptionalAgreementDialogFrag
-        get() = _optionsFrag!!
+        get() = _optionsFrag!!*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,8 +31,8 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
         with(mBinding) {
             fragUserAgreementActionButton.setOnClickListener {
                 if (fragUserAgreementActionButton.text == getString(R.string.agree_to_use)) {
-                    initOptionsFrag()
-                    optionsFrag.show(childFragmentManager, null)
+                    if (findNavController().currentDestination?.id == R.id.userAgreementFrag)
+                        findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
                 } else {
                     fragUserAgreementScrollView.smoothScrollTo(
                         0,
@@ -48,7 +48,7 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
         }
     }
 
-    private fun initOptionsFrag() {
+    /*private fun initOptionsFrag() {
         _optionsFrag =
             OptionalAgreementDialogFrag(object : OptionalAgreementDialogFrag.ClickListener {
                 override fun onAgree() {
@@ -63,11 +63,11 @@ class UserAgreementFrag : BaseFragment<FragUserAgreementBinding>() {
                         findNavController().navigate(R.id.action_userAgreementFrag_to_permissionsFrag)
                 }
             })
-    }
+    }*/
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         _optionsFrag?.dismiss()
         _optionsFrag = null
-    }
+    }*/
 }
