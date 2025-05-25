@@ -18,7 +18,10 @@ data class SenderAddressEntity(
     val senderAddress: String,
 
     @ColumnInfo(name = "sender_type")
-    val senderType: SenderType
+    val senderType: SenderType,
+
+    @ColumnInfo(name = "is_blocked")
+    val isBlocked: Boolean = false
 ) {
     companion object {
         const val TABLE_NAME = "sender_addresses"

@@ -17,6 +17,7 @@ import com.summer.notifai.ui.common.PagingLoadStateAdapter
 import com.summer.notifai.ui.home.HomeViewModel
 import com.summer.notifai.ui.inbox.SmsInboxActivity
 import com.summer.notifai.ui.search.SearchActivity
+import com.summer.notifai.ui.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -53,6 +54,10 @@ class SmsContactListFrag : BaseFragment<FragSmsContactListBinding>() {
         mBinding.ivFragContactListSearch.setOnClickListener {
             if (findNavController().currentDestination?.id == R.id.smsContactListFrag)
                 startActivity(SearchActivity.onNewInstance(requireContext()))
+        }
+        mBinding.ivFragContactListMore.setOnClickListener {
+            if (findNavController().currentDestination?.id == R.id.smsContactListFrag)
+                startActivity(SettingsActivity.onNewInstance(requireContext()))
         }
     }
 

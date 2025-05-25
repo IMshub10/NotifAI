@@ -110,7 +110,18 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
                     }
 
                     R.id.action_block -> {
-
+                        showYesNoDialog(
+                            requireContext(),
+                            getString(R.string.block),
+                            getString(R.string.blocked_sender_message),
+                            {
+                                progressDialog.show()
+                                smsInboxViewModel.blockSender {
+                                    progressDialog.dismiss()
+                                    requireActivity().finish()
+                                }
+                            },
+                            {})
                         true
                     }
 

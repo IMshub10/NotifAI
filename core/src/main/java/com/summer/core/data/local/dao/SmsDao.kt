@@ -107,6 +107,7 @@ interface SmsDao {
         ON sender.sender_type = 'CONTACT'
         AND c.phone_number = sender.sender_address
     WHERE lower(sms.body) LIKE '%' || :query || '%'
+      AND sender.is_blocked = 0
     ORDER BY sms.date DESC
     LIMIT :limit
     """
@@ -137,6 +138,7 @@ interface SmsDao {
         AND c.phone_number = sender.sender_address
     WHERE lower(sms.body) LIKE '%' || :query || '%'
       AND (:senderAddressId = 0 OR sms.sender_address_id = :senderAddressId)
+      AND sender.is_blocked = 0
     ORDER BY sms.date DESC
     """
     )
@@ -150,6 +152,7 @@ interface SmsDao {
     SELECT COUNT(*) FROM sms_messages AS sms
     INNER JOIN sender_addresses AS sender ON sms.sender_address_id = sender.id
     WHERE lower(sms.body) LIKE '%' || :query || '%'
+    AND sender.is_blocked = 0
     """
     )
     suspend fun getMessagesMatchCount(query: String): Int

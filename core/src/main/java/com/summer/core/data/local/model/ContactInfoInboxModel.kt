@@ -14,9 +14,4 @@ data class ContactInfoInboxModel(
     val phoneNumber: String?,
     @ColumnInfo("sender_type")
     val senderType: SenderType?
-) {
-
-    //TODO(Check if it is required)
-    @Ignore
-    var smsImportanceType: SmsImportanceType? = null
-}
+)

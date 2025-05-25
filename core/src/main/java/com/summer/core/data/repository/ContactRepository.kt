@@ -106,4 +106,16 @@ class ContactRepository @Inject constructor(
     override fun getSearchContactsPagingSource(query: String): PagingSource<Int, ContactEntity> {
         return contactDao.getSearchContactsPagingSource(query)
     }
+
+    override suspend fun blockSender(senderAddressId: Long) {
+        contactDao.blockSender(senderAddressId)
+    }
+
+    override suspend fun unblockSender(senderAddressId: Long) {
+        contactDao.unblockSender(senderAddressId)
+    }
+
+    override fun getSearchBlockedSendersPagingSource(query: String): PagingSource<Int, ContactInfoInboxModel> {
+        return contactDao.getSearchBlockedSendersPagingSource(query)
+    }
 }

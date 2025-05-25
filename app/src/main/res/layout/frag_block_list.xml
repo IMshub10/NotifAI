@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Header with back + search -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_fragBlockList_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            android:elevation="@dimen/spacing_small"
+            android:paddingHorizontal="@dimen/spacing_small"
+            android:paddingVertical="@dimen/spacing_x_small"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_fragBlockList_back"
+                android:layout_width="@dimen/spacing_x_large"
+                android:layout_height="@dimen/spacing_x_large"
+                android:background="@drawable/ripple_color_grey_oval"
+                android:contentDescription="@string/back"
+                android:padding="@dimen/spacing_x_small"
+                android:src="@drawable/ic_back_24x24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_fragBlockList_search"
+                style="@style/EditTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:background="@android:color/transparent"
+                android:hint="@string/search_here"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/spacing_small"
+                android:paddingVertical="@dimen/spacing_x_small"
+                android:singleLine="true"
+                android:textColor="?attr/label"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_fragBlockList_back"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/header_title"
+            style="@style/text_header_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_x_medium"
+            android:layout_marginTop="@dimen/spacing_x_small"
+            android:text="@string/blocked_list"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/cl_fragBlockList_header" />
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_fragBlockList_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginVertical="@dimen/spacing_x_small"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_title"
+            tools:listitem="@layout/item_blocked_sender" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

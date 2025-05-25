@@ -45,6 +45,7 @@ interface ContactDao {
     FROM sms_messages sm
     INNER JOIN sms_classification_types sct ON sm.sms_classification_type_id = sct.id
     WHERE sm.sender_address_id = sa.id
+      AND sa.is_blocked = 0
       AND sct.is_important = :isImportant
     ORDER BY sm.date DESC
     LIMIT 1
@@ -75,7 +76,7 @@ FROM sender_addresses sa
 INNER JOIN sms_messages s ON s.id = (
     SELECT sm.id
     FROM sms_messages sm
-    WHERE sm.sender_address_id = sa.id
+    WHERE sm.sender_address_id = sa.id AND sa.is_blocked = 0
     ORDER BY sm.date DESC
     LIMIT 1
 )
@@ -113,6 +114,7 @@ LIMIT :limit
     )
     LEFT JOIN contacts c ON c.phone_number = sa.sender_address
     WHERE lower(COALESCE(c.name, sa.sender_address)) LIKE '%' || :query || '%'
+        AND sa.is_blocked = 0
     GROUP BY s.id
     ORDER BY s.date DESC
     """
@@ -124,6 +126,7 @@ LIMIT :limit
     SELECT COUNT(*) FROM sender_addresses sa
     LEFT JOIN contacts c ON c.phone_number = sa.sender_address
     WHERE lower(COALESCE(c.name, sa.sender_address)) LIKE '%' || :query || '%'
+        AND sa.is_blocked = 0
     """
     )
     suspend fun getConversationsMatchCount(query: String): Int
@@ -141,6 +144,7 @@ LIMIT :limit
     FROM sender_addresses sa
     LEFT JOIN contacts c ON c.phone_number = sa.sender_address
     WHERE sa.id = :senderAddressId
+      AND sa.is_blocked = 0
     """
     )
     fun getContactInfoBySenderAddressId(
@@ -153,6 +157,7 @@ LIMIT :limit
     FROM sender_addresses sa
     LEFT JOIN contacts c ON c.phone_number = sa.sender_address
     WHERE sa.id = :senderAddressId
+      AND sa.is_blocked = 0
     LIMIT 1
 """
     )
@@ -200,4 +205,31 @@ LIMIT :limit
     """
     )
     suspend fun getContactsCount(query: String): Int
+
+    @Query("UPDATE sender_addresses SET is_blocked = 1 WHERE id = :senderAddressId")
+    suspend fun blockSender(senderAddressId: Long)
+
+    @Query("UPDATE sender_addresses SET is_blocked = 0 WHERE id = :senderAddressId")
+    suspend fun unblockSender(senderAddressId: Long)
+
+    @Query(
+        """
+    SELECT 
+        COALESCE(c.name, sa.sender_address) AS sender_name,
+        sa.id AS sender_address_id,
+        CASE 
+            WHEN sa.sender_type = 'CONTACT' THEN c.phone_number
+            ELSE NULL
+        END AS phone_number,
+        sa.sender_type AS sender_type
+    FROM sender_addresses sa
+    LEFT JOIN contacts c ON c.phone_number = sa.sender_address
+    WHERE sa.is_blocked = 1
+      AND lower(COALESCE(c.name, sa.sender_address)) LIKE '%' || :query || '%'
+    ORDER BY sender_name COLLATE NOCASE
+    """
+    )
+    fun getSearchBlockedSendersPagingSource(
+        query: String
+    ): PagingSource<Int, ContactInfoInboxModel>
 }

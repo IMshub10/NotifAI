@@ -35,4 +35,11 @@ interface IContactRepository {
 
     fun getSearchContactsPagingSource(query: String): PagingSource<Int, ContactEntity>
 
+    suspend fun blockSender(senderAddressId: Long)
+
+    suspend fun unblockSender(senderAddressId: Long)
+
+    fun getSearchBlockedSendersPagingSource(
+        query: String
+    ): PagingSource<Int, ContactInfoInboxModel>
 }

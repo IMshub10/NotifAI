@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_settings"
+    app:startDestination="@id/settingsFrag">
+
+    <fragment
+        android:id="@+id/settingsFrag"
+        android:name="com.summer.notifai.ui.settings.SettingsFrag"
+        android:label="Settings"
+        tools:layout="@layout/frag_settings">
+
+        <action
+            android:id="@+id/action_settingsFrag_to_blockListFrag"
+            app:destination="@id/blockListFrag" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/blockListFrag"
+        android:name="com.summer.notifai.ui.settings.blocklist.BlockListFrag"
+        android:label="Blocked Senders"
+        tools:layout="@layout/frag_block_list" />
+</navigation>

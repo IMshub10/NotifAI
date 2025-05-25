@@ -71,14 +71,17 @@ class SearchListFrag : BaseFragment<FragSearchListBinding>() {
         backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (senderAddressId == 0L)
-                    requireActivity().finish()
-                else
                     findNavController().popBackStack()
+                else
+                    requireActivity().finish()
             }
         }
         mBinding.ivFragSearchListBack.setOnClickListener {
             if (findNavController().currentDestination?.id == R.id.searchListFrag)
-                findNavController().popBackStack()
+                if (senderAddressId == 0L)
+                    findNavController().popBackStack()
+                else
+                    requireActivity().finish()
         }
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, backPressedCallback)
     }
