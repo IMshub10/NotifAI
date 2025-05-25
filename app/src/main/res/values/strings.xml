@@ -87,4 +87,5 @@
     <string name="are_you_sure_you_want_to_unblock_this_sender_you_ll_start_receiving_notifications_and_messages_will_appear_in_your_inbox_again">Are you sure you want to unblock this sender?\nYou’ll start receiving notifications and messages will appear in your inbox again.</string>
     <string name="manage_important_sms_classification">Manage Sms Classification importance</string>
     <string name="choose_which_types_of_sms_should_appear_in_the_important_or_other_tabs">Choose which types of SMS should appear in the Important or Other tabs.</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

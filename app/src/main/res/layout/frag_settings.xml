@@ -85,6 +85,21 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintTop_toBottomOf="@+id/tv_fragSettings_itemBlockList" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_fragSettings_itemPrivacy"
+                    style="@style/text_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:background="@drawable/ripple_shape_rect_color_light_radius_x_medium"
+                    android:drawableEnd="@drawable/ic_arrow_back_24x24"
+                    android:drawableTint="@color/white"
+                    android:padding="@dimen/spacing_small"
+                    android:text="@string/privacy_policy"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_fragSettings_itemSmsCategories" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
