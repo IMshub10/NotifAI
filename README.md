@@ -28,7 +28,7 @@
 
 ## 📷 Screenshots
 
- > ![Screenshot at May 25 17-17-47](https://github.com/user-attachments/assets/530f88af-15cf-4057-a2c0-ed3daad50666)
+ > <img width="423" alt="image" src="https://github.com/user-attachments/assets/824a34ff-3efb-495a-b4b4-77886c08f092" />
 
 ---
 
