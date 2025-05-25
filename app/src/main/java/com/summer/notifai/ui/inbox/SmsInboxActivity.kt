@@ -3,6 +3,8 @@ package com.summer.notifai.ui.inbox
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.summer.core.android.notification.AppNotificationManager

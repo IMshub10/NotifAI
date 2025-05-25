@@ -10,9 +10,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Telephony
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -80,8 +84,31 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        addMenuItem()
         observeMessages()
         listeners()
+    }
+
+    private fun addMenuItem() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_sms_inbox, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_search -> {
+                        //TODO
+                        true
+                    }
+                    R.id.action_block -> {
+
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun listeners() {
@@ -296,7 +323,7 @@ class SmsInboxFrag : BaseFragment<FragSmsInboxBinding>() {
         }
     }
 
-    fun copySelectedMessagesToClipboard(context: Context) {
+    private fun copySelectedMessagesToClipboard(context: Context) {
         val messages = smsInboxViewModel.selectedMessages.value
             .sortedBy { it.dateInEpoch } // Optional: keep chronological order
             .joinToString(separator = "\n\n") { it.message } // Double line spacing

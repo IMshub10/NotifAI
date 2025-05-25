@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Search Button -->
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_24x24"
+        app:showAsAction="always"
+        android:title="Search" />
+
+    <!-- More Button -->
+    <item
+        android:id="@+id/action_block"
+        android:icon="@drawable/ic_block_24x24"
+        app:showAsAction="ifRoom"
+        android:title="Block" />
+</menu>

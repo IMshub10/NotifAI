@@ -51,11 +51,12 @@
                     <!-- Search Icon -->
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_fragContactList_search"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="@dimen/spacing_x_large"
+                        android:layout_height="@dimen/spacing_x_large"
                         android:layout_marginTop="@dimen/spacing_small"
                         android:layout_marginEnd="@dimen/spacing_x_medium"
-                        android:background="@drawable/ripple_color_grey"
+                        android:background="@drawable/ripple_color_grey_oval"
+                        android:padding="@dimen/spacing_x_small"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_search_24x24" />
