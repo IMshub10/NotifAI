@@ -28,7 +28,7 @@
 
 ## 📷 Screenshots
 
- > <img width="423" alt="image" src="https://github.com/user-attachments/assets/824a34ff-3efb-495a-b4b4-77886c08f092" />
+ > ![image](https://github.com/user-attachments/assets/d905cba5-0d8f-4ff8-861a-1875fc2107e9)
 
 ---
 
