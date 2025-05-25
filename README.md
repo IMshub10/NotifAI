@@ -28,7 +28,7 @@
 
 ## 📷 Screenshots
 
-> 📌 **TODO:** Add sample UI screenshots or screen recordings here
+ > ![Screenshot at May 25 17-17-47](https://github.com/user-attachments/assets/530f88af-15cf-4057-a2c0-ed3daad50666)
 
 ---
 
